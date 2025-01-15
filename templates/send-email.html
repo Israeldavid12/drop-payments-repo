@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>enviar email</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .container p {
+            font-weight: 600;
+        }
+
+        .container textarea {
+            height: 200px;
+            width: 400px;
+            font-size: 20px;
+        }
+
+        .container input {
+            width: 400px;
+            height: 60px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .container button {
+            margin-top: 10px;
+            width: 400px;
+            height: 60px;
+            border-radius: 8px;
+            outline: none;
+            background-color: rgb(87, 153, 228);
+            color: white;
+        }
+
+        .container button:active {
+            background-color: rgb(86, 87, 87);
+        }
+
+        #output {
+            color: green;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <form id="email-form">
+                <p>TEMPLATE HTML</p>
+                <textarea name="" id="template" required></textarea>
+                <p>E-MAIL RECEPTOR</p>
+                <input id="email" type="text" required>
+                <p>TITULO</p>
+                <input id="subject" type="text" required> <br>
+                <button type="submit">Enviar</button>
+                <p id="output"></p>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('email-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const template = document.getElementById('template').value;
+            const email = document.getElementById('email').value;
+            const assunto = document.getElementById('subject').value;
+            
+            
+            const payload = {
+                templateType: '10-P-E',
+                template: template,
+                emailSeller: email,
+                assunto: assunto
+            }
+
+            fetch('http://127.0.0.1:3001/api/send-email/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':  'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then( response => response.json()).then(
+              data => {
+                console.log(data.message);
+              }
+            ).catch((e) => {
+                console.log(e);
+            });
+             
+             
+             
+
+
+
+
+
+
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>

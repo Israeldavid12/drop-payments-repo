@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar Pixel do Facebook</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="fb_pixel.css">
+</head>
+
+<body>
+    <div class="header">
+
+        <p style="font-size: 1rem; "> <i style="cursor: pointer; margin-right: 10px; " onclick="backPage()"
+                class="fa fa-chevron-left" aria-hidden="true"></i> Configurar Pixel do Facebook <i
+                class="fab fa-facebook"></i>
+        </p>
+    </div> 
+
+    <div class="container">
+
+        <div class="box">
+            <p class="titulo">Insira o codigo pixel no campo abaixo <i class="fa fa-code" aria-hidden="true"></i></p>
+            <p style="text-align: center; font-size: 14px;" id="output"></p>
+            <textarea id="textarea" name="text" placeholder="Insira o código do pixel aqui"
+                class="form-control pixelInput" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <button id="save-pixel">Salvar codigo <i class="fas fa-save"></i>
+            </button>
+            <button class="back-button" onclick="backPage()"> Voltar <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <p> <i class="fa fa-info-circle" aria-hidden="true"></i> O codigo pixel inserido aqui sera carregado em
+                todas as paginas de pagamento *</p>
+        </div>
+    </div>
+    <div id="loader" class="spinner-overlay d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary" role="status">
+            <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+        </div>
+    </div>
+
+    <script>
+        function setLoading1() {
+            document.getElementById('loader').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+
+        }
+        function setLoading2() {
+            document.getElementById('loader').style.display = 'none';
+
+        }
+        setTimeout(setLoading1, 2000);
+        setTimeout(setLoading2, 2000); 
+    </script>
+
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+            authDomain: "drop-payments-mz.firebaseapp.com",
+            databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "drop-payments-mz",
+            storageBucket: "drop-payments-mz.appspot.com",
+            messagingSenderId: "983262508468",
+            appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+            measurementId: "G-JBP3RN50WS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getDatabase(app);
+
+        // Get DOM elements
+        const textarea = document.getElementById('textarea');
+        const save_pixel = document.getElementById("save-pixel");
+
+        // Redirect if not logged in, otherwise save pixel code
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userId = user.uid;
+
+                // Form submission handler
+                save_pixel.addEventListener('click', () => {
+                    document.getElementsByClassName("box")[0].style.opacity = '25%';
+                    document.getElementById("save-pixel").innerHTML = '<i style="font-size: 16px;" class="fas fa-circle-notch fa-spin fa-2x"></i>';
+
+                    if (textarea.value.length >= 500) {
+                        document.getElementsByClassName("box")[0].style.opacity = '100%';
+                        document.getElementById("output").innerHTML = "Numero de caracteres excedido";
+                        document.getElementById("output").style.color = 'red';
+                        document.getElementById("save-pixel").innerHTML = 'Salvar codigo <i class="fas fa-save"></i>';
+                        return;
+                    }
+
+                    const pixelCode = textarea.value;
+
+                    if (pixelCode.trim() !== '') {
+                        // Save pixel code to Firebase Realtime Database
+                        set(ref(db, `users/${userId}/pixelCode`), {
+                            pixel: pixelCode
+                        }).then(() => {
+                            document.getElementsByClassName("box")[0].style.opacity = '100%';
+                            document.getElementById("output").innerHTML = 'Pixel do Facebook salvo com sucesso! <i class="fas fa-save"></i>';
+                            document.getElementById("output").style.color = 'green';
+                            document.getElementById("save-pixel").innerHTML = 'Salvar codigo <i class="fas fa-save"></i>';
+                        }).catch((error) => {
+                        }).catch((error) => {
+                            console.error("Erro ao salvar o código do pixel:", error);
+                            document.getElementsByClassName("box")[0].style.opacity = '100%';
+                            document.getElementById("output").innerHTML = "Erro ao salvar o código do pixel:" + error;
+                            document.getElementById("output").style.color = 'red';
+                            document.getElementById("save-pixel").innerHTML = 'Salvar codigo <i class="fas fa-save"></i>';
+                        });
+                    } else {
+                        document.getElementsByClassName("box")[0].style.opacity = '100%';
+                        document.getElementById("output").innerHTML = 'O campo do código do pixel está vazio! <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>';
+                        document.getElementById("output").style.color = 'red';
+                        document.getElementById("save-pixel").innerHTML = 'Salvar codigo <i class="fas fa-save"></i>';
+                    }
+                });
+
+            } else {
+                // If not logged in, redirect to login page
+                window.location.href = "entrar.html";
+            }
+        });
+    </script>
+
+    <script>
+        function backPage() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

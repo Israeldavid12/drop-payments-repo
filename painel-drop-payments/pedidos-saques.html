@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Saques</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #007bff;
+    }
+
+    .card p {
+      margin: 10px 0;
+      color: #666;
+    }
+
+    .card button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-concluido {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-concluido:hover {
+      background-color: #218838;
+    }
+
+    .btn-reembolsado {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-reembolsado:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<script type="module">
+  // Import Firebase functions
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+      apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+      authDomain: "drop-payments-mz.firebaseapp.com",
+      databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "drop-payments-mz",
+      storageBucket: "drop-payments-mz.appspot.com",
+      messagingSenderId: "983262508468",
+      appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+      measurementId: "G-JBP3RN50WS"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getDatabase(app);
+
+  // Verify if user is authenticated
+  onAuthStateChanged(auth, (user) => {
+      if (user) {
+          loadWithdrawals(); // Load withdrawal data if user is logged in
+      } else {
+          window.location.href = "login.html"; // Redirect to login if not authenticated
+      }
+  });
+
+  // Function to load withdrawal data
+  function loadWithdrawals() {
+      const usersRef = ref(db, 'users');
+      get(usersRef).then((snapshot) => {
+          if (snapshot.exists()) {
+              const users = snapshot.val();
+              const withdrawalContainer = document.getElementById('withdrawalContainer');
+
+              // Iterate through users and display payment and withdrawal information
+              for (const userId in users) {
+                  const userData = users[userId];
+                  const paymentMethods = userData.userpaymentMethods;
+                  const withdraw = userData.withdraw;
+
+                  if (paymentMethods && withdraw) {
+                      // Create a card for each user's withdrawal data
+                      const card = document.createElement('div');
+                      card.classList.add('card');
+                      card.innerHTML = `
+                          <h3>Usuário: ${userData.name}</h3>
+                          <p>Titular: ${userData.email}</p>
+                          <p>Titular: ${paymentMethods.titular}</p>
+                          <p>Método de pagamento: ${paymentMethods.metodo}</p>
+                          <p>Número: ${paymentMethods.numero}</p>
+                          <p>Status do saque: ${withdraw.status}</p>
+                          <p>Valor: ${withdraw.valueAmount}</p>
+                          <p>Whatsapp do usuario: <strong> ${paymentMethods.whatsapp} </strong> </p>
+                          <button class="btn-concluido" id="concluido-${userId}">Concluído</button>
+                          <button class="btn-reembolsado" id="reembolsado-${userId}">Reembolsado</button>
+                      `;
+
+                      // Append the card to the container
+                      withdrawalContainer.appendChild(card);
+
+                      // Add event listeners for the buttons
+                      document.getElementById(`concluido-${userId}`).addEventListener('click', () => {
+                          updateWithdrawStatus(userId, 0, 'concluído');
+                      });
+
+                      document.getElementById(`reembolsado-${userId}`).addEventListener('click', () => {
+                          updateWithdrawStatus(userId, withdraw.valueAmount, 'Reembolsado');
+                      });
+                  }
+              }
+          } else {
+              console.log("No data available");
+          }
+      }).catch((error) => {
+          console.error("Error fetching data:", error);
+      });
+  }
+
+  // Function to update withdrawal status
+  function updateWithdrawStatus(userId, amount, status) {
+      const withdrawRef = ref(db, `users/${userId}/withdraw`);
+      update(withdrawRef, {
+          valueAmount: amount,
+          status: status
+      }).then(() => {
+          alert(`Status atualizado para: ${status}`);
+          location.reload(); // Reload the page to reflect changes
+      }).catch((error) => {
+          console.error("Error updating withdrawal status:", error);
+      });
+  }
+</script>
+<body>
+
+  <h1>Painel de Saques</h1>
+  <div class="container" id="withdrawalContainer"></div>
+
+</body>
+</html>

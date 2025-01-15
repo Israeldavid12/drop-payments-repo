@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação da API - Sistema de Pagamentos</title>
+  <link rel="stylesheet" href="paypal.css">
+</head>
+
+<body>
+  <header>
+    <h1>Documentação da API - Sistema de Pagamentos</h1>
+    <p>Consulte os detalhes sobre como interagir com a API para consultar saldo, processar pagamentos, etc.</p>
+  </header>
+
+  <section class="api-section">
+    <h2>1. /api/paypal-success</h2>
+    <p><strong>Descrição:</strong> Endpoint chamado quando o pagamento é bem-sucedido no PayPal.</p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>Parâmetros:</strong></p>
+    <ul>
+      <li><code>PayerID</code>: ID do pagador fornecido pelo PayPal</li>
+      <li><code>paymentId</code>: ID do pagamento fornecido pelo PayPal</li>
+      <li><code>clientId</code>: ID do usuário que realizou o pagamento</li>
+    </ul>
+    <p><strong>Exemplo de Requisição:</strong></p>
+    <pre><code>GET /api/paypal-success?PayerID=12345&paymentId=abc123&clientId=user123</code></pre>
+    <button class="copy-btn" onclick="copyToClipboard('/api/paypal-success?PayerID=12345&paymentId=abc123&clientId=user123')">Copiar Exemplo</button>
+
+    <h3>Resposta de Sucesso:</h3>
+    <pre><code>{
+  "message": "Pagamento processado e saldo atualizado com sucesso!"
+}</code></pre>
+
+    <h3>Resposta de Erro:</h3>
+    <pre><code>{
+  "message": "Erro ao processar pagamento"
+}</code></pre>
+  </section>
+
+  <section class="api-section">
+    <h2>2. /api/paypal-cancel</h2>
+    <p><strong>Descrição:</strong> Endpoint chamado quando o pagamento é cancelado pelo usuário no PayPal.</p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>Parâmetros:</strong></p>
+    <ul>
+      <li><code>cancelPage</code>: URL para redirecionar o usuário após o cancelamento</li>
+    </ul>
+    <p><strong>Exemplo de Requisição:</strong></p>
+    <pre><code>GET /api/paypal-cancel?cancelPage=https://your-domain.com/cancel</code></pre>
+    <button class="copy-btn" onclick="copyToClipboard('/api/paypal-cancel?cancelPage=https://your-domain.com/cancel')">Copiar Exemplo</button>
+
+    <h3>Resposta de Sucesso:</h3>
+    <pre><code>{
+  "message": "Pagamento foi cancelado pelo usuário."
+}</code></pre>
+  </section>
+
+  <section class="api-section">
+    <h2>3. /api/check-balance</h2>
+    <p><strong>Descrição:</strong> Endpoint para consultar o saldo de um usuário.</p>
+    <p><strong>Método:</strong> GET</p>
+    <p><strong>Parâmetros:</strong></p>
+    <ul>
+      <li><code>clientId</code>: ID do usuário</li>
+    </ul>
+    <p><strong>Exemplo de Requisição:</strong></p>
+    <pre><code>GET /api/check-balance?clientId=user123</code></pre>
+    <button class="copy-btn" onclick="copyToClipboard('/api/check-balance?clientId=user123')">Copiar Exemplo</button>
+
+    <h3>Resposta de Sucesso:</h3>
+    <pre><code>{
+  "balance": 100.00
+}</code></pre>
+
+    <h3>Resposta de Erro:</h3>
+    <pre><code>{
+  "message": "Usuário não encontrado"
+}</code></pre>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 DROP PAYMENTS LTDA </p>
+  </footer>
+
+  <script src="paypal.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pagamento Segura</title>
+    <link rel="shortcut icon" href="assests/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="checkout.css">
+    <link rel="stylesheet" href="sales-made.css">
+    <script type="module" src="checkout-downsell.js" ></script>
+</head>
+<body>
+    <div id="overlay" onclick="closePopup()"></div>
+    <div id="mpesaPopup">
+        <div class="inline" > <div class="lds-ring" bis_skin_checked="1"><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div><p id="infoError" style="color: #E21923; font-size: 16px; font-weight: bold;">Insira o PIN e aguarde...</p></div>
+       
+        <hr>
+        <img class="imagePopup" id="imagePopup" src="assests/mpesa.jpg" alt="emola" style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;">
+        <p>Introduza o PIN no telemóvel com o número indicado para finalizar o pagamento</p>
+        <button class="showPopup" onclick="closePopup()">Fechar</button>
+     </div>
+     <!-- Área da notificação -->
+     <div id="purchase-notification" class="notification hidden">
+        <div class="checkmark">✔</div>
+        <div class="message">
+            <strong>Nova compra adquirida</strong> 
+            <span id="buyer-name"></span> efetuou uma nova compra
+        </div>
+        <div class="close-btn" id="close-notification">✕</div>
+    </div>
+    <!-- Cronômetro movido para fora do contêiner -->
+    <div class="timer" id="timer">
+        <span>00:00:00</span> 
+        <img src="checkou-assets/timer.png" alt="Compra Segura">
+        <p style="font-size: 14px; margin-left: 2px; text-transform: uppercase; ">Preencha os seus <br> dados  antes que <br> o cronômetro  termine</p>
+    </div>
+<div class="body2">
+  
+    <div class="container">
+        <div class="info-secure-coneteiner" >
+            <img class="secure-icon" src="checkou-assets/baner4.png" alt="Segurança">
+            <hr style="margin-bottom: 18px;" >
+        </div>
+  
+        <img style="margin-bottom: 10px;" src="checkou-assets/moz-icon.png" alt="Mozambique Flag" width="40">
+            <div>
+              
+        
+        <div class="product-info">
+            <img id="image-url" src="checkou-assets/default-img.jpg" alt="logo">
+            <div class="product-details">
+                <p>Esta a pagar:</p>
+                <h2 id="productName" style="color: #000000;" ></h2>
+                <p style="font-size: 14px;" >COMPRA 100% SEGURA</p>
+                <p id="productPrice" class="product-price"><p class="product-price" >
+               
+                
+            </div>
+        </div>
+           <hr style="margin-bottom: 16px;" >
+        <form>
+          
+            <div class="form-group">
+              
+                <label for="text">Digite seu nome completo</label>
+                <input id="nome" type="text" placeholder="Digite seu nome completo" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Digite seu melhor e-mail</label>
+                <input id="email" type="email" placeholder="Digite seu melhor e-mail" required>
+            </div>
+            <div class="form-group">
+                <label for="tel">Digite seu whatsapp</label>
+                <input id="whatsapp" type="tel" placeholder="Seu whatsapp">
+            </div>
+        
+            <div class="payment-options">
+                <p style="font-weight: bold; margin-bottom: 15px; color: #062858;" >Escolha seu meio de pagamento</p>
+             
+                <img class="mpesa" src="checkou-assets/mpesa4.jpg" alt="M-Pesa" id="mpesa" onclick="selectMpesa()">
+                <img src="assests/emola3.jpg" alt="e-Mola" id="emola" onclick="selectEmola()">
+            </div>
+
+            <div class="form-group">
+                <input id="paynumber" type="text" placeholder="Digite seu número M-Pesa" required>
+            </div>
+
+            <button class="pay-btn" id="pay-btn">Pagar com M-Pesa</button>
+        </form>
+       
+    </div>
+    <div>
+        <p style="text-align: center; margin-top: 5px;" >© 2024 Drop Payments Mz</p>
+    </div>
+
+</div>
+<script src="sales-made.js"></script>
+  <script>
+      function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('mpesaPopup').style.display = 'none';
+        }
+     // Função de contagem regressiva
+ let timeLeft = 200; // 3.33 minutos em segundos
+ const timerElement = document.getElementById("timer").querySelector("span");
+
+ function startCountdown() {
+     const countdown = setInterval(() => {
+         if (timeLeft <= 0) {
+             clearInterval(countdown);
+             timerElement.innerHTML = "Tempo Esgotado!";
+         } else {
+             let minutes = Math.floor(timeLeft / 60);
+             let seconds = timeLeft % 60;
+             seconds = seconds < 10 ? "0" + seconds : seconds;
+             timerElement.innerHTML = `00 : ${minutes < 10 ? '0' : ''}${minutes} : ${seconds}`;
+             timeLeft--;
+         }
+     }, 1000);
+ }
+
+ startCountdown();
+
+ // Função para selecionar M-Pesa
+function selectMpesa() {
+document.getElementById("mpesa").classList.remove("selected");
+document.getElementById("emola").classList.remove("selected");
+document.getElementById("pay-btn").innerHTML = "Pagar com M-Pesa";
+document.getElementById("pay-btn").classList.remove("e-mola");
+document.getElementById("mpesa").classList.add("selected");
+
+// Alterar placeholder para M-Pesa
+document.getElementById("paynumber").placeholder = "Digite seu número M-Pesa";
+}
+
+// Função para selecionar e-Mola
+function selectEmola() {
+document.getElementById("mpesa").classList.remove("selected");
+document.getElementById("mpesa").classList.remove("mpesa");
+document.getElementById("emola").classList.remove("selected");
+document.getElementById("pay-btn").innerHTML = "Pagar com E-Mola";
+document.getElementById("pay-btn").classList.add("e-mola");
+document.getElementById("emola").classList.add("selected");
+
+// Alterar placeholder para E-Mola
+document.getElementById("paynumber").placeholder = "Digite seu número E-Mola";
+}
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drop Payments Moz</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="criar-conta.css">
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+          authDomain: "drop-payments-mz.firebaseapp.com",
+          databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "drop-payments-mz",
+          storageBucket: "drop-payments-mz.appspot.com",
+          messagingSenderId: "983262508468",
+          appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+          measurementId: "G-JBP3RN50WS"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Função para traduzir erros do Firebase
+        function traduzirErro(errorCode) {
+            switch (errorCode) {
+                case 'auth/invalid-email':
+                    return 'O endereço de e-mail é inválido.';
+                case 'auth/user-disabled':
+                    return 'Esta conta foi desativada.';
+                case 'auth/user-not-found':
+                    return 'Nenhuma conta encontrada com este e-mail.';
+                case 'auth/wrong-password':
+                    return 'Senha incorreta. Verifique e tente novamente.';
+                case 'auth/invalid-password':
+                    return 'Senha incorreta. Verifique e tente novamente.';
+                default:
+                    return 'Ocorreu um erro inesperado. Tente novamente mais tarde.';
+            }
+        }
+
+        // Função para login
+        function login(email, password) {
+            const entrar = document.getElementById("entrar");
+            entrar.textContent= "Entrando aguarde...";
+            signInWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+                // Usuário logado com sucesso
+                const user = userCredential.user;       
+                window.location.href = "index.html";
+                console.log('Usuário logado:');
+              })
+              .catch((error) => {
+                const errorMessage = traduzirErro(error.code);
+                document.getElementById('error-message').textContent = errorMessage;
+              });
+        }
+
+        // Função para login com Google
+        function loginComGoogle() {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // Sucesso no login com Google
+                    const user = result.user;
+                    console.log('Usuário logado com Google:');
+                    window.location.href = "index.html";  // Redireciona para a página principal após o login
+                })
+                .catch((error) => {
+                    const errorMessage = traduzirErro(error.code);
+                    document.getElementById('error-message').textContent = errorMessage;
+                });
+        }
+
+        // Função para recuperação de senha
+        function recuperarSenha(email) {
+            sendPasswordResetEmail(auth, email)
+              .then(() => {
+                // E-mail de redefinição enviado
+                document.getElementById('error-message').textContent = 'E-mail de recuperação enviado. Verifique sua caixa de entrada.';
+              })
+              .catch((error) => {
+                const errorMessage = traduzirErro(error.code);
+                document.getElementById('error-message').textContent = errorMessage;
+              });
+        }
+
+        // Captura o envio do formulário de login
+        window.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                login(email, password);
+            });
+
+            // Captura o clique no botão de login com Google
+            const googleLoginButton = document.getElementById('google-login');
+            googleLoginButton.addEventListener('click', () => {
+                loginComGoogle();
+            });
+
+            // Captura o clique no botão de recuperação de senha
+            const resetButton = document.getElementById('reset-password');
+            resetButton.addEventListener('click', () => {
+                const email = document.getElementById('email').value;
+
+                if (email) {
+                    recuperarSenha(email);
+                } else {
+                    document.getElementById('error-message').textContent = 'Por favor, insira seu e-mail para recuperar a senha.';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="content">
+        <!-- Container da esquerda para texto em desktops -->
+        <div class="left-container">
+            <img style="width: 30px;" src="assests/dp-logo.png" alt="Logo Drop Payments Moz">
+            <h2>Com o que você sabe, é possível criar um negócio online de sucesso. Estamos aqui para ajudar você a começar.</h2>
+            <p>Nós ajudaremos você a dar o próximo passo. Faça login ou crie uma conta.</p>
+        </div>
+
+        <!-- Formulário de login -->
+        <div class="container">
+            <h1>ENTRAR</h1>
+
+            <!-- Botão de login com Google -->
+            <div id="google-login"  class="google-signup-container">
+                <img src="assests/google.png" alt="">
+            </div>
+            <div style="margin: 15px;" class="line-with-text">
+                <span>Ou acesse sua usando um e-mail</span>
+            </div>
+            <form>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="E-mail" required>
+
+                <label for="senha">Senha</label>
+                <input type="password" id="password" placeholder="Senha" required>
+
+                <button id="entrar" type="submit">Entrar</button>
+            </form>
+        
+            <!-- Botão de recuperação de senha -->
+            <button id="reset-password" style="margin-top: 10px; background-color: transparent; color: #007bff; text-decoration: underline;">Esqueceu sua senha?</button>
+
+            
+
+            <!-- Output de erros -->
+            <div id="error-message" style="color: red; margin-top: 10px;"></div>
+
+            <div class="link">
+                Não tem uma conta? <a href="https://www.dropaymentsmz.online/register">Criar conta</a>
+            </div>
+        </div>
+    
+        <button class="help-btn">
+            <span class="icon">?</span> Ajuda
+        </button>
+    </div>
+</body>
+<script>
+    document.querySelector('.help-btn').addEventListener('click', function() {
+        // Substitua o link abaixo pelo link externo que deseja abrir
+        window.open('https://api.whatsapp.com/send?phone=258863814050&text=Preciso%20de%20ajuda...', '_blank');
+    });
+
+    const dynamicNumber = document.getElementById('dynamic-number');
+</script>
+</html>

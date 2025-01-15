@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pagamento Segura</title>
+    <link rel="shortcut icon" href="assests/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../checkout-typed.css">
+    <script type="module" src="../checkout-pixel.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .quantidade-container {
+          display: flex;
+          align-items: center;
+          font-family: Arial, sans-serif;
+        }
+    
+        .quantidade-label {
+          margin-right: 10px;
+          padding: 8px;
+        }
+    
+        .seletor-quantidade {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ccc;
+          padding: 5px;
+          border-radius: 5px;
+        }
+    
+        .seletor-quantidade button {
+          background-color: transparent;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+    
+        .seletor-quantidade input {
+          width: 40px;
+          text-align: center;
+          font-size: 16px;
+          border: none;
+          outline: none;
+          
+        }
+      </style>
+
+</head>
+<body>
+   <div id="pixel"> </div>
+     
+    </div>
+    <div id="overlay" ></div>
+    <div id="mpesaPopup">
+        <div class="inline" > <div class="lds-ring"  bis_skin_checked="1"><div bis_skin_checked="1"></div><div  bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div><p id="infoError" style="color: #E21923; font-size: 16px; font-weight: bold; margin-left: 8px;">Insira o PIN e aguarde...</p></div>
+       
+        <hr>
+        <img class="imagePopup" id="imagePopup" src="../assests/mpesa.jpg" alt="emola" style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;">
+        <i id="sucessPayment" style="margin: 8px; display: none;" class="fa-solid fa-check fa-3x"></i>
+        <p>Introduza o PIN no Popup que aparecerá no seu telemóvel com o número indicado para finalizar o pagamento</p>
+        <p style="font-size: 12px; margin-top: 4px; color: #0e0e0e; " ><strong>*Por favor não recarregue ou saia desta página antes de concluir o pagamento!</strong></p>
+        <button id="fechar" onclick="closePopup()" class="supporteEmail" >Tentar novamente</button>
+     </div>
+
+
+
+    <!-- Cronômetro movido para fora do contêiner -->
+    <div class="timer" id="timer">
+        <span>00:00:00</span> 
+        <img src="../checkou-assets/timer.png" alt="Compra Segura">
+        <p style="font-size: 14px; margin-left: 2px; text-transform: uppercase; ">Preencha os seus <br> dados  antes que <br> o cronômetro  termine</p>
+    </div>
+<div class="body2">
+    <img id="baner-url" style="border-radius: 6px; max-width: 500px;" class="secure-icon" src="../checkou-assets/baner3.png" alt="Banner container">
+    <div class="container">
+        <div class="info-secure-coneteiner" >
+           
+            <hr style="margin-bottom: 18px;" >
+        </div>
+  
+        <img id="mozIcon" style="margin-bottom: 10px;" src="../checkou-assets/moz-icon.png" alt="Mozambique Flag" width="20">
+            <div>
+              
+        
+        <div class="product-info">
+           
+            <div class="product-details">
+                <img id="image-url" src="../checkou-assets/default-img.jpg" alt="logo">
+                <p>Finalizar pagamento para:</p>
+                <h2 id="productName" style="color: #000000;" ></h2>
+                <p style="font-size: 14px;" >COMPRA 100% SEGURA</p>
+                <p id="productPrice" class="product-price"><p class="product-price" >
+            </div>
+           
+        </div>
+        <div class="quantidade-container">
+           
+            <div class="seletor-quantidade">
+              <button onclick="diminuirQuantidade()">−</button>
+              <input type="text" id="quantidade" value="1" readonly>
+              <button onclick="aumentarQuantidade()">+</button>
+            </div>
+            <div class="quantidade-label"> Quantidade de items.</div>
+          </div>
+           <hr style="margin-bottom: 16px; margin-top: 15px;" >
+        <form >
+          
+            <div class="form-group">
+              
+                <label id="labelNome" for="text">Digite seu nome completo </label>
+                <div class="input-container" id="divnome" >
+                    <img src="../assests/user-icon.png" alt="user">
+                    <input id="nome" type="text" placeholder="Digite seu nome completo" required>
+                </div>
+                <p id="inputoutputNome" style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;" ></p>
+            </div>
+            
+            <div class="form-group">
+                <label id="labelEmail" for="email">Digite seu melhor e-mail</label>
+
+               <div class="input-container" id="divemail">
+                <img src="../assests/email.png" alt="email">
+                <input id="email" type="email" placeholder="Digite seu melhor e-mail" required>
+               </div>
+               <p id="inputoutputEmail" style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;" >O número de pagamento deve ter exatamente 9 dígitos.</p>
+            </div>
+            <div class="form-group">
+                <label id="labelWhatsapp" for="tel">Digite seu whatsapp</label>
+
+                <div class="input-container"  id="divwhatsapp">
+                    <img src="../assests/zap-black.png" alt="whatsapp">
+                    <input id="whatsapp" type="tel" placeholder="Seu whatsapp">
+                </div>
+                <p id="inputoutputWhatsapp" style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;" >O número de pagamento deve ter exatamente 9 dígitos.</p>
+            </div>
+
+            <div class="form-group">
+              <label id="labelWhatsapp" for="tel">Endereço para entrega</label>
+
+              <div class="input-container"  id="divwhatsapp">
+                <i class="fas fa-home" style="font-size: 24px; color: #1b1b1b;"></i>
+                  <input id="adress" type="text" placeholder="Endereço para entrega">
+              </div>
+          </div>
+        
+            <div class="payment-options">
+               
+                <div  style="margin-bottom: 40px;" class="form-group">
+                    <label style="font-size: 14px; text-align: start; display: none; " id="labeInserted" for="tel">Insira o montante a pagar</label>
+    
+                    
+                    <div class="input-container"  id="divpriceInserted" style="display: none;" >
+                        <img src="assests/vendas-black.png" alt="whatsapp">
+                        <input id="priceInserted" type="number" placeholder="0.00 MT">
+                    </div>
+                    <p id="inputoutputPrice" style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;" >.</p>
+                </div>
+                <p style="font-weight: bold; margin-bottom: 15px; color: #062858; font-size: 14px;" >Escolha seu metodo de pagamento</p>
+
+             
+                <img class="mpesa" src="../checkou-assets/mpesa4.jpg" alt="M-Pesa" id="mpesa" onclick="selectMpesa()">
+                <img src="../assests/emola3.jpg" alt="e-Mola" id="emola" onclick="selectEmola()">
+            </div>
+             
+            <div class="form-group">
+                
+
+                <div class="input-container"  id="divpriceInserted">
+                    <img src="../assests/fone-number.png" alt="whatsapp">
+                    <input id="paynumber" type="text" placeholder="Digite seu número M-Pesa" required>
+                </div>
+                <p id="inputoutput" style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;" >O número de pagamento deve ter exatamente 9 dígitos.</p>
+            </div>
+            </div>
+
+            <button class="pay-btn" id="pay-btn">Pagar com M-Pesa</button>
+        </form>
+       
+    </div>
+    <div>
+        <p style="text-align: center; margin-top: 5px;font-size: 12px;" >© 2024 Drop Payments Mz</p>
+    </div>
+
+</div>
+
+  <script>
+      function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('mpesaPopup').style.display = 'none';
+        }
+     // Função de contagem regressiva
+ let timeLeft = 200; // 3.33 minutos em segundos
+ const timerElement = document.getElementById("timer").querySelector("span");
+
+ function startCountdown() {
+     const countdown = setInterval(() => {
+         if (timeLeft <= 0) {
+             clearInterval(countdown);
+             timerElement.innerHTML = "Tempo Esgotado!";
+         } else {
+             let minutes = Math.floor(timeLeft / 60);
+             let seconds = timeLeft % 60;
+             seconds = seconds < 10 ? "0" + seconds : seconds;
+             timerElement.innerHTML = `00 : ${minutes < 10 ? '0' : ''}${minutes} : ${seconds}`;
+             timeLeft--;
+         }
+     }, 1000);
+ }
+
+ startCountdown();
+
+ // Função para selecionar M-Pesa
+function selectMpesa() {
+document.getElementById("mpesa").classList.remove("selected");
+document.getElementById("emola").classList.remove("selected");
+document.getElementById("pay-btn").innerHTML = "Pagar com M-Pesa";
+document.getElementById("pay-btn").classList.remove("e-mola");
+document.getElementById("mpesa").classList.add("selected");
+
+// Alterar placeholder para M-Pesa
+document.getElementById("paynumber").placeholder = "Digite seu número M-Pesa";
+}
+
+// Função para selecionar e-Mola
+function selectEmola() {
+document.getElementById("mpesa").classList.remove("selected");
+document.getElementById("mpesa").classList.remove("mpesa");
+document.getElementById("emola").classList.remove("selected");
+document.getElementById("pay-btn").innerHTML = "Pagar com E-Mola";
+document.getElementById("pay-btn").classList.add("e-mola");
+document.getElementById("emola").classList.add("selected");
+
+// Alterar placeholder para E-Mola
+document.getElementById("paynumber").placeholder = "Digite seu número E-Mola";
+}
+
+
+function aumentarQuantidade() {
+      const inputQuantidade = document.getElementById("quantidade");
+      let quantidadeAtual = parseInt(inputQuantidade.value);
+      inputQuantidade.value = quantidadeAtual + 1;
+    }
+
+    function diminuirQuantidade() {
+      const inputQuantidade = document.getElementById("quantidade");
+      let quantidadeAtual = parseInt(inputQuantidade.value);
+      if (quantidadeAtual > 1) {  // Opcional: Impedir que a quantidade vá abaixo de 1
+        inputQuantidade.value = quantidadeAtual - 1;
+      }
+    }
+
+
+    // Função para obter parâmetros da URL
+ function getQueryParams() {
+    const params = {};
+    const queryString = window.location.search.substring(1);
+    const regex = /([^&=]+)=([^&]*)/g;
+    let match;
+    while (match = regex.exec(queryString)) {
+        params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+    }
+    return params;
+}
+
+
+
+// Usar os parâmetros
+const params = getQueryParams();
+
+const productPrice = document.getElementById("productPrice");
+const nameProduct = document.getElementById("productName");
+
+nameProduct.textContent = params.productName;
+console.log(params.productName,  params.productPrice );
+document.getElementById("image-url").src = params.imgUrl;
+
+
+
+    const multiplicador = params.productPrice; // Valor para multiplicar
+
+    function atualizarTotal() {
+      const inputQuantidade = document.getElementById("quantidade");
+      const valorTotal = document.getElementById("productPrice");
+      let quantidadeAtual = parseInt(inputQuantidade.value);
+      valorTotal.textContent = parseFloat( quantidadeAtual * multiplicador).toFixed(2)+" MT"
+    }
+
+    function aumentarQuantidade() {
+      const inputQuantidade = document.getElementById("quantidade");
+      let quantidadeAtual = parseInt(inputQuantidade.value);
+      inputQuantidade.value = quantidadeAtual + 1;
+      atualizarTotal();
+    }
+
+    function diminuirQuantidade() {
+      const inputQuantidade = document.getElementById("quantidade");
+      let quantidadeAtual = parseInt(inputQuantidade.value);
+      if (quantidadeAtual > 1) {  // Opcional: Impedir que a quantidade vá abaixo de 1
+        inputQuantidade.value = quantidadeAtual - 1;
+        atualizarTotal();
+      }
+    }
+
+    // Atualiza o total quando a página carrega
+    atualizarTotal();
+
+  </script>
+     <script src="shopify_check.js" ></script>
+</body>
+</html>

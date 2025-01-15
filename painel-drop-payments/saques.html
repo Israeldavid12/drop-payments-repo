@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Caixa de Entrada - Gmail</title>
+    <link rel="stylesheet" href="saques.css">
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+    <div id="withdrawals"></div>
+
+    <div class="gmail-simulation">
+        <!-- Sidebar Simulando os Menus do Gmail -->
+        <aside class="sidebar">
+            <ul>
+                <li class="active">Caixa de Entrada</li>
+                <li>Starred</li>
+                <li>Enviados</li>
+                <li>Rascunhos</li>
+                <li>Spam</li>
+                <li>Lixeira</li>
+            </ul>
+        </aside>
+
+        <!-- Área da Caixa de Entrada de E-mails -->
+        <main class="inbox">
+            <header class="inbox-header">
+                <h2>Caixa de Entrada</h2>
+            </header>
+
+            <!-- Lista de e-mails recebidos -->
+            <div class="email-list">
+                <div class="email-item unread">
+                    <div class="checkbox"><input type="checkbox"></div>
+                    <div class="star">&#9734;</div>
+                    <div class="sender">Google</div>
+                    <div class="subject">Bem-vindo ao Gmail - Seu guia para começar</div>
+                    <div class="timestamp">12:45</div>
+                </div>
+
+                <div class="email-item">
+                    <div class="checkbox"><input type="checkbox"></div>
+                    <div class="star">&#9734;</div>
+                    <div class="sender">LinkedIn</div>
+                    <div class="subject">Conexões sugeridas para você</div>
+                    <div class="timestamp">10:30</div>
+                </div>
+
+                <div class="email-item unread">
+                    <div class="checkbox"><input type="checkbox"></div>
+                    <div class="star">&#9734;</div>
+                    <div class="sender">Spotify</div>
+                    <div class="subject">Seu resumo semanal de músicas</div>
+                    <div class="timestamp">08:15</div>
+                </div>
+
+                <div class="email-item">
+                    <div class="checkbox"><input type="checkbox"></div>
+                    <div class="star">&#9734;</div>
+                    <div class="sender">Facebook</div>
+                    <div class="subject">Notificações de novos eventos</div>
+                    <div class="timestamp">Ontem</div>
+                </div>
+
+                <div class="email-item">
+                    <div class="checkbox"><input type="checkbox"></div>
+                    <div class="star">&#9734;</div>
+                    <div class="sender">Twitter</div>
+                    <div class="subject">Atividade recente em seu perfil</div>
+                    <div class="timestamp">Ontem</div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

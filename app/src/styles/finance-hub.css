@@ -1,0 +1,73 @@
+.finances-hub p {
+  padding: 30px;
+}
+
+.main-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+    
+}
+
+.box {
+    background-color: white;
+    padding: 20px;
+    margin: 8px;
+    border-radius: 8px;
+    flex: 1 1 calc(50% - 40px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.box-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.box-items i {
+    color: #1b398b;
+}
+.user_name {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(17, 17, 17);
+}
+.box .balance_label {
+    font-size: 12px;
+    color: rgb(107, 107, 107);
+    font-weight: 600;
+    padding: 0;
+}
+.box .balance {
+    font-size: 16px;
+    color: #161616;
+    font-weight: 600;
+    padding: 10px 0;
+}
+.s_saque {
+    border: 0px solid #12599c;
+    background-color: #07a74c;
+    padding: 10px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.s_saque:hover {
+    background-color: #056930;
+}
+.s_saque i {
+    color: #ffffff;
+}
+
+@media (max-width: 600px) {
+    .main-box {
+        display: grid;
+    }
+    .user_name {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar produto</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script type="module" src="js-codes/user.js"></script>
+    
+    <style>
+        body {
+            background-color: rgb(255, 255, 255);
+            margin: 0;
+            padding: 0; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header {
+            position: fixed;
+            background-color: #092049;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            color: #fff;
+            display: flex;
+            align-items: start;
+            justify-content: start;
+            padding: 0 18px;
+        }
+        .footer {
+            background-color: #ffffff;
+            bottom: 0;
+            left: 0;
+            height: 70px;
+            color: #424242;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 10px 30px;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(255, 255, 255);
+            height: 100%;
+            width: 100%;
+            margin-top: 70px;
+        }
+
+        form {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            padding-top: 5px;
+            width: 100%;
+
+        }
+
+        h2 {
+            font-size: 14px;
+            text-align: left;
+            color: #333;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #b0bec5;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            height: 45px;
+            font-size: 15px;
+        }
+        textarea {
+            height: 60px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 18px
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            padding: 3;
+            width: 100%;
+            height: 30px;
+            border: 2px dashed #90caf9;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #f0f4f7;
+            text-align: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        input:focus {
+            outline: none;
+            border: 2px solid #326be6;
+            
+        }
+
+        .textarea:focus {
+            outline: none;
+            border: 2px solid #326be6;
+        }
+
+        button[type="submit"] {
+            background-color: #0288d1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0277bd;
+        }
+
+        #message {
+            color: #1da01d;
+            font-size: 20px;
+        }
+
+        #messageUpsell {
+            color: #1da01d;
+            font-size: 20px;
+        }
+
+        #messageDownsell {
+            color: #1da01d;
+            font-size: 20px;
+        }
+
+        .info-inputs {
+            color: #4b4b4b;
+            font-weight: 400;
+            font-size: 11px;
+        }
+
+
+        /* Ajuste para telas pequenas */
+        @media (max-width: 768px) {
+            form {
+                max-width: 100%;
+                margin: 20px 5%;
+            }
+
+            .content {
+                margin-left: 0;
+                /* Remove a margem esquerda em telas pequenas */
+            }
+            .footer {
+                display: none;
+            }
+        }
+
+
+        .select-image {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        #output {
+        background-color: #e5f0fc;
+        padding: 12px;
+        border: 1px solid #1b68bb;
+        border-radius: 8px;
+    }
+
+        @media (max-width: 1080px) {
+            .form-container {
+                margin-left: 0px;
+            }
+
+            .form {
+                margin: 0px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+
+        <p style="font-size: 1rem; "> <i style="cursor: pointer; margin-right: 10px; " onclick="backPage()"
+                class="fa fa-chevron-left" aria-hidden="true"></i> Criar produto  <i class="fas fa-cube"></i>
+        </p>
+    </div>
+
+    <div class="container">
+        
+        <form id="productForm" style="max-width: 500px; margin: auto; margin-top: 15px; margin-bottom: 15px;">
+            <h2 id="infoBasic" style="height: 40px;" >Informações básicas do produto <i class="fa fa-info-circle" aria-hidden="true"></i></h2>
+            <p style="text-align: center; font-size: 14px; display: none;" id="output"></p>
+            <label for="productName">Nome do Produto:</label>
+            <input type="text" id="productName" placeholder="Nome do Produto" required
+                style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+            <h5 class="info-inputs" style="color: gray;">Esse nome será exibido no Checkout.</h5>
+
+            <label for="productPrice"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Preço do Produto (MT) 
+            <input type="number" id="productPrice" placeholder="0.00 MT" required
+                style="width: 100%; padding: 8px; margin: 8px 0; ;"><br>
+            <h5 class="info-inputs" style="color: gray;">Esse Preço será exibido no Checkout.</h5>
+  
+            <label for="productDescription"><i class="fa fa-book" aria-hidden="true"></i> Descrição do produto:</label>
+            <textarea class="textarea" id="productDescription" placeholder="" required
+                style="width: 100%; padding: 8px; margin: 8px 0;"></textarea><br>
+            <h5 class="info-inputs" style="color: gray;">Essa Descrição <strong>NAO</strong> será exibida no
+                Checkout.</h5>
+               
+            <label for="productImage"><i class="fas fa-image"></i> Imagem do Produto:</label>
+            <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;"><br>
+            <img id="previewProductImage" src="#" alt="Pré-visualização da Imagem"
+                style="display:none; margin: 8px; width: 150px; height: auto; border-radius: 8px;">
+                <p id="output2" style="color: red; font-weight: bold; display: none;" >/p>
+            <h5 class="info-inputs" style="color: gray;">Essa Imagem será exibida no Checkout.</h5>
+
+
+            <label for="productBanner"><i class="fas fa-image"></i>
+                 Banner do Produto : </label>
+            <input type="file" id="productBanner" accept="image/*" style="margin: 8px 0;" required>
+            <img id="previewProductBanner" src="#" alt="Pré-visualização do Banner"
+                style="display:none; margin: 8px; width: 150px; height: auto; border-radius: 8px;">
+                <p id="output1" style="color: red; font-weight: bold; display: none;" ></p>
+            <h5 class="info-inputs" style="color: gray;">Esse Banner será exibido como destaque do produto.</h5>
+            
+             <hr>
+
+            <!-- Checkbox estilizado -->
+            <label for="productType" style="display: flex; align-items: center;">
+                <input type="checkbox" id="productType" style="margin-right: 10px; transform: scale(1.2);">
+                <span>Link externo para o produto. <i class="fas fa-link"></i>
+                </span>
+            </label>
+
+            <!-- Campo de link externo estilizado -->
+            <div id="productLinkDiv" style="display:none; margin-bottom: 20px;">
+                <label for="productLink" style="display: block;">Insira o link Externo do Produto:</label>
+                <input type="url" id="productLink" placeholder="https://example.com"
+                    style="width: 100%; height: 20px;  padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <!-- Campo de arquivo PDF -->
+            <div id="productDocDiv">
+                <label for="productDoc">Arquivo do Produto (.PDF):</label>
+                <input type="file" id="productDoc" accept=".pdf" required style="margin: 8px 0;">
+                <p id="output0" style="color: red; font-weight: bold; display: none;" ></p>
+            </div>
+            
+            <button id="addProduct" type="submit"
+                style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Adicionar Produto
+            </button>
+            <p id="message"></p>
+            <p style="height: 20px;" ></p>
+        </form>
+    </div>
+    <div class="footer">
+        <a style="font-size: 12px; text-decoration: underline; color: #202020; " href="#"> Ajuda e Support <i class="fa fa-question-circle" aria-hidden="true"></i>  </a>
+        <p style="font-size: 12px; text-decoration: underline;"> &copy; Drop Payments E.I .  
+        </p>
+        <a style="font-size: 12px; text-decoration: underline; color: #424242; " href="#"> Dashboard <i class="fa fa-home" aria-hidden="true"></i> </a>
+        <a style="font-size: 12px; text-decoration: underline; color: #424242; " href="#"> Vendas <i class="fa fa-usd" aria-hidden="true"></i> </a>
+    </div>
+    
+    <script>
+         function backPage() {
+        window.location.href = 'index.html';
+    }
+
+    
+document.getElementById('productType').addEventListener('change', function() {
+    const linkDiv = document.getElementById('productLinkDiv');
+    const fileDiv = document.getElementById('productDocDiv');
+    const fileInput = document.getElementById('productDoc');
+
+    if (this.checked) {
+        linkDiv.style.display = 'block'; // Mostrar campo de link externo
+        fileDiv.style.display = 'none';  // Ocultar campo de arquivo PDF
+        fileInput.required = false; // Tornar o arquivo PDF não obrigatório
+    } else {
+        linkDiv.style.display = 'none'; // Ocultar campo de link externo
+        fileDiv.style.display = 'block'; // Mostrar campo de arquivo PDF
+        fileInput.required = true;  // Tornar o arquivo PDF obrigatório novamente
+    }
+});
+    </script>
+</body>
+
+</html>

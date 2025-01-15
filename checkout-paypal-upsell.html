@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pagamento Segura - PayPal: Upsell</title>
+    <link rel="shortcut icon" href="assests/logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="checkout.css">
+    <link rel="stylesheet" href="sales-made.css">
+    <script type="module" src="paypal-payment-upsell.js"></script>
+    <script type="module" src="checkout-pixel.js"></script>
+      <!-- Inclusão do SDK do PayPal -->
+      <script src="https://www.paypal.com/sdk/js?client-id=AZh4fh2iISKyn4cYecfKY4JelecjBLlhRdu27YCR3b0hQKX4SQUFxrHDLT4Rdw46mveiMJtn8UcL_bmO&currency=USD"></script>
+    
+</head>
+<body>
+    <div id="pixel"> </div>
+
+    <!-- Container do cronômetro -->
+    <div class="timer" id="timer">
+        <span>00:00:00</span> 
+        <img src="checkou-assets/timer.png" alt="Compra Segura">
+        <p style="font-size: 14px; margin-left: 2px; text-transform: uppercase; ">Preencha os seus <br> dados antes que <br> o cronômetro termine</p>
+    </div>
+
+    <div class="body2">
+        <div class="container">
+            <div class="info-secure-coneteiner" >
+                <img id="dynamic-image" class="secure-icon" src="assests/safe.png" alt="Segurança">
+                <hr style="margin-bottom: 18px;">
+            </div>
+
+            <div class="product-info">
+                <img id="image-url" src="checkou-assets/default-img.jpg" alt="logo">
+                <div class="product-details">
+                    <p>Esta a pagar:</p>
+                    <h2 id="productName" style="color: #000000;"></h2>
+                    <p style="font-size: 14px;">COMPRA 100% SEGURA</p>
+                    <p id="productPrice" class="product-price"></p>
+                </div>
+            </div>
+
+            <hr style="margin-bottom: 16px;">
+
+            <form>
+                <div class="form-group">
+                    <label for="nome">Digite seu nome completo (opcional)</label>
+                    <input id="nome" type="text" placeholder="Digite seu nome completo">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Digite seu melhor e-mail</label>
+                    <input id="email" type="email" placeholder="Digite seu melhor e-mail" required>
+                </div>
+
+                <div style="display: none;" class="form-group">
+                    <label for="whatsapp">Digite seu whatsapp</label>
+                    <input id="whatsapp" type="tel" placeholder="Seu whatsapp">
+                </div>
+                <br><br>
+                <p style=" font-size: 13px; " >Detalhes da compra</p>
+                <hr>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" >
+                    <p id="nameValue" style="display: inline; font-weight: bold; font-size: 12px;" >Drop payments</p> <p style="display: inline;  font-size: 12px;" id="priceValue" > 00,00 US$</p>
+                </div>
+                
+
+                <!-- Botão do PayPal -->
+                <div id="paypal-button-container"></div>
+            </form>
+        </div>
+
+        <div>
+            <p style="text-align: center; margin-top: 5px;">© 2024 Drop Payments Mz</p>
+        </div>
+    </div>
+
+
+  
+
+    <script>
+     
+      
+
+        // Função de contagem regressiva
+        let timeLeft = 200;
+        const timerElement = document.getElementById("timer").querySelector("span");
+
+        function startCountdown() {
+            const countdown = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.innerHTML = "Tempo Esgotado!";
+                } else {
+                    let minutes = Math.floor(timeLeft / 60);
+                    let seconds = timeLeft % 60;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+                    timerElement.innerHTML = `00 : ${minutes < 10 ? '0' : ''}${minutes} : ${seconds}`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        startCountdown();
+
+
+          // Detecta o idioma do navegador
+          const userLang = navigator.language || navigator.userLanguage;
+
+// Elemento da imagem
+const imgElement = document.getElementById('dynamic-image');
+
+// Verifica se o idioma é inglês (en, en-US, etc.)
+if (userLang.startsWith('en')) {
+            // Idioma inglês
+            imgElement.src = "assests/safe.png";
+        } else if (userLang.startsWith('pt')) {
+            // Idioma português
+            imgElement.src = "checkou-assets/baner4.png";
+        } else if (userLang.startsWith('es')) {
+            // Idioma espanhol
+            imgElement.src = "checkou-assets/baner4.png";
+        } else {
+            // Qualquer outro idioma
+            imgElement.src = "assests/safe.png";
+        }
+    </script>
+</body>
+</html>

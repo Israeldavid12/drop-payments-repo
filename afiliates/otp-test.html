@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <input value="israeldavide35@gmail.com" type="email" name="" id="email">
+    <button id="send">solicitar otp</button>
+     <input type="text" id="code" >
+    <button id="verify">verificar</button>
+
+
+    <script type="module"  >
+       /// const axios = require('axios/dist/browser/axios.cjs'); // browser
+
+
+        document.getElementById('send').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const type = 'OTP';
+            axios.post('http://127.0.0.1:3013/api/otp-code', {
+                email: email,
+                type_code: type
+            })
+            .then(function (response) {
+                localStorage.setItem('otp', response.data.otp);
+                const otp = localStorage.getItem('otp');
+            })
+            .catch(function (error) {
+                console.log(error);
+            })  
+
+        });
+
+        document.getElementById('verify').addEventListener('click', () => {
+            
+            const code_client = document.getElementById('code').value;
+            
+            const server_code = localStorage.getItem('otp');
+
+            if (code_client === server_code) {
+                console.log('Verificado com sucesso');
+            } else if (code_client != server_code) {
+                console.log('OTP invalido!');
+            }
+
+        });
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

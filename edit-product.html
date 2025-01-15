@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Produto</title>
+    <link rel="shortcut icon" href="assests/logo.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px; /* Adicionei um padding para evitar que o conteúdo encoste nas bordas */
+            overflow-y: auto; /* Permite rolagem vertical */
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 20px 0 10px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .product-view {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .upload-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .upload-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .drop-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            width: 60%;
+            text-align: center;
+            color: #999;
+        }
+
+        button {
+            padding: 12px;
+            border: 1px solid #00aaff;
+            background-color: #00aaff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0088cc;
+        }
+
+        .product-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .existing-image {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .ver-produto {
+            text-align: right;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        #verProduto {
+            text-decoration: none;
+            color: #00aaff;
+            font-size: 14px;
+        }
+
+        #verProduto:hover {
+            color: #0088cc;
+            text-decoration: underline;
+        }
+
+        .save-button {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Informações básicas do produto</h1>
+        <p>Os dados abaixo são muito importantes para seu produto. Preencha-os com atenção.</p>
+        
+        <form id="productForm">
+            <label for="nomeProduto">Nome do produto</label>
+            <input type="text" id="nomeProduto" value="ZERO BARRIGA" readonly>
+            <small>Esse nome será exibido no checkout</small>
+
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" rows="3">hscgvsgdvgscdhd csdbhbscdvsvucdvsudc</textarea>
+
+            <div class="product-view">
+                <div class="upload-section">
+                    <label>Imagem do seu produto</label>
+                    <div class="upload-area">
+                        <div class="drop-area">
+                            Arraste o arquivo para cá
+                        </div>
+                        <button type="button">Selecionar imagem</button>
+                    </div>
+
+                    <label>Selecionar produto</label>
+                    <div class="upload-area">
+                        <div class="drop-area">
+                            Arraste o arquivo para cá
+                        </div>
+                        <button type="button">Selecionar arquivo</button>
+                    </div>
+                </div>
+
+                <div class="product-image">
+                    <label>Imagem atual do produto</label>
+                    <img src="assests/mpesa.jpg" alt="Imagem do produto" class="existing-image">
+                </div>
+            </div>
+
+            <div class="ver-produto">
+                <a href="produto.html" id="verProduto">Ver produto</a>
+            </div>
+
+            <div class="save-button">
+                <button type="submit">Salvar informações</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('verProduto').addEventListener('click', function(event) {
+            event.preventDefault(); // Impede o redirecionamento automático
+            window.location.href = 'produto.html'; // Substitua 'produto.html' pelo caminho correto
+        });
+
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+
+            // Ação a ser executada ao salvar as informações do produto
+            alert('Informações do produto salvas com sucesso!');
+        });
+    </script>
+</body>
+</html>

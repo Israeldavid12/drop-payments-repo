@@ -1,0 +1,112 @@
+.container-2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 0px;
+}
+h2 {
+    padding: 0px 0px;
+}
+
+.box {
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(50% - 40px);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+   
+   
+}
+
+.box h2 {
+    margin-top: 0;
+}
+
+.button {
+    display: inline-block;
+    padding: 5px 15px;
+    border: 1px solid #0f4897;
+    background-color: transparent;
+    color: #0f4897;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    height: 30px;
+    text-decoration: none;
+    font-size: 12px;
+    margin-right: 5px;
+    width: 160px;
+}
+
+#saquesHistoryView {
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #009D43;
+    color: #ffffff;
+    width: 160px;
+} 
+#sendMoney {
+    height: 30px;
+    border-radius: 20px;
+    border: none;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #0b4291;
+    color: #ffffff;
+    width: 160px;
+}
+#sendMoney:hover {
+    background-color: #072755;
+}
+
+#saquesHistoryView:hover {
+    background-color: #037735;
+}
+#saquesHistoryView:active {
+    background-color: #025f2a;
+}
+
+#vendasHistoryView {
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid black;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #ffffff;
+    color: #000000;
+    margin-bottom: 5px;
+    width: 160px;
+}
+
+#vendasHistoryView:hover {
+    background-color: #037735;
+    color: #ffffff;
+    border: none;
+}
+#vendasHistoryView:active {
+    background-color: #025f2a;
+    color: #ffffff;
+}
+
+.imgs-payments {
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.imgs-icon {
+    width: 25px;
+    margin-right: 3px;
+    transform: translateY(5px);
+}

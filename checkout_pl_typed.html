@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pagamento Segura</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="checkout-typed.css">
+    <link rel="stylesheet" href="sales-made.css">
+    <script type="module" src="paypal-payment.js"></script>
+    <script type="module" src="checkout-pixel.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+
+</head>
+
+<body>
+    <div id="pixel"> </div>
+
+    </div>
+    <div id="overlay" onclick="closePopup()"></div>
+    <div id="mpesaPopup">
+        <div class="inline">
+            <div class="lds-ring" bis_skin_checked="1">
+                <div bis_skin_checked="1"></div>
+                <div bis_skin_checked="1"></div>
+                <div bis_skin_checked="1"></div>
+                <div bis_skin_checked="1"></div>
+            </div>
+            <p id="infoError" style="color: #E21923; font-size: 16px; font-weight: bold; margin-left: 8px;">Insira o PIN
+                e aguarde...</p>
+        </div>
+
+        <hr>
+        <img class="imagePopup" id="imagePopup" src="assests/mpesa.jpg" alt="emola"
+            style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;">
+        <p>Introduza o PIN no Popup que aparecerá no seu telemóvel com o número indicado para finalizar o pagamento</p>
+        <p style="font-size: 12px; margin-top: 4px; color: #0e0e0e; "><strong>*Por favor não recarregue ou saia desta
+                página antes de concluir o pagamento!</strong></p>
+        <button id="fechar" onclick="closePopup()" class="supporteEmail">Tentar novamente</button>
+    </div>
+    <!-- Área da notificação -->
+    <div id="purchase-notification" class="notification hidden">
+        <div class="checkmark">✔</div>
+        <div class="message">
+            <strong>Nova compra adquirida</strong>
+            <span id="buyer-name"></span> efetuou uma nova compra
+        </div>
+        <div class="close-btn" id="close-notification">✕</div>
+    </div>
+    <!-- Cronômetro movido para fora do contêiner -->
+    <div class="timer" id="timer">
+        <span>00:00:00</span>
+        <img src="checkou-assets/timer.png" alt="Compra Segura">
+        <p style="font-size: 14px; margin-left: 2px; text-transform: uppercase; ">Preencha os seus <br> dados antes que
+            <br> o cronômetro termine
+        </p>
+    </div>
+    <div class="body2">
+        <img id="baner-url" style="border-radius: 6px; max-width: 620px;" class="secure-icon"
+            src="checkou-assets/default-banner.jpg" alt="Banner container">
+        <div class="container">
+            <div class="info-secure-coneteiner">
+
+                <hr style="margin-bottom: 18px;">
+            </div>
+
+
+            <div>
+
+
+                <div class="product-info">
+                    <img id="image-url" src="checkou-assets/default-img.jpg" alt="logo">
+                    <div class="product-details">
+                        <p>Esta a pagar:</p>
+                        <h2 id="productName" style="color: #000000;"></h2>
+                        <p style="font-size: 14px;">COMPRA 100% SEGURA</p>
+                        <p id="productPrice" class="product-price">
+                        <p class="product-price">
+
+
+                    </div>
+                </div>
+                <hr style="margin-bottom: 16px;">
+                <form>
+
+                    <div class="form-group">
+
+                        <label id="labelNome" for="text">Digite seu nome completo </label>
+                        <div class="input-container" id="divnome">
+                            <i style="color: #afaeae; font-size: 19px;" class="fa fa-user fa-2x" aria-hidden="true"></i>
+                            <input id="nome" type="text" placeholder="Digite seu nome completo" required>
+                        </div>
+                        <p id="inputoutputNome"
+                            style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;">
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="labelEmail" for="email">Digite seu melhor e-mail</label>
+
+                        <div class="input-container" id="divemail">
+                            <i style="color: #afaeae; font-size: 19px;" class="fa fa-envelope fa-2x"
+                                aria-hidden="true"></i>
+                            <input id="email" type="email" placeholder="Digite seu melhor e-mail" required>
+                        </div>
+                        <p id="inputoutputEmail"
+                            style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;">
+                            O número de pagamento deve ter exatamente 9 dígitos.</p>
+                    </div>
+                    <div class="form-group">
+                        <label id="labelWhatsapp" for="tel">Digite seu whatsapp</label>
+
+                        <div class="input-container" id="divwhatsapp">
+                            <i style="color: #afaeae; font-size: 19px;" class="fab fa-whatsapp fa-2x"></i>
+                            <input id="whatsapp" type="tel" placeholder="Seu whatsapp">
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <p style=" font-size: 13px; ">Informações do produto</p>
+                    <hr>
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 15px;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                        <p id="nameValue" style="display: inline; font-weight: bold; font-size: 12px;">Drop payments</p>
+                        <p style="display: inline;  font-size: 12px;" id="priceValue"> 00,00 US$</p>
+                    </div>
+
+                    <p style="margin-bottom: 5px;">Pagar com:</p>
+
+                    <div class="paypal" id="paypal">
+                        <img src="assests/pp-lg.png" alt="paypal" id="paypal_icon">
+                        <i id="spiner"
+                            style="color: #063b85; font-size: 25px; text-align: center; margin-top: 0px; display:  none;   "
+                            class="fas fa-circle-notch fa-spin fa-2x"></i>
+                        
+                    </div>
+                    <br>
+                    <div style="display: none;" class="credit-card" id="credit-card">
+                        <i style="margin-right: 8px;" class="fa fa-credit-card-alt" aria-hidden="true"></i> Cartão de
+                        credito
+                        <i id="spiner"
+                            style="color: #063b85; font-size: 25px; text-align: center; margin-top: 0px; display:  none;   "
+                            class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="credit-card-form">
+                        <div class="form-group">
+                            <label style="color: #6b6b6b;" for="card-number">Número do cartão</label>
+                            <input
+                                style=" border: 1px solid rgb(190, 187, 187); padding: 8px 8px; height: 45px; font-size: 14px;"
+                                type="text" id="card-number" placeholder="0000 0000 0000 0000" />
+                        </div>
+
+                        <div class="form-group">
+                            <label style="color: #6b6b6b;" for="cardholder-name">Nome do titular</label>
+                            <input
+                                style=" border: 1px solid rgb(190, 187, 187); padding: 8px 8px; height: 45px; font-size: 14px; outline: none;"
+                                type="text" id="cardholder-name" placeholder="Insira o nome impresso no cartão"
+                                autofocus />
+                        </div>
+
+                        <div class="form-group">
+                            <label style="color: #6b6b6b;">Validade</label>
+                            <div class="input-row">
+                                <select id="expiry-month">
+                                    <option value="" disabled selected>MM</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+
+                                <select id="expiry-year">
+                                    <option value="" disabled selected>AA</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                </select>
+                            </div>
+                            <span class="error" id="error-year" style="display: none;">Ano é obrigatório.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input
+                                style=" border: 1px solid rgb(190, 187, 187); padding: 8px 8px; height: 45px; font-size: 14px;"
+                                type="text" id="cvv" placeholder="CVV" />
+                        </div>
+                        <button class="pay-now" id="pay">Comprar agora</button>
+                    </div>
+                </form>
+
+            </div>
+            <div>
+                <p style="text-align: center; margin-top: 5px;font-size: 12px;">© 2024 Drop Payments E.I</p>
+            </div>
+
+        </div>
+        <div id="loader" class="spinner-overlay d-flex justify-content-center align-items-center">
+            <div class="spinner-border text-primary" role="status">
+                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+            </div>
+        </div>
+
+        <div style="background-color: #353535;" id="hide-checkout" class="spinner-overlay d-none justify-content-center align-items-center ">
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg  style="width: 20px;" xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <div>
+                 <p style="color: white; font-size: 18px;" > 404 - PAGINA INDISPONIVEL!</p>
+                 <p style="text-align: center; margin-top: 5px;font-size: 10px; color: white;" >© 2024 Drop Payments E.I</p>
+                </div>
+              </div>
+              <br>
+              <div>
+                
+            </div>
+        </div>
+
+        <script>
+        function setLoading1() {
+            document.getElementById('loader').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+
+        }
+        function setLoading2() {
+            document.getElementById('loader').style.display = 'none';
+
+        }
+        setTimeout(setLoading1, 2000);
+        setTimeout(setLoading2, 2000); 
+
+            function closePopup() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mpesaPopup').style.display = 'none';
+            }
+            // Função de contagem regressiva
+            let timeLeft = 200; // 3.33 minutos em segundos
+            const timerElement = document.getElementById("timer").querySelector("span");
+
+            function startCountdown() {
+                const countdown = setInterval(() => {
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        timerElement.innerHTML = "Tempo Esgotado!";
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        seconds = seconds < 10 ? "0" + seconds : seconds;
+                        timerElement.innerHTML = `00 : ${minutes < 10 ? '0' : ''}${minutes} : ${seconds}`;
+                        timeLeft--;
+                    }
+                }, 1000);
+            }
+
+            startCountdown();
+
+            document.getElementById("credit-card").addEventListener('click', () => {
+                const credit_card_form = document.getElementsByClassName("credit-card-form ")[0];
+                credit_card_form.style.display = 'block';
+                const position = credit_card_form.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({ top: position, behavior: 'smooth' }); // Rolagem suave até a posição do elemento
+            });
+
+
+        </script>
+</body>
+
+</html>

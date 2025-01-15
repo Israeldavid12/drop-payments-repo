@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank you page</title>
+    <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon"> <!-- Corrigido 
+    'assests' para 'assets' -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+            authDomain: "drop-payments-mz.firebaseapp.com",
+            databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "drop-payments-mz",
+            storageBucket: "drop-payments-mz.appspot.com",
+            messagingSenderId: "983262508468",
+            appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+            measurementId: "G-JBP3RN50WS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('suporte').addEventListener('click', function() {
+    window.location.href = "https://api.whatsapp.com/send?phone=258863814050";
+});
+
+        function getQueryParam(name) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            return urlParams.get(name);
+        }
+
+        const namePayer = getQueryParam('namePayer');
+        const emailPayer = decodeURIComponent(getQueryParam('emailPayer')); 
+        const nameProduct = decodeURIComponent(getQueryParam('nameProduct'));// Decodifica o e-mail
+        const productId = getQueryParam('id');
+
+        if (productId) {
+            const productRef = doc(db, 'products', productId);
+            getDoc(productRef)
+                .then((docSnap) => {
+                    if (docSnap.exists()) {
+                        const productData = docSnap.data();
+                        const docUrl = productData.docUrl;
+
+                        if (docUrl) {
+                            const downloadLink = document.getElementById('download-link');
+                            downloadLink.href = docUrl;
+
+                            // Envia o e-mail com o nome, e-mail e link para o documento
+                            fetch('https://www.dropaymentsmz.online/api/send-email', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    namePayer: namePayer,
+                                    emailPayer: emailPayer,
+                                    nameProduct: nameProduct,
+                                    docUrl: docUrl,
+                                    templateType: "1-B"
+                                })
+                            }).then(response => {
+                                return response.json();
+                            }).then(data => {
+                                console.log(data.message);
+                            }).catch(error => {
+                                console.error('Erro ao enviar o e-mail:', error, emailPayer);
+                            });
+
+                        } else {
+                            console.error('docUrl não encontrado.');
+                        }
+                    } else {
+                        console.error('Nenhum documento encontrado para o ID fornecido.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro ao obter documento:', error);
+                });
+        } else {
+            console.error('ID do produto ausente.');
+        }
+    </script>
+</head>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+        color: #1a2e5d;
+        width: 100%;
+    }
+
+    .container {
+        text-align: center;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        
+    }
+
+    .container img {
+      
+        width: 80px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .download-button {
+        display: inline-block;
+        background-color: #34a853;
+        color: #fff;
+        padding: 12px 24px;
+        font-size: 17px;
+        text-decoration: none;
+        border-radius: 25px;
+        margin-bottom: 30px;
+        font-weight: 600;
+        box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .support-section {
+        margin-bottom: 20px;
+        margin-top: 40px;
+    }
+
+    .support-section img {
+        width: 40px;
+        margin-bottom: 0px;
+    }
+
+    .footer {
+        font-size: 14px;
+        height: 45px;
+        color: #fff;
+        background-color: #1f395e;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+    }
+    #suporte {
+        text-decoration: underline;
+        font-size: 11px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img src="assests/checked.png" alt="Ícone de confirmação">
+    <h1>OBRIGADO PELA SUA COMPRA</h1>
+    <p>A sua compra foi confirmada e enviada para o <strong>E-mail</strong> anteriormente fornecido, por favor clique no link abaixo para ter acesso imediato ao produto.</p>
+    <a href="#" id="download-link" class="download-button">ACEDER AO MEU PRODUTO</a>
+    <div class="support-section">
+        <p style="font-size: 11px;"  >Precisa de ajuda?</p>
+        <img src="assests/user-icon.png" alt="Ícone de suporte">
+        <p id="suporte" >Contactar support</p>
+    </div>
+</div>
+
+<div class="footer">
+    Drop Payments Mz – Todos direitos Reservados - 2024
+</div>
+
+</body>
+</html>

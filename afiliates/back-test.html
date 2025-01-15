@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento com PayPal</title>
+</head>
+<body>
+  <h1>Pagamento com PayPal</h1>
+  <button id="payButton">Pagar</button>
+
+  <script>
+    document.getElementById('payButton').addEventListener('click', () => {
+
+
+
+fetch('http://127.0.0.1:3010/api/paypal-back-payment', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    clientId:  'rVQeoNZ99VWsuDgmIHQ7AKYwc2J2',
+    sucessPage: "https://gta.com",
+    cancelPage: "https://www.paypal.com/mz/home",
+    amount: '0.01',
+  }),
+})
+  .then((response) => {
+    console.log('Status da resposta:', response.status);
+    return response.json();
+  })
+  .then((data) => {
+    console.log('Resposta do backend:', data);
+    if (data.approvalUrl) {
+      window.location.href = data.approvalUrl;
+    } else {
+      console.error('approvalUrl ausente:', data);
+    }
+  })
+  .catch((error) => console.error('Erro na requisição:', error));
+
+    });
+  </script>
+</body>
+</html>

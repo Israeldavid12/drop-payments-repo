@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPA com Páginas Externas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .sidebar {
+      width: 200px;
+      background-color: #f4f4f4;
+      height: 100vh;
+      position: fixed;
+      padding: 10px;
+    }
+    .menu-item {
+      cursor: pointer;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #ddd;
+      text-align: center;
+    }
+    .menu-item:hover {
+      background-color: #bbb;
+    }
+    #content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="menu-item" onclick="navigateTo('affiliates/mpesa-test.html')">Home</div>
+    <div class="menu-item" onclick="navigateTo('mpesa-test.html')">Sobre</div>
+    <div class="menu-item" onclick="navigateTo('saque-function.html')">Contato</div>
+    <div class="menu-item" onclick="navigateTo('back-test.html')">Contato</div>
+  </div>
+
+  <div id="content">
+    <h1>Bem-vindo à SPA</h1>
+    <p>Selecione uma opção no menu para carregar o conteúdo.</p>
+  </div>
+
+  <script>
+    async function navigateTo(route) {
+  try {
+    // Busca o conteúdo da página externa
+    const response = await fetch(route);
+
+    if (!response.ok) {
+      throw new Error(`Erro ao carregar ${route}`);
+    }
+
+    // Insere o conteúdo no contêiner
+    const html = await response.text();
+    document.getElementById("content").innerHTML = html;
+
+    // Atualiza a URL no navegador sem recarregar a página
+    history.pushState({ route }, "", `/${route}`);
+  } catch (error) {
+    document.getElementById("content").innerHTML = `
+      <h1>Erro</h1>
+      <p>Não foi possível carregar a página: ${error.message}</p>
+    `;
+  }
+}
+
+// Carrega o estado correto ao usar botões do navegador (voltar/avançar)
+window.onpopstate = function (event) {
+  if (event.state && event.state.route) {
+    navigateTo(event.state.route);
+  } else {
+    navigateTo("affiliates/menu-tela.html"); // Página padrão
+  }
+};
+
+// Define a página inicial
+navigateTo("/affiliates/menu-tela.html");
+
+  </script>
+</body>
+</html>

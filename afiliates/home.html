@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afiliados Painel</title>
+  <link rel="shortcut icon" href="../assests/dp-logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+
+</head>
+
+<body>
+  <div class="header">
+    <p>OLA.ISRAEL DAVIDE <i class="fas fa-user"></i></p>
+    <div onclick="showSidebar()">
+
+      <i style="color: black;" class="bi bi-text-center"></i>
+    </div>
+    <div style="display: inline-block;">
+      <p>OLA.ISRAEL DAVIDE <i class="fas fa-user"></i></p>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <img src="../assests/dp-logo.png" alt="">
+      <a onclick="selectMenu(this)" class="menu-item" href="#inicio"><i class="fa-thin fa-house"></i> <span
+          class="title-sidebar">Dashboard </span></a>
+      <a onclick="selectMenu(this)" class="menu-item" href="#/home"><i class="fa-thin fa-chart-network"></i> <span
+          class="title-sidebar">Pixel </span></a>
+      <a onclick="selectMenu(this)" class="menu-item" href="#shopify"><i class="fa-brands fa-shopify"></i> <span
+          class="title-sidebar">Shopify </span></a>
+      <a onclick="selectMenu(this)" class="menu-item" href="#api/credentials"><i style="font-size: 18px;"
+          class="fa-thin fa-key"></i> <span class="title-sidebar">Credencias </span></a>
+      <a onclick="selectMenu(this)" class="menu-item" href="#create/product"><i class="bi bi-box"></i> <span class="title-sidebar">Produtos</span></a>
+      <div onclick="selectMenu(this)" class="menu-item" data-target="tela1">
+        <i class="fas fa-home"></i> <span class="title-sidebar">Produtos </span>
+      </div>
+      <div class="menu-item show-dropdown-menu" data-target="tela2">
+        <p> <i class="fas fa-image"></i> </p><span class="title-sidebar">Links <i style="font-size:20px;"
+            class="fa-thin fa-caret-down"></i></span>
+      </div>
+      <div class="menu-item" data-target="tela4">
+        <i class="fas fa-envelope"></i> <span class="title-sidebar">Sugestoes</span>
+      </div>
+      <div class="menu-item" data-target="tela4">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> <span class="title-sidebar">Ajuda</span>
+      </div>
+      <div id="logoutButton" class="menu-item" data-target="tela4">
+        <i class="fa fa-question-circle" aria-hidden="true"></i> <span class="title-sidebar">Sair</span>
+      </div>
+     
+  
+    </div>
+  
+    <div id="content">
+      <h1>PAGINA INICIAL </h1>
+    </div>
+
+    <div id="loader">
+      <span class="loader"></span>
+    </div>
+
+  </div>
+</body>
+
+</html>
+
+<script>
+
+  function selectMenu(selectedItem) {
+    // Remover o background de todos os itens
+    const items = document.querySelectorAll('.menu-item');
+    items.forEach(item => {
+      item.classList.remove('selected');
+    });
+
+    // Adicionar o background ao item clicado
+    selectedItem.classList.add('selected');
+  }
+  let state = false;
+
+
+  function showSidebar() {
+    state = !state;
+    console.log(state);
+    if (state === true) {
+      document.getElementsByClassName('title-sidebar')[0].style.display = 'block';
+      document.getElementsByClassName('sidebar')[0].style.display = 'block';
+    } else {
+      document.getElementsByClassName('title-sidebar')[0].style.display = 'none';
+      document.getElementsByClassName('sidebar')[0].style.display = 'none';
+    }
+
+  }
+
+
+
+  // Seleciona todos os itens de menu da sidebar e as telas
+  const menuItems = document.querySelectorAll('.menu-item');
+  const screens = document.querySelectorAll('.screen');
+
+ 
+
+</script>
+<script type="module" src="app.js"></script>
+</body>
+
+</html>

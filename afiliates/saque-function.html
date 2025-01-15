@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testar Saque</title>
+</head>
+<body>
+  <h1>Realizar Saque</h1>
+  
+  <form id="saqueForm">
+    <label for="valorSaque">Valor para saque:</label>
+    <input type="number" id="valorSaque" required><br>
+    <button type="submit">Realizar Saque</button>
+  </form>
+
+  <p id="resultado"></p>
+
+  <script>
+    document.getElementById('saqueForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const valorSaque = parseFloat(document.getElementById('valorSaque').value);
+      
+      // Chama a API ou lógica de back-end para processar o saque
+      const resultado = await realizarSaqueApi(valorSaque);
+      
+      document.getElementById('resultado').textContent = resultado;
+    });
+
+    async function realizarSaqueApi(valorSaque) {
+      // Aqui você chamaria o seu back-end (Node.js) para realizar o saque
+      // Exemplo de resposta simulada
+      return `Saque de ${valorSaque} realizado com sucesso!`;
+    }
+  </script>
+</body>
+</html>

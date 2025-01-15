@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Template</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #062858;
+            padding: 20px;
+            border-radius: 5px;
+            width: 600px;
+            height: 35px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            width: 35px;
+            height: 35px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            font-size: 18px;
+            color: #333;
+        }
+        h3 span {
+            padding: 0 5px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 11px;
+            color: #333;
+        }
+        p span {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #07a544;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .signature {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #333;
+        }
+        #suporte {
+            text-decoration: underline;
+            font-size: 12px;
+            color: #333;
+        }
+        .footer {
+            margin-top: 10px;
+            font-size: 9px;
+            height: 25px;
+            color: #fff;
+            background-color: #1f395e;
+            padding: 10px;
+            text-align: center;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table td {
+            padding: 10px 20px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 11px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .table th {
+            text-align: left;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #062858;
+            color: white;
+            border: 1px solid #ddd;
+        }
+        .table td:first-child {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img id="back-button" src="https://i.ibb.co/D455cWM/Design-sem-nome-67.png" alt="DP logo" class="logo">
+    </div>
+    <div class="container">
+        <h3>Novo pedido <span style="color: #07a544;">pago</span> da loja ${storeName}!</h3>
+
+        <table class="table">
+            <tr>
+                <td>Nome do produto</td>
+                <td>${productName}</td>
+            </tr>
+            <tr>
+                <td>Total pago</td>
+                <td>${amountPaid}</td>
+            </tr>
+            <tr>
+                <td>Quantidade de itens</td>
+                <td>${quantity}</td>
+            </tr>
+            <tr>
+                <td>Data</td>
+                <td>${timestamp}</td>
+            </tr>
+        </table>
+
+        <p style="font-weight: 600; font-size: 14px;">Informações do comprador:</p>
+        
+        <table class="table">
+            <tr>
+                <td>Nome</td>
+                <td>${nameBuyer}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>${emailBuyer}</td>
+            </tr>
+            <tr>
+                <td>Whatsapp</td>
+                <td>${whatsappBuyer}</td>
+            </tr>
+            <tr>
+                <td>Endereço</td>
+                <td>${adress}</td>
+            </tr>
+        </table>
+
+        <a href="https://www.dropaymentsmz.online/vendas" class="button">Ver mais detalhes</a>
+
+        <div class="signature">
+            <p>Atenciosamente,<br>Equipe Drop Payments</p>
+        </div>
+
+        <div class="footer">
+            Drop Payments Mz – Todos direitos Reservados - 2024
+        </div>
+    </div>
+</body>
+</html>

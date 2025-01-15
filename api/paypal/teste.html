@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento com PayPal</title>
+    <script src="https://www.paypal.com/sdk/js?client-id=AS79q6mbuZLoCOgzsm2d1w9HX9g3Vjsp3sc1HEOTOnlYK-N715mucMh0MRUHHQPgZRimoc6gVe10kSNi"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pagamento com PayPal</h1>
+        <p>Realize seu pagamento de forma segura com o PayPal!</p>
+
+        <!-- Botão do PayPal -->
+        <div id="paypal-button-container"></div>
+    </div>
+    <button id="pay-now">Pagar com PayPal</button>
+
+    <script>
+      document.getElementById('pay-now').addEventListener('click', async () => {
+        // Faz uma requisição para o backend para criar o pedido
+        const response = await fetch('/api/create-order', { method: 'POST' });
+        const orderData = await response.json();
+    
+        // Redireciona o usuário para o PayPal
+        window.location.href = orderData.links.find(link => link.rel === 'approve').href;
+      });
+    </script>
+    
+    <script>
+        paypal.Buttons({
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: '10.00'  // Valor do pagamento
+                }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            // Após o pagamento ser aprovado, capturamos a transação
+            return actions.order.capture().then(function(details) {
+             console.log('Pagamento aprovado: ' + details.payer.name.given_name);
+              
+              // Envia os detalhes do pagamento para o backend
+              fetch('http://127.0.0.1:3010/api/paypal-payment', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  paymentId: data.orderID,
+                  payerName: details.payer.name.given_name,
+                  payerEmail: details.payer.email_address,
+                  amount: details.purchase_units[0].amount.value,
+                  currency: details.purchase_units[0].amount.currency_code,
+                  clientId: "rVQeoNZ99VWsuDgmIHQ7AKYwc2J2",
+                  productName: "Nome do produto",
+                })
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Pagamento salvo no banco de dados:', data);
+              })
+              .catch((error) => {
+                console.error('Erro ao salvar pagamento:', error);
+              });
+            });
+          },
+          onError: function(err) {
+            console.error('Erro no pagamento', err);
+            alert('Ocorreu um erro durante o pagamento. Tente novamente.');
+          }
+        }).render('#paypal-button-container'); // Renderiza o botão do PayPal
+      </script>
+
+</body>
+</html>

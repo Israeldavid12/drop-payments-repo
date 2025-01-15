@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar envio</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .top-bar {
+            top: 0;
+            /* Alinha ao topo da página */
+            left: 0;
+            /* Alinha à esquerda */
+            width: 100%;
+            /* Largura total da página */
+            height: 60px;
+            /* Altura da barra */
+            background-color: #092049;
+            /* Cor de fundo */
+            color: white;
+            /* Cor do texto */
+            display: flex;
+            /* Para centralizar o texto */
+            align-items: center;
+            /* Centraliza verticalmente o texto */
+            justify-content: space-around;
+            /* Centraliza horizontalmente o texto */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Adiciona uma sombra */
+            z-index: 1000;
+            /* Mantém a barra acima de outros elementos */
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 90%;
+            background-color: #e3e9f5;
+        }
+
+        .box {
+            display: grid;
+            justify-content: center;
+            border-radius: 12px;
+            max-width: 400px;
+            padding: 12px;
+            gap: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin: 10px;
+        }
+
+        .box input {
+            height: 30px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid silver;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .box input:focus {
+            border: 2px solid #095fa5;
+        }
+
+        .box p {
+            color: #202020;
+        }
+
+        .box button {
+            background-color: #fff;
+            color: #1056be;
+            border: 1px solid #095fa5;
+            border-radius: 10px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        #endPayment {
+            display: none;
+            background-color: #095fa5;
+            color: #ffffff;
+            border: 1px solid white;
+            border-radius: 10px;
+            height: 40px;
+            cursor: pointer;
+        }
+        #endPayment:hover {
+            background-color: #083255;
+        }
+        .box img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .item {
+            display: inline-block;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table td {
+            padding: 10px 20px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .table th {
+            text-align: left;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #062858;
+            color: white;
+            border: 1px solid #ddd;
+        }
+
+        .table td:first-child {
+            font-weight: 500;
+            color: #333;
+        }
+        .footer {
+            background-color: #e3e9f5;
+            bottom: 0;
+            left: 0;
+            height: 70px;
+            color: #424242;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 0px 30px;
+        }
+        .hidden_tr {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar"><i  onclick="backPage()" style="cursor: pointer;"  class="fa fa-chevron-left" aria-hidden="true"></i>  DROP PAYMENTS E.I </div>
+    <div class="container">
+        <div class="box">
+          
+         
+            
+            <p style="color: red; display: none; text-align: center; font-size: 45px;" id="output" ></p>
+           <i id="check" style="text-align: center; font-size: 45px; color: green; display: none;" class="fa fa-check-circle" aria-hidden="true"></i>
+            <table class="table">
+                <tr>
+                    <td>Carteira:</td>
+                    <td><img id="wallet" src="checkou-assets/paypal-waleet-logo.png" alt=""> <span id="name_wallet" ></span></td>
+                </tr>
+                <tr>
+                    <td>Montante a pagar:</td>
+                    <td id="amount" >100.00 MZN</td>
+                </tr>
+                <tr>
+                    <td>Saldo:</td>
+                    <td id="balance" >Paypal Balance</td>
+                </tr>
+                <tr class="hidden_tr" id="name_acc" >
+                    <td>Titular da conta:</td>
+                    <td id="account_name" ></td>
+                </tr>
+                <tr class="hidden_tr"  id="email_acc" >
+                    <td>Conta beneficiaria:</td>
+                    <td id="account_email" ></td>
+                </tr>
+                <tr style="display: none;" >
+                    <td>Fee:</td>
+                    <td id="fee" ></td>
+                </tr>
+            </table>
+            <p id="label_email" style="font-size: 12px; margin-bottom: -10px;">E-mail da conta do beneficiario</p>
+            <input id="email_account" type="email" placeholder="example@example.com">
+            <button id="getUserData" > Proximo </button>
+            <button id="endPayment" > Concluir</button>
+            <a id="back" style="text-align: center; display: none;" href="index.html">Ir ao inicio</a>
+            <p style="text-align: center; font-size: 11px;" >DROP PAYMENTS E.I</p>
+        </div>
+    </div>
+    <div class="footer">
+
+        <a style="font-size: 14px; text-decoration: none; color: #424242; " href="#"> Ajuda e Support</a>
+        <p style="font-size: 14px; "> &copy; DROP PAYMENTS E.I .  
+        </p>
+        <a style="font-size: 14px; text-decoration: none; color: #424242; " href="#"> Ajuda e Support</a>
+    </div>
+
+</body>
+<script>
+     function backPage() {
+        window.location.href = 'index.html';
+    }
+</script>
+
+<script type="module"  >
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+// Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+  authDomain: "drop-payments-mz.firebaseapp.com",
+  databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "drop-payments-mz",
+  storageBucket: "drop-payments-mz.appspot.com",
+  messagingSenderId: "983262508468",
+  appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+  measurementId: "G-JBP3RN50WS"
+};
+
+// Inicializando Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+
+let sender_useruid = '';
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+       sender_useruid = user.uid; // Pega o ID do usuário logado
+        
+    } else {
+        console.log("Usuário não está logado");
+        // Redirecionar para a página de login
+        window.location.href = 'https://www.dropaymentsmz.online/entrar';
+    }
+});
+
+
+   
+    const urlParams = new URLSearchParams(window.location.search);
+    const wallet_balance = urlParams.get("wallet_balance");
+    const wallet_destin = urlParams.get("wallet_destin");
+    const amount = urlParams.get("amount");
+    const sender_email = urlParams.get("sender_email");
+
+    const image_wallet = document.getElementById("wallet");
+    const name_wallet = document.getElementById("name_wallet");
+    const amount_to_send = document.getElementById("amount");
+    const balance_wallet = document.getElementById("balance");
+    let fee = '';
+
+     const formatter = new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "MZN",
+    });
+    let email_user = '';
+    let uid_user = '';
+
+    if (wallet_destin == "dp-wallet") {
+        image_wallet.src = "assests/dp-logo.png";
+        name_wallet.innerText = 'DP Wallet';
+        fee = '-8.OO MZN';
+    } 
+    if (wallet_destin == "paypal") {
+        image_wallet.src = "checkou-assets/paypal-waleet-logo.png";
+        name_wallet.innerText = 'PayPal';
+        fee = '-35.OO MZN';
+    } 
+   
+    amount_to_send.innerText = formatter.format(amount);
+    balance_wallet.innerText = wallet_balance;
+    document.getElementById('fee').innerText = fee;
+    
+
+    document.getElementById("getUserData").addEventListener('click' , () => {
+
+        document.getElementById("getUserData").innerHTML = ' <i style="font-size: 16px;" class="fas fa-circle-notch fa-spin fa-2x"></i>';
+        document.getElementsByClassName("box")[0].style.opacity = '25%';
+
+        const email = document.getElementById("email_account").value;
+        fetch("https://www.mozbuyit.store/api/get-user-info", {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({email: email})
+    })
+    .then(res => res.json()).then(data => {
+        if (data.estado === "success") {
+            document.getElementById("account_name").innerText = data.name;
+            document.getElementById("account_email").innerText = data.email;
+            document.getElementById("name_acc"). classList.remove('hidden_tr');
+            document.getElementById("email_acc").classList.remove('hidden_tr');
+            document.getElementById("email_account").style.display = 'none';
+            document.getElementById("label_email").style.display = 'none';
+            document.getElementsByClassName("box")[0].style.opacity = '100%';
+            document.getElementById("getUserData").style.display = 'none';
+            document.getElementById("endPayment").style.display = 'block';
+            uid_user = data.userId;
+        } else {
+            console.log(data.error);
+            document.getElementById("output").style.display = 'block';
+            document.getElementById("output").innerText = data.error;
+            document.getElementById("getUserData").innerHTML = 'Proximo';
+            document.getElementsByClassName("box")[0].style.opacity = '100%';
+        }
+
+    }).catch(error => {
+        console.log("Ocorreu um erro inesperado!");
+        document.getElementsByClassName("box")[0].style.opacity = '100%';
+    } );
+ });
+
+
+ 
+ document.getElementById('endPayment').addEventListener('click', () => {
+    document.getElementsByClassName("box")[0].style.opacity = '25%';
+    email_user = document.getElementById("account_email").textContent;
+    const payloadPayment = {
+    sender_email: sender_email,
+    sender_id: sender_useruid,
+    userId: uid_user,
+    email: email_user,
+    balance_wallet: wallet_balance,
+    wallet_destin: wallet_destin,
+    amount: amount
+ };
+ 
+    document.getElementById('endPayment').innerHTML = '<i style="font-size: 16px;" class="fas fa-circle-notch fa-spin fa-2x"></i>';
+     fetch('https://www.mozbuyit.store/api/send-amount', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(payloadPayment)
+     }).then(res => res.json().then(data => {
+        if (data.message === 'sent') {
+            document.getElementsByClassName("box")[0].style.opacity = '100%';
+            document.getElementById('check').style.display = 'block';
+            document.getElementById('endPayment').style.display = 'none';
+            document.getElementById('back').style.display = 'block';
+            document.getElementById('output').style.display = 'none';
+        } else if (data.error === 'Saldo insuficiente.')  {
+            document.getElementById('output').innerHTML = '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>';
+            document.getElementById('output').style.display = 'block';
+            document.getElementsByClassName("box")[0].style.opacity = '100%';
+        }
+     }));
+ });
+
+    
+   
+</script>
+
+</html>

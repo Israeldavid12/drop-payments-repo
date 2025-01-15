@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Template</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #062858;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            height: 35px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            width: 35px;
+            height: 35px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            font-size: 16px;
+            color: #333;
+        }
+        h3 span {
+            padding: 0 5px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 11px;
+            color: #333;
+        }
+        p span {
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0056b3;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0978ee;
+            color: #fff;
+        }
+        .signature {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #333;
+        }
+        #suporte {
+            text-decoration: underline;
+            font-size: 12px;
+            color: #333;
+        }
+        .footer {
+            margin-top: 10px;
+            font-size: 9px;
+            height: 25px;
+            color: #fff;
+            background-color: #1f395e;
+            padding: 10px;
+            text-align: center;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .table-container {
+            max-width: 600px;
+            padding: 10px;
+        }
+        .table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .table td {
+            padding: 10px 20px;
+            text-align: left;
+            vertical-align: top;
+            color: #3d3d3d;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .table th {
+            text-align: left;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #062858;
+            color: white;
+            border: 1px solid #ddd;
+        }
+        .table td:first-child {
+            font-weight: bold;
+            color: #333;
+            
+        }
+        .titulo {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img id="back-button" src="https://i.postimg.cc/gj1psQ1c/Design-sem-nome-68.png" alt="DP logo" class="logo">
+    </div>
+    <div class="container">
+        <h3>Saque<span style="color: #07a544;">${paymentId}</span>pago com sucesso!</h3>
+
+      <div class="table-container" >
+        <table class="table">
+            <tr>
+                <td class="titulo"  >Total solicitado</td>
+                <td>${amountPaid} MT</td>
+            </tr>
+            <tr>
+                <td class="titulo" >Total pago</td>
+                <td>${(amountPaid - (amountPaid * 0.08)) - 10 } MT</td>
+            </tr>
+            <tr>
+                <td class="titulo" >Conta solicitante</td>
+                <td  >${emailSeller}</td>
+            </tr>
+            <tr>
+                <td class="titulo" >M. de pagamento</td>
+                <td>${paymentMethod}</td>
+            </tr>
+            <tr>
+                <td class="titulo" >Data</td>
+                <td>${timestamp}</td>
+            </tr>
+        </table>
+
+      </div>
+        <a href="https://www.dropaymentsmz.online/saques" class="button">Ver mais detalhes</a>
+
+        <div class="signature">
+            <p>Atenciosamente,<br>Equipe Drop Payments</p>
+        </div>
+
+        
+    </div>
+    <div class="footer">
+        Drop Payments E.I – Todos direitos Reservados
+    </div>
+    <script>
+        console.log((100 - (100 * 0.08)) - 10);
+    </script>
+</body>
+</html>

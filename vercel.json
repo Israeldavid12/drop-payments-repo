@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1.html"
+    }
+  ],
+  "functions": {
+    "api/*": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}

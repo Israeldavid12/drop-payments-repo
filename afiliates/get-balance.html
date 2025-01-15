@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Saldo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+    .container h1 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    .container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .container button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .container button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Consultar Saldo</h1>
+    <input type="text" id="userId" placeholder="Digite o ID do usuário" />
+    <button onclick="getSaldo()">Consultar</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function getSaldo() {
+      const userId = document.getElementById('userId').value;
+      const resultDiv = document.getElementById('result');
+
+      if (!userId) {
+        resultDiv.innerHTML = '<span class="error">Por favor, insira um ID de usuário.</span>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3012/api/saldo/${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          resultDiv.innerHTML = `
+            <p><strong>Saldo Total:</strong> ${data.saldoTotal}</p>
+            <p><strong>Saldo Disponível:</strong> ${data.saldoDisponivel}</p>
+          `;
+        } else {
+          resultDiv.innerHTML = `<span class="error">${data.error || 'Erro ao obter o saldo'}</span>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<span class="error">Erro: ${error.message}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>

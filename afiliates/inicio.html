@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard DP</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="inicio.css">
+    <script type="module" src="../js-codes/sales-graphics.js"></script>
+
+
+</head>
+
+<body>
+
+   
+
+  
+    <div class="container-2">
+       
+        <div class="box">
+            <h2 style="font-size: 18px; font-weight: 500;">Saldo disponível para saque</h2>
+            <p id="saldoDisponivel"
+                style="color: #272727; font-size: 19px; font-weight: bold; display: inline;">MZN 120.00
+            </p>
+            <p style="display: inline-block;"> <button id="hideFirstBalance"
+                    style="background-color: transparent; border: none;">
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
+                </button></p> <br></p>
+            <button id="showSaquepop" class="button" style="margin: 8px;"> <i class="fa fa-credit-card-alt"
+                    aria-hidden="true"></i> Solicitar Saque </button>
+            <button id="saquesHistoryView"> <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                Historico de saques</button>
+
+            <p style="color: red; font-weight: bold;" id="saqueInfo"> </p>
+            <p>Vendas das carteiras:</p>
+            <img class="imgs-payments" src="../assests/emola.png" alt="">
+            <img class="imgs-payments" src="../assests/mpesa2.jpg" alt="">
+        </div>
+        <div class="box">
+            <h2 style="font-size: 18px; font-weight: 500;">Saldo disponivel para saque: </h2>
+            <p id="paypalBalance"
+                style="color: #272727; font-size: 19px;  font-weight: bold; display: inline; " ">MZN 120.00</p>  
+            <p style=" display: inline-block;"> <button style="background-color: transparent; border: none;"
+                    id="hideBalance">
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
+                </button></p> <br>
+            <button id="showSaquepopPay" class="button" style="margin: 8px;"> <i class="fa fa-credit-card-alt"
+                    aria-hidden="true"></i> Solicitar Saque </button>
+            <button id="saquesHistoryView"> <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
+                Historico de saques</button>
+
+            <p style="color: red; font-weight: bold;" id="saqueInfo2"> </p>
+            <p>Vendas da carteira:</p>
+            <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
+
+        </div>
+        <div class="box">
+            <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 16px;">Ultimo saque efetuado
+            </h2>
+            <p id="pedidoDeSaque" style="color: #272727; font-size: 19px;  font-weight: bold;">MZN 0.00
+            </p>
+            <p id="saqueStatus" style="font-size: 18px;"><strong>Estado:</strong> Pendente</p><br>
+
+            <button style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" id="sendMoney"> Enviar
+                dinheiro</button>
+            <p id="sendMoneyInfo" style="color: red; font-weight: 600; display: none;">Recurso
+                indisponivel!</p>
+        </div>
+        <div class="box">
+            <h2 style="font-size: 18px; font-weight: 500; ">Vendas realizadas hoje</h2>
+            <p>
+            <p id="vendasHoje" style="color: #006e2f; font-size: 19px; font-weight: 500; ">
+                MZN 0.00</p>
+            </p>
+            <button id="vendasHistoryView"> <i class="fa-solid fa-hand-holding-dollar"></i> Historico de
+                vendas </i> </button>
+            <p>Transações das carteiras:</p>
+            <img class="imgs-payments" src="../assests/emola.png" alt="">
+            <img class="imgs-payments" src="../assests/mpesa2.jpg" alt="">
+            <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
+        </div>
+        <p style="margin-top: 50px;">&copf; Drop Payments E.I</p>
+
+        <canvas id="salesChart"></canvas>
+        <!-- Inclua a biblioteca Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </div>
+</body>
+
+</html>

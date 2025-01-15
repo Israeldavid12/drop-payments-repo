@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Saldo</title>
+</head>
+<body>
+    <h2>Adicionar saldo à conta de usuários</h2>
+    <input id="userId" type="text" style="height: 50px; font-size: 16px; text-align: center;" placeholder="ID do usuário">
+    <input id="productId" type="text" style="height: 50px; font-size: 16px; text-align: center;" placeholder="ID do produto">
+    <input id="amount" style="height: 50px; font-size: 16px; text-align: center;" type="text" placeholder="0.00 MT">
+    <button id="addBalance" style="height: 50px; font-size: 16px;">Adicionar</button>
+    <p id="outPut" style="display: none;">Valor adicionado com sucesso!</p>
+
+    <script type="module">
+        // Import Firebase and Firestore
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+            authDomain: "drop-payments-mz.firebaseapp.com",
+            databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "drop-payments-mz",
+            storageBucket: "drop-payments-mz.appspot.com",
+            messagingSenderId: "983262508468",
+            appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+            measurementId: "G-JBP3RN50WS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const rtdb = getDatabase(app);
+
+        // Função para adicionar saldo
+        document.getElementById('addBalance').addEventListener('click', function() {
+            // Obter os valores dos campos de input
+            const userId = document.getElementById('userId').value;
+            const productId = document.getElementById('productId').value;
+            const amountValue = document.getElementById('amount').value;
+
+            // Verificar se o userId, productId e amount não estão vazios
+            if (!userId) {
+                alert('Por favor, insira o ID do usuário.');
+                return;
+            }
+
+            if (!productId) {
+                alert('Por favor, insira o ID do produto.');
+                return;
+            }
+
+            if (!amountValue) {
+                alert('Por favor, insira um valor.');
+                return;
+            }
+
+            // Gerar um ID único para o pagamento
+            const paymentId = new Date().getTime().toString();
+
+            // Gerar timestamp atual
+            const timestamp = new Date().toISOString();
+
+            // Referências para os nós de pagamento no Firebase
+            const paymentRef = ref(rtdb, `users/${userId}/payments/${paymentId}`);
+            const paymentBackupRef = ref(rtdb, `users/${userId}/paymentsBackup/${paymentId}`);
+
+            // Dados a serem salvos
+            const paymentData = {
+                originalAmount: parseFloat(amountValue),
+                productId: productId,
+                timestamp: timestamp,
+                paymentMethod: 'E-Mola'
+            };
+
+            // Salvar o valor no nó payments e no nó paymentsBackup
+            Promise.all([
+                set(paymentRef, paymentData),
+                set(paymentBackupRef, paymentData)
+            ])
+            .then(() => {
+                console.log('Pagamento adicionado com sucesso em ambos os nós!');
+                // Exibir a mensagem de sucesso
+                document.getElementById('outPut').style.display = 'block';
+            })
+            .catch((error) => {
+                console.error('Erro ao adicionar pagamento:', error);
+            });
+        });
+    </script>
+</body>
+</html>

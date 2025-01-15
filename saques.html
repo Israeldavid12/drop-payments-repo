@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Saques</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="saques.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <img id="back-button" src="assests/back-blue.png" alt="DP logo" class="logo">
+        <div class="title-section">
+            <h1>Saques</h1>
+            <p>Veja detalhes dos seus saques aqui</p>
+            <p id="saquesInfo" style="color: red;"></p>
+        </div>
+        <button id="reload-button" class="reload-btn">
+            <img src="assests/reload.png" alt="Reload">
+        </button>
+    </div>
+    <div class="filter-form">
+        <label for="start-date">De:</label>
+        <input type="date" id="start-date">
+    
+        <label for="end-date">Até:</label>
+        <input type="date" id="end-date">
+    
+        <label for="month">Mês:</label>
+        <select id="month">
+            <option value="">Todos</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+        </select>
+    
+        <label for="year">Ano:</label>
+        <input type="number" id="year" placeholder="2024" min="2000" max="2100">
+    
+        <label for="entries">Entradas:</label>
+        <input type="number" id="entries" placeholder="10" min="1" value="10">
+    
+        <button id="apply-filters">Aplicar Filtros</button>
+    </div>
+    
+    <div class="container">
+        <h4>Histórico de Saques <i class="fa-solid fa-arrow-up"></i></h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Solicitado a:</th>
+                    <th>Valor solicitado:</th>
+                    <th>Valor a receber:</th>
+                    <th>Taxa: </th>
+                    <th>Conta:</th>
+                    <th>Estado:</th>
+                    <th>Id do saque:</th>
+                </tr>
+            </thead>
+            <tbody> 
+                <!-- Linhas da tabela preenchidas dinamicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+            authDomain: "drop-payments-mz.firebaseapp.com",
+            databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "drop-payments-mz",
+            storageBucket: "drop-payments-mz.appspot.com",
+            messagingSenderId: "983262508468",
+            appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+            measurementId: "G-JBP3RN50WS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadWithdrawHistory(user.uid);
+            } else {
+                console.error("Usuário não logado.");
+            }
+        });
+
+        const botao = document.getElementById('apply-filters');
+       
+
+       botao.addEventListener('click', () => {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    const month = document.getElementById('month').value;
+    const year = document.getElementById('year').value;
+    const entries = parseInt(document.getElementById('entries').value, 10) || 10;
+
+    const withdrawHistoryRef = ref(db, `users/${auth.currentUser.uid}/withdrawHistory`);
+    get(withdrawHistoryRef).then(withdrawSnapshot => {
+        if (withdrawSnapshot.exists()) {
+            const withdrawHistory = withdrawSnapshot.val();
+            renderTable(withdrawHistory, { startDate, endDate, month, year, maxEntries: entries });
+        } else {
+            console.error("Nenhum histórico encontrado.");
+            document.getElementById("saquesInfo").textContent = "Nenhum histórico encontrado.";
+        }
+    });
+});
+
+
+        function renderTable(withdrawHistory, filters = {}) {
+            const { startDate, endDate, maxEntries } = filters;
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            // Converte o objeto para array e aplica os filtros
+            let withdrawArray = Object.entries(withdrawHistory)
+                .map(([key, value]) => ({ id: key, ...value }))
+                .filter(({ timestamp }) => {
+                    const entryDate = new Date(timestamp);
+                    if (startDate && entryDate < startDate) return false;
+                    if (endDate && entryDate > endDate) return false;
+                    return true;
+                })
+                .reverse();
+
+            // Limita a quantidade de registros
+            if (maxEntries && !isNaN(maxEntries)) {
+                withdrawArray = withdrawArray.slice(0, maxEntries);
+            }
+
+            // Renderiza os dados
+            withdrawArray.forEach(({ id, metodo, status, timestamp, valueAmount }) => {
+                const date = new Date(timestamp).toLocaleDateString("pt-BR");
+                const statusDotClass = status === "concluido" ? "status-dot-green" : "";
+                const metodo_image = metodo === "E-MOLA" ? "assests/emola.png" :
+                    metodo === "M-PESA" ? "checkou-assets/mpesa-white.png" : "assests/paypal.png";
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td><strong style="color: #272727;">-${valueAmount}.00 MT</strong></td>
+                    <td><strong style="color: #272727;">${valueAmount - (valueAmount * 0.08)} MT</strong></td>
+                    <td>10 MT</td>
+                    <td><img style="width: 25px; height: 25px; border-radius: 50%;" src="${metodo_image}" alt="emola"> ${metodo || "Método não disponível"}</td>
+                    <td>${status} <span class="status-dot ${statusDotClass}"></span></td>
+                    <td>${id}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function applyFilters(startDate, endDate, maxEntries) {
+            const userId = auth.currentUser?.uid;
+            if (!userId) {
+                console.error("Usuário não logado.");
+                return;
+            }
+
+            const withdrawHistoryRef = ref(db, `users/${userId}/withdrawHistory`);
+            get(withdrawHistoryRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    renderTable(snapshot.val(), { startDate, endDate, maxEntries });
+                } else {
+                    console.error("Histórico de saques não encontrado.");
+                }
+            });
+        }
+
+        botao.click(); 
+
+
+
+        document.getElementById('back-button').addEventListener('click', function () {
+            window.location.href = "https://www.dropaymentsmz.online/";
+        });
+    </script>
+</body>
+</html>

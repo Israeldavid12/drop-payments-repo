@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Page</title>
+    <link rel="shortcut icon" href="assests/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="download.css">
+    <!-- Importa os módulos do Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+            authDomain: "drop-payments-mz.firebaseapp.com",
+            projectId: "drop-payments-mz",
+            storageBucket: "drop-payments-mz.appspot.com",
+            messagingSenderId: "983262508468",
+            appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+            measurementId: "G-JBP3RN50WS"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Função para obter o valor de um parâmetro da query string
+        function getQueryParam(name) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            return urlParams.get(name);
+        }
+
+        // Obtém o productId da query string
+        const productId = getQueryParam('id');
+        console.log('Product ID:', productId);
+
+        // Obtém a URL do produto do Firestore
+        if (productId) {
+            const productRef = doc(db, 'upsells', productId);
+            getDoc(productRef)
+                .then((docSnap) => {
+                    if (docSnap.exists()) {
+                        const productData = docSnap.data();
+                        const docUrl = productData.docUrl;
+
+                        if (docUrl) {
+                            // Define o href do link de download
+                            const downloadLink = document.getElementById('download-link');
+                            downloadLink.href = docUrl;
+                            downloadLink.textContent = 'BAIXAR O MEU PRODUTO AGORA';
+                            console.log('Download URL:', docUrl);
+                        } else {
+                            console.error('docUrl not found for the given product ID.');
+                        }
+                    } else {
+                        console.error('No document found for the given product ID.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error getting document:', error);
+                });
+        } else {
+            console.error('Product ID parameter is missing.');
+        }
+    </script>
+</head>
+<body>
+    <div class="confetti left"> <img src="assests/conf.png" alt=""></div>
+    <div class="confetti right"><img src="assests/conf.png" alt=""></div>
+    <div class="container">
+        <div class="header">
+            <img src="assests/checked.png" alt="Checkmark">
+            <h1>OBRIGADO PELA SUA COMPRA</h1>
+            <p>A sua compra foi confirmada e processada com sucesso, por favor clique no botao abaixo para fazer ter acesso ao mesmo</p>
+        </div>
+        <div class="download-button">
+            <a id="download-link"  href="#">ACEDER AO MEU PRODUTO AGORA</a>
+        </div>
+        <div class="footer">
+            <p>Precisa de ajuda?</p>
+            <a href="#">contactar support</a>
+        </div>
+    </div>
+    <div class="credits">
+        <p>© Drop Payments Mz </p>
+        <p>Todos direitos Reservados - 2024</p>
+    </div>
+</body>
+</html>

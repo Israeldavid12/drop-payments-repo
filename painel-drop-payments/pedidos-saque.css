@@ -1,0 +1,61 @@
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card h3 {
+    margin: 0;
+    color: #007bff;
+  }
+
+  .card p {
+    margin: 10px 0;
+    color: #666;
+  }
+
+  .card button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-concluido {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .btn-concluido:hover {
+    background-color: #218838;
+  }
+
+  .btn-reembolsado {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn-reembolsado:hover {
+    background-color: #c82333;
+  }

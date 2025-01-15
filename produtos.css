@@ -1,0 +1,325 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0px;
+    margin-bottom: 8px;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    margin: 0px;
+}
+
+header {
+    display: flex;
+    padding: 10px 20px;
+    justify-content: flex-start; /* Garante que o conteúdo fique alinhado no início horizontalmente */
+    align-items: center; /* Alinha o conteúdo verticalmente ao centro */
+    background-color: #002f6c;
+    color: white;
+}
+
+.back-button {
+    display: flex;
+    align-items: center; /* Alinha a imagem dentro do link verticalmente ao centro */
+    margin-right: 8px; /* Margem de 8px entre o botão e o texto */
+}
+
+.back-press {
+    margin-right: 8px; /* Adiciona margem entre a imagem e o texto */
+    height: 40px;
+     /* Define as dimensões da imagem */
+}
+
+h2 {
+    margin: 0; /* Remove qualquer margem padrão */
+    font-weight: 500;
+}
+
+.back-press:hover {
+    opacity: 50%;
+}
+
+.back-press:active {
+    opacity: 50%;
+}
+
+.vodacom-logo {
+    height: 40px;
+}
+
+h1 {
+    font-size: 24px;
+    
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 5px; /* Espaçamento entre os elementos */
+    margin-top: 20px;
+    margin-right: 5px;
+    justify-items: center; /* Alinha horizontalmente */
+    align-items: center; /* Alinha verticalmente */
+
+}
+  /* Adicione uma regra para telas grandes */
+  @media (min-width: 1200px) {
+    .container {
+        grid-template-columns: repeat(auto-fit, 200px);
+     
+    }
+  }
+
+.product-card {
+   
+    background-color: rgb(255, 253, 253);
+    border-radius: 10px;
+    padding: 10px;
+    width: 230px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: start;
+    margin: 8px;
+    margin-left: 0px;
+}
+
+.product-logo {
+  width: 100%;
+    margin-bottom: 15px;
+    border-radius: 15px;
+}
+
+h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.edit-button {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #0077cc;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.links-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    color: #0077cc;
+    border: 1px solid #0077cc;
+    width: 100%;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.checkout {
+    font-size: 14px;
+    display: none;
+}
+
+.checkout-link {
+    display: block;
+    display: none;
+    word-wrap: break-word;
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.checkout-link:hover {
+    text-decoration: underline;
+}
+
+
+
+
+/* Estilo para a tela de carregamento */
+#loading-screen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.satus-sales {
+    border: 1px solid rgb(29, 197, 29);
+    border-radius: 25px;
+    padding: 4px 8px;
+    font-size: 11px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+#loading-screen img {
+    width: 100px;
+    height: 100px;
+}
+
+#loading-screen h2 {
+    font-family: Arial, sans-serif;
+    color: #112048;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* Estilo geral para o modal */
+.modal {
+    display: block; /* Mostrar o modal por padrão (altere para 'none' ao carregar) */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    scroll-margin-top: 100px; /* ajuste para a altura da barra fixa */
+    animation: zoomInAnimation 0.3s ease forwards; /* Duração de 0.5s */
+  }
+  
+  /* Conteúdo do modal */
+  .modal-content {
+    background-color: #eeebeb;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    position: relative;
+    margin: 10px;
+    margin-top: 30px; /* Adiciona altura fixa e rolagem vertical */
+    max-height: 600px; /* ajuste a altura conforme necessário */
+    overflow-y: auto;
+    animation: zoomInAnimation 0.3s ease forwards; /* Duração de 0.5s */
+    transition: all 0.3s ease;
+}
+
+
+
+  
+  /* Estilo do botão de fechar */
+  .modal .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  /* Estilo dos inputs e labels */
+  .modal-content label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .modal-content input[type="text"],
+  .modal-content input[type="file"] {
+    outline: none;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .modal-content input[type="text"]:focus {
+    border: 1px solid #0077cc;
+  }
+  /* Estilo do botão de salvar */
+  .modal-content button[type="submit"] {
+    background-color: #28a745; /* Verde */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  .modal-content button[type="submit"]:hover {
+    background-color: #218838; /* Tom mais escuro de verde */
+  }
+  
+  /* Estilo para o cabeçalho do modal */
+  .modal-content h2 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+
+  button {
+    display: inline-block;
+    outline: none;
+    border: none;
+    padding: 5px 10px;
+    background-color: #0077cc;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    height: 30px;
+  }
+
+  button:active {
+    opacity: 50%;
+  }
+
+  button:hover {
+    opacity: 50%;
+  }
+
+ textarea {
+    width: 100%;
+    line-break: auto;
+    color: rgb(12, 126, 231);
+    border: 1px solid rgb(12, 126, 231);
+    background-color: transparent;
+    resize: none; /* Para remover a opção de redimensionar */
+    overflow: hidden; /* Remover barra de rolagem */
+    padding: 8px;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    outline: none;
+ }
+
+
+ #hr {
+ 
+    display: none;
+ }
+
+ .img-methods img {
+    width: 30px;
+    border-radius: 5px;
+ }
+
+ .link-container {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 8px;
+ }
+ .links-button {
+  width: 100%;
+ }

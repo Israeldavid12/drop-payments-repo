@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .actions button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-banir {
+            background-color: #FF4C4C;
+        }
+
+        .btn-desativar {
+            background-color: #FFA500;
+        }
+
+        .actions button.btn-banir:hover {
+            background-color: #cc0000;
+        }
+
+        .actions button.btn-desativar:hover {
+            background-color: #e69500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gestão de Usuários</h1>
+    
+    <!-- Campo de busca -->
+    <input type="text" id="searchInput" placeholder="Pesquisar por nome, ID ou email...">
+    
+    <!-- Tabela de usuários -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Valor Líquido</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+            <!-- Usuários serão inseridos aqui -->
+        </tbody>
+    </table>
+</div>
+
+<script type="module">
+    // Firebase inicialização (substituir com suas credenciais)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+        authDomain: "drop-payments-mz.firebaseapp.com",
+        databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "drop-payments-mz",
+        storageBucket: "drop-payments-mz.appspot.com",
+        messagingSenderId: "983262508468",
+        appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+        measurementId: "G-JBP3RN50WS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Função para buscar os dados de todos os usuários e atualizar a tabela
+    function buscarUsuarios() {
+        const searchQuery = document.getElementById("searchInput").value.toLowerCase();
+        const usersRef = ref(db, 'users/');
+        const userTable = document.getElementById('userTable');
+        
+        // Limpa a tabela antes de adicionar novos resultados
+        userTable.innerHTML = ''; 
+
+        // Ler os dados dos usuários no Firebase
+        onValue(usersRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const users = []; // Array para armazenar os usuários encontrados
+
+                // Itera sobre todos os usuários no snapshot
+                snapshot.forEach((childSnapshot) => {
+                    const userId = childSnapshot.key;
+                    const userData = childSnapshot.val();
+                    const userName = userData.name || "N/A";
+                    const userEmail = userData.email || "N/A";
+
+                    // Armazena o usuário no array
+                    users.push({ userId, userName, userEmail });
+                });
+
+                // Processa os usuários para filtrar pela pesquisa
+                users.forEach(async (user) => {
+                    const { userId, userName, userEmail } = user;
+
+                    // Filtra os usuários com base na pesquisa
+                    if (
+                        userName.toLowerCase().includes(searchQuery) || 
+                        userId.includes(searchQuery) || 
+                        userEmail.toLowerCase().includes(searchQuery)
+                    ) {
+                        const totalLiquido = await calcularValorLiquido(userId);
+
+                        // Cria uma nova linha na tabela para cada usuário
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                            <td>${userName}</td>
+                            <td>${userId}</td>
+                            <td>${userEmail}</td>
+                            <td>MZN ${totalLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                            <td class="actions">
+                                <button class="btn-banir" onclick="banirUsuario('${userId}')">Banir</button>
+                                <button class="btn-desativar" onclick="desativarUsuario('${userId}')">Desativar Conta</button>
+                            </td>
+                        `;
+
+                        // Adiciona a nova linha à tabela
+                        userTable.appendChild(newRow);
+                    }
+                });
+
+                if (userTable.rows.length === 0) {
+                    console.log("Nenhum usuário corresponde aos critérios de pesquisa.");
+                } else {
+                    console.log(`Total de usuários encontrados: ${userTable.rows.length}`);
+                }
+            } else {
+                console.log("Nenhum usuário encontrado.");
+            }
+        }, (error) => {
+            console.error("Erro ao buscar usuários:", error);
+        });
+    }
+
+    async function calcularValorLiquido(userId) {
+        const paymentsBackupRef = ref(db, `users/${userId}/paymentsBackup/`);
+        let totalLiquido = 0;
+
+        await get(paymentsBackupRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const payment = childSnapshot.val();
+                    const originalAmount = parseFloat(payment.originalAmount);
+                    
+                    // Verifica se o originalAmount é válido
+                    if (!isNaN(originalAmount)) {
+                        totalLiquido += originalAmount;
+                    }
+                });
+            } else {
+                console.log(`Nenhum pagamento encontrado para o usuário: ${userId}`);
+            }
+        }).catch((error) => {
+            console.error(`Erro ao calcular valor líquido para o usuário ${userId}:`, error);
+        });
+
+        return totalLiquido;
+    }
+
+    // Função para banir um usuário (implementação pode variar)
+    function banirUsuario(userId) {
+        alert(`Usuário com ID ${userId} banido!`);
+    }
+
+    // Função para desativar a conta do usuário (implementação pode variar)
+    function desativarUsuario(userId) {
+        alert(`Conta do usuário com ID ${userId} desativada!`);
+    }
+
+    // Carrega os usuários na tabela ao carregar a página e registra o evento de pesquisa
+    window.onload = function() {
+        document.getElementById("searchInput").onkeyup = buscarUsuarios;
+        buscarUsuarios();
+    };
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funil de Vendas</title>
+    <link rel="stylesheet" href="sales-funel.css">
+</head>
+<body>
+    <button id="add-step">Adicionar Etapa</button>
+    <div id="funnel-container">
+        <div id="step1" class="funnel-step">Início</div>
+        <div id="step2" class="funnel-step">Oferta de Upsell</div>
+        <div id="step3" class="funnel-step">Página de Agradecimento</div>
+    </div>
+    
+    <!-- Incluindo jsPlumb corretamente via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.6/jsplumb.min.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Criando uma nova instância do jsPlumb
+        const instance = jsPlumb.getInstance({
+            container: document.getElementById("funnel-container")
+        });
+
+        // Configurando as conexões e estilos padrão
+        instance.importDefaults({
+            Connector: ["Straight"],
+            Anchors: ["Right", "Left"],
+            PaintStyle: { stroke: "green", strokeWidth: 2 },
+            Endpoint: ["Dot", { radius: 2 }],
+        });
+
+        // Conectando os blocos
+        instance.connect({
+            source: "step1",
+            target: "step2",
+        });
+
+        instance.connect({
+            source: "step2",
+            target: "step3",
+        });
+
+        // Tornando os blocos móveis (draggable)
+        instance.draggable("step1");
+        instance.draggable("step2");
+        instance.draggable("step3");
+    });
+    </script>
+</body>
+</html>

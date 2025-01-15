@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste API de Pagamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .response {
+      margin-top: 20px;
+      padding: 10px;
+      background: #e7f3fe;
+      border: 1px solid #b3d7ff;
+      border-radius: 5px;
+      color: #004085;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Teste API de Pagamento</h1>
+    <form id="paymentForm">
+      <div class="form-group">
+        <label for="msisdn">Número do Cliente (MSISDN):</label>
+        <input type="text" id="msisdn" placeholder="Ex: 86123456789" required>
+      </div>
+      <div class="form-group">
+        <label for="transAmount">Valor (transAmount):</label>
+        <input type="number" id="transAmount" placeholder="Ex: 100" required>
+      </div>
+      <div class="form-group">
+        <label for="transId">ID da Transação (transId):</label>
+        <input type="text" id="transId" placeholder="Ex: unique_transaction_id" required>
+      </div>
+      <div class="form-group">
+        <label for="language">Idioma (language):</label>
+        <input type="text" id="language" placeholder="Ex: en">
+      </div>
+      <button type="submit">Enviar Requisição</button>
+    </form>
+    <div id="response" class="response" style="display: none;"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('paymentForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const apiUrl = 'https://10.229.16.29:8520/BCCSGateway/BCCSGateway?wsdl'; // Endpoint de Teste
+      const msisdn = document.getElementById('msisdn').value;
+      const transAmount = document.getElementById('transAmount').value;
+      const transId = document.getElementById('transId').value;
+      const language = document.getElementById('language').value;
+
+      const soapRequest = `
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:web="http://webservice.bccsgw.viettel.com/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <web:gwOperation>
+      <Input>
+        <username>seu_usuario</username>
+        <password>sua_senha</password>
+        <wscode>pushUssdMessage</wscode>
+        <param name="partnerCode" value="00204"/>
+        <param name="msisdn" value="${msisdn}"/>
+        <param name="smsContent" value="Pagamento em processamento"/>
+        <param name="transAmount" value="${transAmount}"/>
+        <param name="transId" value="${transId}"/>
+        <param name="language" value="${language}"/>
+        <param name="refNo" value="ref12345"/>
+        <param name="key" value="sua_chave_privada"/>
+        <rawData></rawData>
+      </Input>
+    </web:gwOperation>
+  </soapenv:Body>
+</soapenv:Envelope>
+`;
+
+      try {
+        const response = await axios.post(apiUrl, soapRequest, {
+          headers: {
+            'Content-Type': 'text/xml',
+          },
+        });
+
+        const responseDiv = document.getElementById('response');
+        responseDiv.style.display = 'block';
+        responseDiv.textContent = 'Resposta da API: ' + response.data;
+      } catch (error) {
+        const responseDiv = document.getElementById('response');
+        responseDiv.style.display = 'block';
+        responseDiv.textContent = 'Erro ao chamar a API: ' + (error.response ? error.response.data : error.message);
+      }
+    });
+  </script>
+</body>
+</html>

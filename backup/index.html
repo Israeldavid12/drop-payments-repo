@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard DP</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="product-forrm.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="js-codes/status-user.js" type="module" ></script>
+    <script src="js-codes/user.js" type="module"> </script>
+    <script type="module" src="js-codes/sales-graphics.js"></script>
+    <script src="user-earnings-status.js" ></script>
+    <script type="module" src="js-codes/send-request.js" ></script>
+   
+   
+</head>
+<body>
+ <!-- Tela de carregamento -->
+ <div id="loading-screen">
+    <div>
+        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+    </div>
+</div>
+<!-- Conteúdo principal da página -->
+<div id="content" class="hidden">
+
+    
+
+     <!-- Fundo escuro do popup -->
+     <div id="popup-background" style="display: none;">
+        <div id="popup">
+            <img style="width: 100px;" src="assests/D__24_-removebg-preview.png" alt="Imagem do Popup">
+            <p id="popup-text">Novidade! integração com Shopify adcionada!</p>
+            <button class="popupUpdateButton" id="close-popup">Ok</button>
+        </div>
+    </div>
+
+    <div class="" style="display: block;">
+       <div id="product-pop-container-2" class="product-pop-container-2" >
+        <div class="product-popup" >
+             <i  onclick="closeProductPopup()" class="fa fa-times" style="float: right; margin-bottom: 5px; " aria-hidden="true"></i>
+
+
+            <p id="popup-text-2" style="margin-bottom: 30px;" >Criando produto, por favor aguarde...</p>
+            <div id="addingProduct" style="display: block;" > <div class="lds-ring"  bis_skin_checked="1"><div bis_skin_checked="1"></div><div  bis_skin_checked="1"></div><div bis_skin_checked="1"></div><div bis_skin_checked="1"></div></div>
+           
+        </div>
+        <i id="addedProduct" class="fa fa-check-circle" style="font-size: 35px; display: none; " aria-hidden="true"></i>
+      
+        <a id="linkProduto" href="https://dropaymentsmz.online/produtos" class="button-product-popup" >Ver produto  <i class="fa fa-book" aria-hidden="true"></i> </a>
+    </div>
+       </div>
+
+
+ <!-- Popup para solicitar saque -->
+ <div  class="product-pop-container-3" id="product-pop-container-3" >
+    <div class="saque-popup" >
+       <p style="margin-bottom: 6px; text-align: start; font-size: 16px;" >Obs: uma vez solicitado nao sera possivel cancelar*</p>
+       <div class="balance" >
+        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
+        <p id="balancePreview" >0.00 MT</p>
+       </div>
+       <input  style="font-weight: 600;" id="valor" type="number"  placeholder="0 MT" >
+       <p style="font-size: 12px; margin-bottom: 8px;" >Por favor insira um valor inteiro*</p>
+      <div class="confirm" >
+        <input  type="checkbox" name="" id="confirm"> Confirmar solicitação<br>
+      </div>
+       <button id="solicitarSaqueBtn" style=" background-color: #0056b3;" >Solicitar</button>
+       <button  onclick="closeSaquePopup()" style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;" >Cancelar</button>
+       <div id="response-message" class="response-message"></div>
+    </div>
+  </div>
+
+
+
+    
+ <!-- Popup para solicitar saque -->
+ <div  class="product-pop-container-3" id="product-pop-container-3" >
+    <div class="saque-popup" >
+       <p style="margin-bottom: 6px; text-align: start; font-size: 16px;" >Obs: uma vez solicitado nao sera possivel cancelar*</p>
+       <div class="balance" >
+        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
+        <p id="balancePreview" >0.00 MT</p>
+       </div>
+       <input  style="font-weight: 600;" id="valor" type="number"  placeholder="0 MT" >
+       <p style="font-size: 12px; margin-bottom: 8px;" >Por favor insira um valor inteiro*</p>
+      <div class="confirm" >
+        <input  type="checkbox" name="" id="confirm"> Confirmar solicitação<br>
+      </div>
+       <button id="solicitarSaqueBtn" style=" background-color: #0056b3;" >Solicitar</button>
+       <button  onclick="closeSaquePopup()" style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;" >Cancelar</button>
+       <div id="response-message" class="response-message"></div>
+    </div>
+  </div>
+
+
+<!-- Popup para solicitar saque - paypal -->
+<div  class="product-pop-container-4" id="product-pop-container-4" >
+    <div class="saque-popup" >
+       <p style="margin-bottom: 6px; text-align: start; font-size: 16px;" >Obs: uma vez solicitado nao sera possivel cancelar*</p>
+       <div class="balance" >
+        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
+        <p id="balancePreviewPayPal" >0.00 MT</p>
+       </div>
+       <input style="font-weight: 600;" id="valor-paypal" type="number"  placeholder="0 MT" >
+       <p style="font-size: 12px; margin-bottom: 8px;" >Por favor insira um valor inteiro*</p>
+       <div class="confirm" >
+        <input  type="checkbox" name="" id="confirm-paypal"> Confirmar solicitação<br>
+      </div>
+       <button id="solicitarSaquePayPal" style=" background-color: #0056b3;" >Solicitar</button>
+       <button  onclick="closeSaquePopup4()" style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;" >Cancelar</button>
+       <div id="response-message-2" class="response-message"></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  
+
+    <div id="overlay" onclick="closePopup()"></div>
+    <div id="mpesaPopup">
+        <p id="infoError" style="color: #062858; font-size: 16px; font-weight: bold;">Informacao</p>
+       
+        <hr>
+        
+        <img  style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;"  src="checkou-assets/info.png" alt="">
+        <p id="textInfo" >A criacao de funil de vendas estara disponivel em breve.</p>
+        <button class="showPopup" onclick="closePopup()">Fechar</button>
+     </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-icon"></div>
+            <img class="usermenu-icon" style="width: 40px; display: flex; border-radius: 50px; margin-right: 8px; " src="assests/dp-logo.png" alt="User Menu">
+            <h2 style="color: white; font-size: 13px;" >DROP PAYMENTS INC.</h2>
+
+
+          
+        </div>
+        <hr>
+        <div class="menu">
+            <div id="homepage" class="menu-item" onclick="selectMenu(this)" > <i class="fa fa-home" aria-hidden="true"></i> Início</div>
+            <div class="menu-item expandable" onclick="toggleDropdown('productDropdown'); selectMenu(this)"> <i class="fas fa-cube"></i>
+                 Cadastrar produtos</div>
+            <div class="dropdown" id="productDropdown">
+                <div id="principalProduct"  ><i class="fas fa-cube"></i>
+                    Produto principal</div>
+                <div style="display: none;" id="upsellProduct" > <i class="fas fa-cube"></i>
+                     Upsells</div>
+                <div style="display: none;" id="downsellProduct" > <img class="imgs-icon"  src="assests/produto-icon.png" alt="produto-icon"> Downsells</div>
+            </div>
+
+            <div  class="menu-item expandable" onclick="toggleDropdownmy('myproductDropdown'); selectMenu(this)"> <i class="fas fa-cube"></i>
+                 Meus produtos </div>
+            <div class="dropdown" id="myproductDropdown">
+                <div id="principalProductmy" ><i class="fas fa-cube"></i>
+                     Ver meus produtos </div>
+                <div style="display: none;" id="upsellProductmy" > <img class="imgs-icon"  src="assests/produto-icon.png" alt="produto-icon">Produtos Upsells</div>
+                <div style="display: none;" id="downsellProductmy" > <img class="imgs-icon"  src="assests/produto-icon.png" alt="produto-icon">Produtos Downsells</div>
+            </div>
+
+            <div id="editcheckout" class="menu-item"><i class="fas fa-store"></i>
+                 Definições do checkout</div>
+            <div style="display: none;" id="donate" class="menu-item"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Checkout para Doações</div>
+            <div id="vendasPage" class="menu-item"> <div class="circle-icon">
+                <i class="fas fa-dollar-sign"></i>
+              </div>          
+              Vendas</div>
+            <div id="saques" class="menu-item"> <i class="fa fa-credit-card-alt" aria-hidden="true"></i>  Saques</div>
+            <div id="funelPage" class="menu-item"> <i class="fas fa-filter"></i>
+            Funil de Venda</div>
+            <div id="pixelpage" class="menu-item"> <!-- Ícone de Wi-Fi dentro de um Círculo com CSS --> <i class="fas fa-wifi"></i> Pixel do Facebook</div>
+            <div id="shopifyIntegration" onclick="selectMenu(this)" class="menu-item"> <i class="fab fa-shopify"></i>
+            Vincular na Shopify</div>
+            <hr class="hr2">
+            <div id="instaPage" class="menu-item"> <i class="fab fa-instagram"></i>
+                 Siga-nos no Instagram</div>
+            <div id="supportPage" class="menu-item"> <i class="fab fa-whatsapp"></i>
+                Ajuda e Supporte 24/7</div>
+            <div id="comunidade" class="menu-item"> <i class="fas fa-users"></i>
+                Comunidade </div>
+           
+        </div>
+    </div>
+
+ <div class="active" id="active" >   
+    <div id="conteudo" class="content">
+       
+    
+       
+
+
+        
+        <div  class="header">
+           
+           
+            <span id="userName" style="font-size: 20px; margin-left: 20px; font-weight: 500; color: rgb(39, 39, 39);; ">  carregando...</span>
+
+
+
+            <div class="user-menu" onclick="toggleDropdown('userMenu')">
+                <img id="profileFoto" class="usermenu-icon" style="width: 50px; display: flex; border-radius: 50px; box-shadow: 0px 4px 8px rgb(0, 73, 173); " src="assests/user.png" alt="User Menu">
+            </div>
+            
+            <div id="userMenu" class="dropdown2">
+                <img id="profileFoto1" src="assests/user.png"  style="width: 50px; border-radius: 50px;" alt="">
+                <p id="userName2" >carregando dados...</p>
+                <p id="userEmail" >carregando dados...</p>
+                <div id="myacc" style="margin-top: 20px;" > <i class="fa fa-user" aria-hidden="true"></i>  Minha conta</div>
+                <div id="paymentMethod" > <i class="fas fa-money-check"></i>
+                    Informacoes de pagamento</div>
+                <div id="apiCrendentials" > <i class="fa fa-key" style="margin-top: 4px;" aria-hidden="true"></i>   Credenciais da API</div>
+                <div id="apiDoc" > <i class="fa fa-book" aria-hidden="true"></i>  Documentação da API </div>
+                <div id="help" > <i class="fa fa-question-circle" aria-hidden="true"></i>  Ajude </div>
+                <div id="logoutButton">  <i class="fa fa-sign-out" aria-hidden="true"></i>  Sair</div>
+            </div>
+        </div>
+
+        <div style="display: none;" class="progress-label">
+            <span style="font-size: 14px;" id="progress-text">MZN 0 </span>
+            <strong style="margin-left: 5px; font-size: 14px;" > /  MZN 100,000.00 </strong>
+        </div>
+    
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- Div Container posicionada abaixo da div Header -->
+        <div class="container">
+            <div class="box">
+                <h2 style="font-size: 18px; font-weight: 500;" >Saldo disponível para saque</h2>
+                <p id="saldoDisponivel" style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold; display: inline;"></p>   <p style="display: inline-block;" > <button   id="hideFirstBalance" style="background-color: transparent; border: none;">
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
+                </button></p> <br></p> 
+                 <button  id="showSaquepop" class="button" style="margin: 8px;" >  <i class="fa fa-credit-card-alt" aria-hidden="true"></i>   Solicitar Saque </button>
+                 <button id="saquesHistoryView" > <i class="fa fa-credit-card-alt" aria-hidden="true"></i>  Historico de saques</button>
+                
+                <p style="color: red; font-weight: bold;" id="saqueInfo" > </p>
+                <p>Vendas das carteiras:</p>
+                <img class="imgs-payments" src="assests/emola.png" alt="">
+                <img class="imgs-payments" src="assests/mpesa2.jpg" alt="">
+            </div>
+            <div class="box">
+                <h2  style="font-size: 18px; font-weight: 500;" >Saldo disponivel para saque: </h2>
+                <p id="paypalBalance" style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold; display: inline; " "></p> <p style="display: inline-block;" > <button style="background-color: transparent; border: none;" id="hideBalance">
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
+                </button></p> <br>
+                <button  id="showSaquepopPay" class="button" style="margin: 8px;" >  <i class="fa fa-credit-card-alt" aria-hidden="true"></i>   Solicitar Saque </button>
+                <button id="saquesHistoryView" > <i class="fa fa-credit-card-alt" aria-hidden="true"></i>  Historico de saques</button>
+                
+               <p style="color: red; font-weight: bold;" id="saqueInfo2" > </p>
+                <p>Vendas da carteira:</p>
+                <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
+                
+            </div>
+            <div class="box">
+                <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 16px;" >Ultimo saque solicitado</h2>
+                <p id="pedidoDeSaque" style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold;">MZN 0.00 </p>
+                <p id="saqueStatus" style="font-size: 18px;" ><strong>Estado:</strong> Pendente</p><br>
+                
+                <button id="sendMoney" >  Enviar dinheiro</button>
+                <p id="sendMoneyInfo" style="color: red; font-weight: 600; display: none;" >Recurso indisponivel!</p>
+            </div> 
+            <div class="box">
+                <h2 style="font-size: 18px; font-weight: 500; " >Vendas realizadas hoje</h2>
+                <p><p id="vendasHoje" style="color: #006e2f; font-size: 19px; font-weight: 500; margin: 10px;"> MZN 0.00</p></p>
+                <button id="vendasHistoryView" >  <i class="fa-solid fa-hand-holding-dollar"></i> Historico de vendas </i> </button>
+                <p>Transações das carteiras:</p>
+                <img class="imgs-payments" src="assests/emola.png" alt="">
+                <img class="imgs-payments" src="assests/mpesa2.jpg" alt="">
+                <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
+            </div>
+            
+            <canvas id="salesChart"></canvas>
+             <!-- Inclua a biblioteca Chart.js -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </div>
+   <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/674a1cf24304e3196aea9741/1idso269o';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Formulário para adicionar produtos -->
+<form id="productForm" style="max-width: 500px; margin: auto; margin-top: 15px; margin-bottom: 15px;">
+    <h2>Informações básicas do produto</h2>
+    <label for="productName">Nome do Produto:</label>
+    <input type="text" id="productName" placeholder="Nome do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse nome será exibido no Checkout.</h5><br>
+
+    <label for="productPrice">Preço do Produto (MT):</label>
+    <input type="number" id="productPrice" placeholder="0.00 MT" required style="width: 100%; padding: 8px; margin: 8px 0; ;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse Preço será exibido no Checkout.</h5><br>
+
+    <label for="productDescription">Descrição do Produto:</label>
+    <textarea class="textarea" id="productDescription" placeholder="Descrição do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"></textarea><br>
+    <h5 class="info-inputs" style="color: gray;">Essa Descrição <strong>NAO</strong> será exibida no Checkout.</h5><br>
+
+    <label for="productImage">Imagem do Produto:</label>
+    <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;"><br>
+    <img id="previewProductImage" src="#" alt="Pré-visualização da Imagem" style="display:none; margin: 8px; width: 150px; height: auto; border-radius: 8px;">
+    <h5 class="info-inputs" style="color: gray;">Essa Imagem será exibida no Checkout.</h5><br><br>
+
+
+    <label for="productBanner">Banner do Produto (Recomendado): </label>
+    <input type="file" id="productBanner" accept="image/*" style="margin: 8px 0;" required><br>
+    <img id="previewProductBanner" src="#" alt="Pré-visualização do Banner" style="display:none; margin: 8px; width: 300px; height: auto; border-radius: 8px;">
+    <h5 class="info-inputs" style="color: gray;">Esse Banner será exibido como destaque do produto.</h5><br><br>
+
+
+    <!-- Checkbox estilizado -->
+    <label for="productType" style="display: flex; align-items: center;">
+        <input type="checkbox" id="productType" style="margin-right: 10px; transform: scale(1.2);"> 
+        <span>Fornecer um link externo para o produto.</span>
+    </label>
+
+    <!-- Campo de link externo estilizado -->
+    <div id="productLinkDiv" style="display:none; margin-bottom: 20px;">
+        <label for="productLink" style="display: block;">Link Externo do Produto:</label>
+        <input type="url" id="productLink" placeholder="https://example.com" style="width: 100%; height: 43px;  padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <!-- Campo de arquivo PDF -->
+    <div id="productDocDiv">
+        <label for="productDoc">Arquivo do Produto (ebooks .PDF):</label>
+        <input type="file" id="productDoc" accept=".pdf" required style="margin: 8px 0;"><br>
+    </div><br>
+
+    <button id="addProduct" type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Adicionar Produto
+    </button>
+    <p id="message"></p>
+</form> 
+
+
+</div> <!--Active menu-->
+<div id="active2" class="active2" >
+
+<div class="container2">
+    <p id="requestStatus" style="font-weight: bold; border: 1px solid #062858; padding: 8px; margin: 8px;  width: 400px; border-radius: 7px; margin-left: 0px; color: #031125; font-size: 12px; display: none; " >ESTADO DA SOLIÇITAÇÃO: <span id="statusRef" style="color: rgb(160, 14, 14);" >PENDENTE</span></p>
+    <p id="clientLabel" style="font-size: 16px; color: #363636; margin-bottom: 15px; display: none; " > <strong> </strong> <span  id="clientID" style="margin-left: 8px;" ></span></p>
+    <hr>
+    <p class="title">Preencha os campos abaixo para solicitar a integração dos meios de pagamento M-pesa/e-Mola em sua loja na shopify.</p>
+
+    <div class="row">
+      
+    </div>
+    <img style="width: 180px;" src="assests/D__24_-removebg-preview.png" alt="dp-shopify-banner">
+    
+    <p>Seu whatsapp * <span style="color: #333333 ;" >Entraremos em contacto atraves desde numero.</span> </p>
+    <input   style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="whatsapp" placeholder="Inisira seu whatsapp" class="inputForm">
+    <p>Nome da loja * </p>
+    <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="storename" placeholder="Inisira o nome da loja" class="inputForm">
+    <p>Link da loja * </p>
+    <input  style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  " type="text" id="storeurl" placeholder="Inisira o link da loja" class="inputForm">
+    <p>Email onde receberá as notificações de pedidos gerados pelos compradores * </p>
+    <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="emailuser" placeholder="Inisira o seu email" class="inputForm"> <br>
+    <button id="sendInfo" > Enviar solicitação</button>
+    <p id="outPutrequest" >Solicitação enviada com sucesso, dentro de 3 dias entraremos em contacto.</p>
+</div>
+
+</div> 
+
+
+
+
+
+
+
+
+
+<!-- Formulário para adicionar produtos -->
+<form id="productFormUpsell" style="max-width: 500px; margin: auto; margin-top: 15px; margin-bottom: 15px; display: none;">
+    <h2>Informações básicas do Upsell </h2>
+    
+    <label for="upsellName">Nome do Produto:</label>
+    <input type="text" id="upsellName" placeholder="Nome do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse nome será exibido no Checkout.</h5><br>
+
+    <label for="upsellPrice">Preço do Produto (MT):</label>
+    <input type="number" id="upsellPrice" placeholder="00.00 MT" required style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse Preço será exibido no Checkout.</h5><br>
+
+    <label for="upsellDescription">Descrição do Produto:</label>
+    <textarea class="textarea" id="upsellDescription" placeholder="Descrição do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"></textarea><br>
+    <h5 class="info-inputs" style="color: gray;">Essa Descrição <strong>NÃO</strong> será exibida no Checkout.</h5><br>
+
+    <label for="upsellImage">Imagem do Produto:</label>
+    <input type="file" id="upsellImage" accept="image/*" required style="margin: 8px 0;"><br>
+    <img id="previewUpsellImage" src="#" alt="Pré-visualização da Imagem" style="display:none; margin: 8px; width: 150px; height: auto;">
+    <h5 class="info-inputs" style="color: gray;">Essa Imagem será exibida no Checkout.</h5><br><br>
+
+    <!-- Checkbox para seleção de link externo -->
+    <label for="upsellType" style="display: flex; align-items: center;">
+        <input type="checkbox" id="upsellType" style="margin-right: 10px; transform: scale(1.2);"> 
+        <span>Fornecer um link externo para o produto.</span>
+    </label>
+
+    <!-- Campo de link externo -->
+    <div id="upsellLinkDiv" style="display:none; margin-bottom: 20px;">
+        <label for="upsellLink" style="display: block;">Link Externo do Produto:</label>
+        <input type="url" id="upsellLink" placeholder="https://example.com" style="width: 100%; height: 43px; padding: 8px;  border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <!-- Campo de arquivo PDF -->
+    <div id="upsellDocDiv">
+        <label for="upsellDoc">Arquivo do Produto (somente ebooks .PDF):</label>
+        <input type="file" id="upsellDoc" accept=".pdf" required ><br>
+    </div><br>
+
+    <button id="addProductUpsell" type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Adicionar Upsell
+    </button>
+    <p id="messageUpsell"></p>
+</form>
+
+
+
+
+<!-- Formulário para adicionar Downsell -->
+<form id="productFormDownsell" style="max-width: 500px; margin: auto; margin-top: 10px; margin-bottom: 10px; display: none;">
+    <h2>Informações básicas do Downsell</h2>
+
+    <label for="downsellName">Nome do Produto:</label>
+    <input type="text" id="downsellName" placeholder="Nome do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse nome será exibido no Checkout.</h5><br>
+
+    <label for="downsellPrice">Preço do Produto (MT):</label>
+    <input type="number" id="downsellPrice" placeholder="00.00 MT" required style="width: 100%; padding: 8px; margin: 8px 0;"><br>
+    <h5 class="info-inputs" style="color: gray;">Esse Preço será exibido no Checkout.</h5><br>
+
+    <label for="downsellDescription">Descrição do Produto:</label>
+    <textarea class="textarea" id="downsellDescription" placeholder="Descrição do Produto" required style="width: 100%; padding: 8px; margin: 8px 0;"></textarea><br>
+    <h5 class="info-inputs" style="color: gray;">Essa Descrição <strong>NÃO</strong> será exibida no Checkout.</h5><br>
+
+    <label for="downsellImage">Imagem do Produto:</label>
+    <input type="file" id="downsellImage" accept="image/*" required style="margin: 8px 0;"><br>
+    <img id="previewDownsellImage" src="#" alt="Pré-visualização da Imagem" style="display:none; margin: 8px; width: 150px; height: auto;">
+    <h5 class="info-inputs" style="color: gray;">Essa Imagem será exibida no Checkout.</h5><br><br>
+
+    <!-- Checkbox para seleção de link externo -->
+    <label for="downsellType" style="display: flex; align-items: center;">
+        <input type="checkbox" id="downsellType" style="margin-right: 10px; transform: scale(1.2);"> 
+        <span>Fornecer um link externo para o produto.</span>
+    </label>
+
+    <!-- Campo de link externo -->
+    <div id="downsellLinkDiv" style="display:none; margin-bottom: 20px;">
+        <label for="downsellLink" style="display: block;">Link Externo do Produto:</label>
+        <input type="url" id="downsellLink" placeholder="https://example.com" style="width: 100%; height: 43px; padding: 8px;  border: 1px solid #ccc; border-radius: 4px;">
+    </div>
+
+    <!-- Campo de arquivo PDF -->
+    <div id="downsellDocDiv">
+        <label for="downsellDoc">Arquivo do Produto (somente ebooks .PDF):</label>
+        <input type="file" id="downsellDoc" accept=".pdf" required ><br>
+    </div><br>
+
+    <button id="addProductDownsell" type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Adicionar Downsell
+    </button>
+    <p id="messageDownsell"></p>
+</form>
+
+
+
+
+</div>
+
+
+
+
+
+    <script src="index.js"></script>
+
+    <script>
+ function showMenu(menuId) {
+    // Esconder todos os menus
+    document.querySelectorAll('.menuHidden').forEach(menu => menu.classList.remove('active'));
+    // Mostrar o menu selecionado
+    document.getElementById(menuId).classList.add('active');
+  }
+
+function closeProductPopup() {
+    const popupBackground2 = document.getElementById('product-pop-container-2');
+    popupBackground2.style.display = 'none';
+}
+
+function closeSaquePopup() {
+    const popupBackground3 = document.getElementById('product-pop-container-3');
+    popupBackground3.style.display = 'none';
+}
+function closeSaquePopup4() {
+    const popupBackground3 = document.getElementById('product-pop-container-4');
+    popupBackground3.style.display = 'none';
+}
+
+
+
+
+      // Versão atual do popup (altere essa versão quando houver uma atualização)
+const popupVersion = '5.0'; // Atualize essa string para uma nova versão, como '1.1' ou '2.0'
+
+// Função para exibir o popup
+function showPopup2() {
+    const popupBackground = document.getElementById('popup-background');
+    popupBackground.style.display = 'block';
+}
+
+// Verifica se o popup já foi exibido para a versão atual
+function verifyPopup() {
+    const storedVersion = localStorage.getItem('infoUpdateVersion');
+
+    // Se a versão armazenada for diferente da atual, mostra o popup
+    if (storedVersion !== popupVersion) {
+        showPopup2();
+    } else {
+       console.error("...");
+    }
+}
+
+// Função para fechar o popup
+function closePopup2() {
+    const popupBackground = document.getElementById('popup-background');
+    popupBackground.style.display = 'none';
+    console.log("Popup fechado.");
+
+    // Marca no localStorage que o popup foi exibido para a versão atual
+    localStorage.setItem('infoUpdateVersion', popupVersion);
+}
+
+verifyPopup();
+
+
+// Adiciona o evento de clique no botão de fechar o popup
+document.getElementById('close-popup').addEventListener('click', closePopup2);
+    </script>
+
+<script type="module" src="checkoutDef.js"></script>
+
+</body>
+</html>

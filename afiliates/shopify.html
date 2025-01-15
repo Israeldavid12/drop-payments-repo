@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Document</title>
+    <style>
+  .container2 { 
+    border-top: 40px solid rgb(115, 197, 230);
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    padding: 60px;
+   
+}
+
+
+.title {
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #333333;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-weight: bold;
+    width: 200px;
+}
+
+.client-id {
+    width: 500px;
+    word-wrap: break-word;
+}
+
+
+
+
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-button {
+    padding: 15px 40px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #FFF;
+    font-size: 16px;
+    cursor: pointer;
+}
+input {
+    max-width: 300px;
+    min-width: 250px;
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+   
+    border: 1px solid silver;
+}
+
+input:hover {
+    border: 1px solid #062858;
+}
+#sendInfo {
+    max-width: 300px;
+    min-width: 250px;
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+    background-color: #062858;
+    margin: 8px 0px;
+    color: white;
+
+}
+.label {
+    font-size: 14px;
+}
+    </style>
+</head>
+<body>
+    <a href="#inicio"> <p><i class="fa-thin fa-house"></i> > Pagina incial </p> </a>
+    <a href="#state1"> </i>  mudar container  </p> </a>
+    <div id="box" class="container2">
+       
+        <p id="requestStatus"
+            style="font-weight: bold; border: 1px solid #062858; padding: 8px; margin: 8px;  width: 400px; border-radius: 7px; margin-left: 0px; color: #031125; font-size: 12px; display: none; ">
+            ESTADO DA SOLIÇITAÇÃO: <span id="statusRef" style="color: rgb(160, 14, 14);">PENDENTE</span></p>
+        <p id="clientLabel" style="font-size: 16px; color: #363636; margin-bottom: 15px; display: none; ">
+            <strong> </strong> <span id="clientID" style="margin-left: 8px;"></span>
+        </p>
+       
+        <p class="title">Preencha os campos abaixo para solicitar a integração dos meios de pagamento
+            M-pesa/e-Mola em sua loja na shopify.</p>
+
+        <div class="row">
+
+        </div>
+        <img style="width: 180px;" src="../assests/D__24_-removebg-preview.png" alt="dp-shopify-banner">
+
+        <p class="label" >Seu whatsapp * <span style="color: #333333 ;">Entraremos em contacto atraves desde numero.</span>
+        </p>
+        <input  type="text" id="whatsapp"
+            placeholder="Inisira seu whatsapp" class="inputForm">
+        <p>Nome da loja * </p>
+        <input type="text" id="storename"
+            placeholder="Inisira o nome da loja" class="inputForm">
+        <p class="label" >Link da loja * </p>
+        <input  type="text" id="storeurl"
+            placeholder="Inisira o link da loja" class="inputForm">
+        <p>Email onde receberá as notificações de pedidos gerados pelos compradores * </p>
+        <input  type="text" id="emailuser"
+            placeholder="Inisira o seu email" class="inputForm"> <br>
+        <button id="sendInfo"> Enviar solicitação</button>
+        <p id="outPutrequest">Solicitação enviada com sucesso, dentro de 3 dias entraremos em contacto.</p>
+    </div>
+    <p style="margin-top: 50px;" >&copf; Drop Payments E.I</p>
+
+</body>
+</html>

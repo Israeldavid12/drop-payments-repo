@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Shopify</title>
+    <script src="https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js"></script>
+</head>
+<body>
+    <h1>Checkout Shopify</h1>
+    <div>
+        <h2>Adicionar Produto ao Carrinho</h2>
+        <input type="text" id="productVariantId" placeholder="ID da Variante do Produto" />
+        <input type="number" id="quantity" placeholder="Quantidade" min="1" />
+        <button id="addToCartButton">Adicionar ao Carrinho</button>
+    </div>
+
+    <div>
+        <h2>Criar Pedido</h2>
+        <input type="email" id="customerEmail" placeholder="Email do Cliente" />
+        <input type="text" id="shippingAddress" placeholder="Endereço de Entrega" />
+        <button id="checkoutButton">Finalizar Pedido</button>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+        const client = ShopifyBuy.buildClient({
+            domain: 'testetore.myshopify.com', // Substitua pelo domínio correto
+            storefrontAccessToken: 'd1aaa9c8bc937685fc4297b7be9fa3c8', // Substitua pelo token correto
+        });
+
+        let cartId;
+
+        // Função para criar o carrinho (se ainda não existir)
+        const createCart = async () => {
+            if (!cartId) {
+                const cartCreateMutation = `
+                    mutation {
+                        cartCreate(input: {}) {
+                            cart {
+                                id
+                                checkoutUrl
+                            }
+                        }
+                    }
+                `;
+
+                const response = await client.graphQLClient.send({
+                    query: cartCreateMutation,
+                });
+
+                cartId = response.data.cartCreate.cart.id; // Armazena o ID do carrinho
+                return response.data.cartCreate.cart.checkoutUrl; // Retorna a URL de checkout
+            }
+        };
+
+        // Função para adicionar produto ao carrinho
+        document.getElementById('addToCartButton').onclick = async () => {
+            const productVariantId = document.getElementById('productVariantId').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+
+            if (!productVariantId || !quantity) {
+                document.getElementById('output').innerText = 'ID da variante do produto ou quantidade inválida!';
+                return;
+            }
+
+            // Certifique-se de que o carrinho foi criado antes de adicionar produtos
+            await createCart();
+
+            const addToCartMutation = `
+                mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+                    cartLinesAdd(cartId: $cartId, lines: $lines) {
+                        cart {
+                            id
+                            lines {
+                                id
+                                quantity
+                                merchandise {
+                                    ... on ProductVariant {
+                                        id
+                                        title
+                                    }
+                                }
+                            }
+                        }
+                        userErrors {
+                            field
+                            message
+                        }
+                    }
+                }
+            `;
+
+            const response = await client.graphQLClient.send({
+                query: addToCartMutation,
+                variables: {
+                    cartId: cartId, // Usa o carrinho criado
+                    lines: [{ quantity: quantity, merchandiseId: productVariantId }],
+                },
+            });
+
+            if (response.data.cartLinesAdd.userErrors.length > 0) {
+                document.getElementById('output').innerText = 'Erro ao adicionar ao carrinho: ' + response.data.cartLinesAdd.userErrors[0].message;
+            } else {
+                document.getElementById('output').innerText = 'Produto adicionado ao carrinho!';
+            }
+        };
+
+        // Função para criar o pedido
+        document.getElementById('checkoutButton').onclick = async () => {
+            const email = document.getElementById('customerEmail').value;
+            const shippingAddress = document.getElementById('shippingAddress').value;
+
+            if (!email || !shippingAddress) {
+                document.getElementById('output').innerText = 'Preencha o email e o endereço de entrega!';
+                return;
+            }
+
+            // Certifique-se de que o carrinho foi criado
+            const checkoutUrl = await createCart();
+
+            const cartUpdateMutation = `
+                mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+                    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+                        cart {
+                            id
+                            buyerIdentity {
+                                email
+                            }
+                        }
+                        userErrors {
+                            field
+                            message
+                        }
+                    }
+                }
+            `;
+
+            const response = await client.graphQLClient.send({
+                query: cartUpdateMutation,
+                variables: {
+                    cartId: cartId, // Usa o carrinho criado
+                    buyerIdentity: {
+                        email: email,
+                        phone: "",
+                        countryCode: "BR", // Brasil
+                    },
+                },
+            });
+
+            if (response.data.cartBuyerIdentityUpdate.userErrors.length > 0) {
+                document.getElementById('output').innerText = 'Erro ao atualizar o comprador: ' + response.data.cartBuyerIdentityUpdate.userErrors[0].message;
+            } else {
+                document.getElementById('output').innerHTML = `Pedido criado com sucesso! <a href="${checkoutUrl}" target="_blank">Finalizar Checkout</a>`;
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    let orderId; // Declara a variável como global
+    orderId = "17";
+    // Função para adicionar o produto ao carrinho e redirecionar para o checkout
+function handleCheckout(variantId, productQuantity) {
+// Primeiro, adiciona o produto ao carrinho
+fetch('https://10bbed-ef.myshopify.com/cart/add.js', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': '5c1d042e399b788258c39a717f6c4e20-1730713684'
+
+    },
+    body: JSON.stringify({
+        items: [{
+            id: variantId,
+            quantity: productQuantity
+        }]
+    })
+})
+.then(response => {
+    if (!response.ok) {
+        console.log(variantId,  productQuantity );
+        throw new Error('Erro ao adicionar ao carrinho: ' + response.statusText);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('Produto adicionado ao carrinho:', data);
+
+ 
+})
+.catch(error => {
+    console.error('Erro ao processar o checkout:', error);
+});
+}
+
+    
+
+
+    
+
+const productQuantity = parseInt(document.querySelector('input[name="quantity"]').value); // Substitua pelo seletor real da quantidade
+
+const variantId = document.querySelector('input[name="id"]').value; // Substitua pelo seletor real do ID da variante
+const lineItems = [
+{
+    id: variantId, // Variant ID do produto
+    quantity: productQuantity
+}
+];
+    
+    document.getElementById('payWithMpesa').addEventListener('click', function() {
+       handleCheckout(variantId, productQuantity);
+      createCheckout(lineItems)
+.then(data => {
+    console.log("Checkout criado:", data);
+    orderId = data.checkout.id; // Atribui o orderId à variável globalui
+      //id do cliente
+    const client_id = "rVQeoNZ99VWsuDgmIHQ7AKYwc2J2";
+
+    const productName = document.querySelector('h1').innerText; // Substitua pelo seletor real do nome do produto
+
+    const productPrice = parseFloat(document.querySelector('.price-item').innerText.replace('Mt', '').replace(',', '.').trim()); // Substitua pelo seletor real do preço
+   
+    // Cria a URL de checkout
+     const checkoutUrl = `http://127.0.0.1:5501/shopify_checkout/checkout.html?client_id=${client_id}&productName=${encodeURIComponent(productName)}&productPrice=${productPrice}&productQuantity=${productQuantity}&variantId=${variantId}`; 
+    
+    // Redireciona para a página de checkout
+    window.location.href = checkoutUrl;  
+})
+.catch(error => {
+    console.error(error);
+});
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+     document.getElementById('payWithMpesa').addEventListener('click', function() {
+       handleCheckout(variantId, productQuantity);
+     
+    const client_id = "rVQeoNZ99VWsuDgmIHQ7AKYwc2J2";
+
+    const productName = document.querySelector('h1').innerText; // Substitua pelo seletor real do nome do produto
+
+    const productPrice = parseFloat(document.querySelector('.price-item').innerText.replace('Mt', '').replace(',', '.').trim()); // Substitua pelo seletor real do preço
+   
+    // Cria a URL de checkout
+     const checkoutUrl = `http://127.0.0.1:5501/shopify_checkout/checkout.html?client_id=${client_id}&productName=${encodeURIComponent(productName)}&productPrice=${productPrice}&productQuantity=${productQuantity}&variantId=${variantId}`; 
+    
+    // Redireciona para a página de checkout
+    window.location.href = checkoutUrl;  
+});
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    let imgProduct = "";
+     
+     // Seleciona a imagem com base em uma classe ou atributo
+    const imageElement = document.querySelector('.global-media-settings[data-media-id="23935318360166"]');
+
+if (imageElement) {
+  // Extrai o link da imagem do atributo 'src'
+  const imageUrl = imageElement.getAttribute('src');
+
+  // Cria um parâmetro de URL
+  const urlParam = encodeURIComponent(imageUrl); // Codifica o URL para que possa ser usado em um parâmetro
+
+  // Exibe a URL no console
+  console.log("Link da imagem:", imageUrl);
+  imgProduct = 'https:'+imageUrl;
+  console.log(imgProduct);
+  // Aqui você pode usar o link da imagem conforme necessário
+  // Por exemplo, redirecionar para uma nova URL com o parâmetro
+  
+  
+  // Descomente a linha abaixo para redirecionar
+  // window.location.href = newUrl;
+} else {
+  console.error('Elemento de imagem não encontrado.');
+}
+</script>

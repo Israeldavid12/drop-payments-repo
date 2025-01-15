@@ -1,0 +1,74 @@
+body, html {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0a2f63;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header, section {
+    text-align: center;
+    margin-top: 20px;
+}
+.top-nav {
+    display: flex;
+    justify-content: end;
+}
+.top-nav button {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+}
+.login {
+    background-color: #fff;
+    color: #000000;
+}
+button {
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: #fff;
+    border-radius: 9px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 250px;
+    height: 60px;
+    font-size: 16px;
+}
+
+.dynamic-value {
+    font-size: 18px;
+   
+}
+
+.fb-pixel {
+    background-color: #323232;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.screenshot {
+    width: 80%;
+    margin-top: 20px;
+}
+
+footer {
+    display: flex;
+    margin-top: 40px;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: space-between;
+}
+.checkout-img {
+    max-width: 100px;
+    margin: 8px;
+}

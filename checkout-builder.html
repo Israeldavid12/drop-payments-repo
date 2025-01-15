@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout Builder</title>
+  <style>
+    /* Estilos básicos */
+    .checkout-container {
+      padding: 10px;
+      border: 1px solid #ddd;
+      min-height: 400px;
+    }
+
+    .checkout-component {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      cursor: grab;
+    }
+
+    .dragging {
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-container" id="checkout-container"></div>
+
+  <!-- Inicialização do Firebase e código JavaScript -->
+  <script type="module">
+    // Importação do Firebase usando módulos
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
+      authDomain: "drop-payments-mz.firebaseapp.com",
+      databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "drop-payments-mz",
+      storageBucket: "drop-payments-mz.appspot.com",
+      messagingSenderId: "983262508468",
+      appId: "1:983262508468:web:c0a6e26cf8789807b26ee1",
+      measurementId: "G-JBP3RN50WS"
+    };
+
+    // Inicializando o Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // ID do usuário (pode ser alterado conforme a autenticação)
+    const userId = "user-unique-id";
+
+    // Dados de componentes de exemplo
+    const initialComponents = [
+      { id: 'component-1', type: 'Logo', content: 'https://example.com/logo.png' },
+      { id: 'component-2', type: 'PaymentButton', content: 'Pay with Credit Card' },
+      { id: 'component-3', type: 'FormField', content: 'Email' }
+    ];
+
+    // Carregar componentes do Firebase
+    async function loadUserComponents() {
+      const docRef = doc(db, "users", userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data().checkoutComponents;
+      } else {
+        return initialComponents; // Se não houver dados, usa os componentes iniciais
+      }
+    }
+
+    // Salvar componentes no Firebase
+    async function saveUserComponents(components) {
+      await setDoc(doc(db, "users", userId), {
+        checkoutComponents: components
+      });
+    }
+
+    // Função para renderizar os componentes
+    function renderComponents(components) {
+      const container = document.getElementById('checkout-container');
+      container.innerHTML = ''; // Limpa o conteúdo anterior
+
+      components.forEach(component => {
+        const div = document.createElement('div');
+        div.classList.add('checkout-component');
+        div.draggable = true;
+        div.id = component.id;
+
+        // Adiciona o conteúdo do componente
+        if (component.type === 'Logo') {
+          const img = document.createElement('img');
+          img.src = component.content;
+          img.style.maxWidth = '100px';
+          div.appendChild(img);
+        } else if (component.type === 'PaymentButton') {
+          const button = document.createElement('button');
+          button.textContent = component.content;
+          div.appendChild(button);
+        } else if (component.type === 'FormField') {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = component.content;
+          div.appendChild(input);
+        }
+
+        // Adiciona eventos de arrastar e soltar
+        div.addEventListener('dragstart', handleDragStart);
+        div.addEventListener('dragend', handleDragEnd);
+        div.addEventListener('dragover', handleDragOver);
+        div.addEventListener('drop', handleDrop);
+
+        container.appendChild(div);
+      });
+    }
+
+    // Variáveis de controle de arrastar e soltar
+    let draggedItem = null;
+
+    // Início do arrastar
+    function handleDragStart(event) {
+      draggedItem = event.target;
+      event.target.classList.add('dragging');
+    }
+
+    // Final do arrastar
+    function handleDragEnd(event) {
+      event.target.classList.remove('dragging');
+      draggedItem = null;
+    }
+
+    // Função ao arrastar sobre outro componente
+    function handleDragOver(event) {
+      event.preventDefault(); // Previne o comportamento padrão
+    }
+
+    // Soltar o componente
+    function handleDrop(event) {
+      event.preventDefault();
+      const container = document.getElementById('checkout-container');
+      const afterElement = getDragAfterElement(container, event.clientY);
+
+      if (afterElement == null) {
+        container.appendChild(draggedItem);
+      } else {
+        container.insertBefore(draggedItem, afterElement);
+      }
+
+      // Atualizar a ordem dos componentes e salvar no Firebase
+      const updatedComponents = Array.from(container.children).map(div => {
+        const id = div.id;
+        return initialComponents.find(comp => comp.id === id);
+      });
+
+      saveUserComponents(updatedComponents);
+    }
+
+    // Determinar o elemento "depois" do qual o item está sendo arrastado
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.checkout-component:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Carregar e renderizar componentes ao carregar a página
+    window.addEventListener('DOMContentLoaded', async () => {
+      const components = await loadUserComponents();
+      renderComponents(components);
+    });
+  </script>
+  
+</body>
+</html>

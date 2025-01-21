@@ -1238,7 +1238,7 @@ if (templateType === "2-S") {
     .container {
       max-width: 600px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0px;
       background-color: #ffffff;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
@@ -1252,7 +1252,7 @@ if (templateType === "2-S") {
       max-height: 40px;
     }
     .content {
-      padding: 20px;
+      padding: 8px;
     }
     .content h2 {
       font-size: 24px;

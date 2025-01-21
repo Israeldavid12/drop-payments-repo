@@ -1,10 +1,24 @@
-import userData from "../user/user_data.mjs";
+import {userData} from "../user/user_data.mjs";
 
+
+export const formatBalance = (balance) => {
+    const formatter = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "MZN",
+      });
+    const f_balance = formatter.format(balance || 0);
+    console.log('work');
+    return f_balance;
+}
 
 
 export default function financeHub() {
     const container = document.createElement('div');
-    const name = userData();
+    const user = userData();
+    const balance = formatBalance(user.balance);
+    const paypalBalance = formatBalance(user.paypalBalance);
+    const username  = 'Olá, '+ user.name;
+    const vendasHoje = formatBalance(user.vendasHoje);
 
     fetch(`/app/src/static-pages/finance-hub.html`)
     .then((response) => {
@@ -20,7 +34,7 @@ export default function financeHub() {
     });
 
    const template =  `<div class="finances-hub">
-    <p class="user_name">Olá, ${name.name}</p>
+    <p class="user_name">${username}</p>
     <div class="main-box">
         <div class="box">
             <div class="box-items" >
@@ -29,8 +43,8 @@ export default function financeHub() {
                 </div>
                  <div>
                      <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
-                     <a href='#' class="s_saque" ><i class="bi bi-credit-card-2-back"></i> Solicitar saque</a>
+                     <p class="balance">${balance}</p>
+                     <a href='#withdraw' class="s_saque" ><i class="bi bi-credit-card-2-back"></i> Solicitar saque</a>
                     
                  </div>
                  
@@ -43,7 +57,7 @@ export default function financeHub() {
                </div>
                 <div>
                     <p class="balance_label">Saldo disponivel </p>
-                    <p class="balance">392.03 MZN </p>
+                    <p class="balance">${paypalBalance}</p>
                     <a href='#' class="s_saque" ><i class="bi bi-credit-card-2-back"></i> Solicitar saque</a>
                 </div>
             </div>
@@ -56,8 +70,8 @@ export default function financeHub() {
                  <i class="bi bi-coin"></i>
                 </div>
                  <div>
-                     <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
+                     <p class="balance_label">Vendas realizadas hoje </p>
+                     <p class="balance">${vendasHoje}</p>
                  </div>
              </div>
         </div>
@@ -67,8 +81,8 @@ export default function financeHub() {
                  <i class="bi bi-coin"></i>
                 </div>
                  <div>
-                     <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
+                     <p class="balance_label">Vendas  </p>
+                     <p class="balance">0</p>
                  </div>
              </div>
         </div>

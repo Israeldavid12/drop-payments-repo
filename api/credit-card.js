@@ -40,7 +40,7 @@ app.get('/api/client-token', (req, res) => {
 
 
 // Endpoint para processar o pagamento
-app.post('/api/process-payment', (req, res) => {
+ app.post('/api/process-payment', (req, res) => {
     console.log(req.body);
     const nonceFromTheClient = req.body.nonce;
   

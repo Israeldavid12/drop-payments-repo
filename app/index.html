@@ -4,22 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="src/styles/dashboard.css">
-    <link rel="stylesheet" href="src/styles/user-info-menu-modal.css">
+    <link rel="stylesheet" href="src/styles/modals-styles/user-info-menu-modal.css">
     <link rel="stylesheet" href="src/styles/finance-hub.css">
     <link rel="shortcut icon" href="src/assets/logo-dp.png" type="image/x-icon">
     <link rel="stylesheet" href="src/styles/loading-icon.css">
     <link rel="stylesheet" href="src/styles/product-hub.css">
+    <link rel="stylesheet" href="src/styles/withdraw-hub.css">
+    <link rel="stylesheet" href="src/styles/profile-hub.css">
 
 
 </head>
 
 <body>
+
     <nav id="sidebar" class="show_sidebar">
         <div id="sidebar_content">
             <div id="company_info">
@@ -27,8 +30,9 @@
                 <span class="item-description logo_title">
                     DROP PAYMENT E.I
                 </span>
-                <i id="close_side_menu" class="bi bi-x-lg"></i>
+                <i id="close_side_menu" class="bi bi-layout-sidebar-inset"></i>
                 <i id="close_side_menu_mobile" class="bi bi-x-lg"></i>
+
             </div>
 
             <ul id="side_items">
@@ -60,7 +64,7 @@
                 </li>
 
                 <li class="side-item">
-                    <a href="#">
+                    <a href="#withdraw">
                         <i class="bi bi-credit-card-2-back"></i>
                         <span class="item-description">
                             Carteira
@@ -109,7 +113,9 @@
 
             <div class="user">
                 <i class="bi bi-bell"></i>
-                <h2 id="open_user_menu"></h2>
+                <div>
+                    <h2 id="open_user_menu"></h2>
+                </div>
             </div>
         </div>
 
@@ -117,20 +123,82 @@
         <!---CONTAINER--->
         <div id="content" class="content">
 
-            <div class="loading-container">
-                <div class="circle"></div>
-                <span class="logo">D</span>
-              </div>
+            <div class="p-main-container">
+                <div class="p-box" >
+                    <p class="p-title" >Informacoes pessoais</p>
+                    <p>Detalhes sobre o perfil e informações da conta.</p>
+                    <br>
+                    <div class="p-flex-container">
+                        <div>
+                            <p>Nome</p>
+                            <input type="text">
+                        </div>
+                        <div>
+                            <p>E-mail</p>
+                            <input value="teste1@gmail.com" type="text" disabled>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="p-box">
+                    <p class="p-title" >Informacoes Pagamento</p>
+                    <div class="p-flex-container">
+                        <div>
+                            <p>Titular</p>
+                            <input type="text">
+                        </div>
+                        <div>
+                            <p>Numero</p>
+                            <input type="text">
+                        </div>
+                       
+                      
+                    </div>
+
+                    <div class="p-select"  >
+                        <p class="p-title" >Metodo de pagamento</p>
+                        <p>Selecione um metodo de pagamento</p>
+                        <select id="tipo-conta" class="form-select form-select-sm" aria-label="Small select example">
+                            <option disabled >Selecione um metodo de pagamento</option>
+                            <option value="M-PESA">M-pesa </option>
+                            <option value="E-MOLA">e-Mola</option>
+                        </select>
+                       <br>
+                        <img id="imageELement" src="src/assets/mpesa.png" alt="">
+                    </div>
+                    
+                    
+                </div>
+
+                <div class="p-box" >
+                    <p class="p-title" >Informacoes pessoais</p>
+                    
+                    <div class="p-flex-container">
+                        <div>
+                            <p>Nome</p>
+                            <input type="text">
+                        </div>
+                        <div>
+                            <p>Nome</p>
+                            <input type="text">
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <button>
+                    Salvar
+                </button>
+
+            </div>
+           
+
+        </div>
 
 
-     
     
-        </div>
-
-
-        </div>
     </main>
-    
 
 
     <script type="module" src="src/scripts/app.js"></script>
@@ -139,6 +207,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="src/pages/finances-hub.js"></script>
     <script type="module" src="src/scripts/sales-graphic.js"></script>
+    <script type="module" src="src/user/user_data.mjs"></script>
 
 </body>
 

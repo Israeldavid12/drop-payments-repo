@@ -16,7 +16,11 @@
     <script type="module" src="../checkout-pixel.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../app/src/styles/loading-icon.css">
+    <link rel="stylesheet" href="styles/timer.css">
+    <link rel="stylesheet" href="styles/select-tag.css">
+
 
 </head>
 
@@ -54,14 +58,18 @@
         </div>
         <div class="close-btn" id="close-notification">✕</div>
     </div>
+
     <!-- Cronômetro movido para fora do contêiner -->
-    <div class="timer" id="timer">
-        <span>00:00:00</span>
-        <img src="../checkou-assets/timer.png" alt="Compra Segura">
-        <p style="font-size: 14px; margin-left: 2px; text-transform: uppercase; ">Preencha os seus <br> dados antes que
-            <br> o cronômetro termine
-        </p>
+    <div class="container-timer">
+        <div id="timer" class="timer">00 : 00 : 00</div>
+        <div>
+            <img class="info-icon" src="https://img.icons8.com/ios/50/ffffff/timer.png" alt="Ícone do cronômetro">
+        </div>
+        <div class="info">
+            <div class="info-text">Preencha os seus dados antes que o cronômetro termine</div>
+        </div>
     </div>
+
     <div class="body2">
         <img id="baner-url" style="border-radius: 6px; max-width: 620px; display: none;" class="secure-icon"
             src="../checkou-assets/default-banner.jpg" alt="Banner container">
@@ -70,9 +78,13 @@
 
                 <hr style="margin-bottom: 18px;">
             </div>
+            <select name="cars" id="cars">
+                <option value="volvo">MZ</option>
+                <option value="saab">BR</option>
+                <option value="mercedes">USA</option>
+                <option value="audi">RSA</option>
+            </select>
 
-            <img id="mozIcon" style="margin-bottom: 10px;" src="../checkou-assets/moz-icon.png" alt="Mozambique Flag"
-                width="20">
             <div>
 
 
@@ -80,7 +92,7 @@
                     <img id="image-url" src="../checkou-assets/default-img.jpg" alt="logo">
                     <div class="product-details">
                         <p>Esta a pagar:</p>
-                        <h2 id="productName" style="color: #000000;"></h2>
+                        <h2 id="productName" style="color: #000000; font-weight: 600;"></h2>
                         <p style="font-size: 14px;">COMPRA 100% SEGURA</p>
                         <p id="productPrice" class="product-price">
                         <p class="product-price">
@@ -95,7 +107,7 @@
 
                         <label id="labelNome" for="text">Digite seu nome completo </label>
                         <div class="input-container" id="divnome">
-                            <img src="../assests/user-icon.png" alt="user">
+                            <i class="bi bi-person"></i>
                             <input id="nome" type="text" placeholder="Digite seu nome completo" required>
                         </div>
                         <p id="inputoutputNome"
@@ -107,7 +119,7 @@
                         <label id="labelEmail" for="email">Digite seu melhor e-mail</label>
 
                         <div class="input-container" id="divemail">
-                            <img src="../assests/email.png" alt="email">
+                            <i class="bi bi-envelope"></i>
                             <input id="email" type="email" placeholder="Digite seu melhor e-mail" required>
                         </div>
                         <p id="inputoutputEmail"
@@ -118,11 +130,11 @@
                         <label id="labelWhatsapp" for="tel">Digite seu whatsapp</label>
 
                         <div class="input-container" id="divwhatsapp">
-                            <img src="../assests/zap-black.png" alt="whatsapp">
+                            <i class="bi bi-whatsapp"></i>
                             <input id="whatsapp" type="tel" placeholder="Seu whatsapp">
                         </div>
                     </div>
-
+                    <hr>
                     <div class="payment-options">
 
                         <div style="margin-bottom: 40px;" class="form-group">
@@ -130,10 +142,12 @@
                                 for="tel">Insira o montante a pagar</label>
 
 
-                            <div class="input-container" id="divpriceInserted" style="display: none;">
+                            <div class="input-container" id="divpriceInserted" style="display: none;padding: 0; margin-right: 9px;">
                                 <img src="../assests/vendas-black.png" alt="whatsapp">
-                                <input id="../priceInserted" type="number" placeholder="0.00 MT">
+                                <input id="priceInserted" type="number" placeholder="0.00 MT">
                             </div>
+
+
                             <p id="inputoutputPrice"
                                 style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;">
                                 .</p>
@@ -142,9 +156,9 @@
                             metodo de pagamento</p>
 
 
-                        <img class="mpesa" src="../checkou-assets/mpesa4.jpg" alt="M-Pesa" id="mpesa" onclick="selectMpesa()">
-                        <img src="../assests/emola3.jpg" alt="e-Mola" id="emola" onclick="selectEmola()">
-                        <img  src="../assests/paypal.png" alt="paypal" id="paypal" onclick="selectPayPal()">
+                        <img class="mpesa" src="assets/mpesa.png" alt="M-Pesa" id="mpesa" onclick="selectMpesa()">
+                        <img src="assets/emola.png" alt="e-Mola" id="emola" onclick="selectEmola()">
+                        <img src="assets/paypal.png" alt="paypal" id="paypal" onclick="selectPayPal()">
                     </div>
 
                     <div class="form-group">
@@ -160,7 +174,7 @@
                     </div>
             </div>
 
-            <button  class="pay-btn paypal" id="pay-btn">Pagar com M-Pesa</button>
+            <button class="pay-btn paypal" id="pay-btn">Pagar com M-Pesa</button>
             </form>
 
         </div>
@@ -171,7 +185,9 @@
     </div>
 
     <div id="loader" class="spinner-overlay d-flex justify-content-center align-items-center">
-        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+        <div class="loading-container">
+            <div class="circle"></div>
+            <span class="logo">D</span>
         </div>
     </div>
 
@@ -210,7 +226,7 @@
         }
         // Função de contagem regressiva
         let timeLeft = 200; // 3.33 minutos em segundos
-        const timerElement = document.getElementById("timer").querySelector("span");
+        const timerElement = document.getElementById("timer");
 
         function startCountdown() {
             const countdown = setInterval(() => {
@@ -264,16 +280,17 @@
             document.getElementById("pay-btn").classList.remove("mpesa");
             document.getElementById("mpesa").classList.remove("mpesa");
             document.getElementById("emola").classList.remove("selected");
+            document.getElementById("mpesa").classList.remove("selected");
             document.getElementById("pay-btn").innerHTML = "Pagar com Paypal";
             document.getElementById("pay-btn").classList.add('paypal-button');
             document.getElementsByClassName('input-container')[4].style.display = 'none';
         }
-           
-           
-           
-            
 
-            
+
+
+
+
+
 
 
 

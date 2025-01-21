@@ -162,13 +162,7 @@ function pegarValoresDeMultiplasChaves(userId) {
         manualPrice.style.display = 'none';
         manualLabel.style.display = 'none';
       }
-
-      if (switchMozicon === true) {
-        mozicon.src = 'checkou-assets/moz-icon.png'; 
-      } 
-      else {
-        mozicon.style.display = 'none'; 
-      }
+        
 
       if (switchBanner === true) {
         banner.style.display = "block"

@@ -1,5 +1,4 @@
 .user_info_menu {
-   
     display: flex;
     align-items: center;
     justify-content: start;
@@ -29,7 +28,7 @@
     margin-right: 10px;
 }
 
-.user_info_menu h2 {
+.user_info_menu .user_name_h2 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,7 +41,8 @@
     color: white;
     /* Cor do texto */
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
+    padding: 8px;
     /* Tamanho da fonte */
     border-radius: 50%;
     /* Torna o elemento circular */

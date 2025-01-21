@@ -38,32 +38,7 @@ body {
   padding: 13px;
 }
 
-.timer {
-  background-color: #C33939;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  padding: 10px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  flex-wrap: nowrap;
-  /* Garante que os elementos não quebrem linha */
-}
 
-.timer,
-.timer {
-  white-space: nowrap;
-  /* Impede quebra de linha no conteúdo do span e p */
-}
-
-.timer img {
-  width: 30px;
-  height: auto;
-  margin-left: 10px;
-}
 
 
 .container {
@@ -141,6 +116,9 @@ body {
   height: 30px;
   outline: none;
 }
+.form-group i {
+  font-size: 24px;
+}
 
 
 .payment-options {
@@ -153,18 +131,14 @@ body {
 .payment-options img {
   max-width: 80px;
   height: 70px;
-  margin: 0 6px;
+  margin: 12px 6px;
   cursor: pointer;
   transition: opacity 0.3s;
   border-radius: 8px;
   object-fit: contain
 
 }
-#paypal {
-  
-  padding: 10px;
- 
-}
+
 .payment-options img.selected {
   opacity: 0.5;
   border: 1.5px solid #062858;
@@ -383,7 +357,7 @@ input {
   border-radius: 10px;
   padding: 10px;
   align-items: center;
-
+  box-sizing: border-box;
   border: 1px solid #ddd;
 }
 
@@ -537,4 +511,16 @@ select:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   /* Sombra */
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+
+
+@media (min-width: 992px) {
+  body {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .container-timer {
+    display: none;
+  }
 }

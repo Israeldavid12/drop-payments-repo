@@ -1,0 +1,82 @@
+.p-main-container {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    width: 75%;
+}
+.p-flex-container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.p-box .p-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+.p-flex-container input {
+  outline: none;
+  height: 40px;
+  border: 1px solid silver;
+  border-radius: 4px;
+  padding: 9px;
+  width: 250px;
+}
+.p-flex-container input:hover {
+    border: 1px solid #253F82;
+}
+.p-flex-container p {
+    margin: 0px 10px;
+}
+
+.p-select {
+    margin-top: 20px;
+}
+.p-select img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+select {
+    padding: 8px;
+    outline: none;
+    border: 1px solid silver;
+}
+
+.p-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    gap: 10px;
+}
+
+.p-main-container button {
+    height: 40px;
+    width: 20%;
+    border: none;
+    background-color: #253F82;
+    color: #fff;
+    border-radius: 6px;
+    justify-self: start;
+    margin-top: 15px;
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 600px) {
+   .p-main-container {
+    padding-top: 80px;
+    width: 100%;
+   }
+   .p-flex-container input {
+    width: 100%;
+   }
+}

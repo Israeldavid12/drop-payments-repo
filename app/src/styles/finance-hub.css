@@ -11,14 +11,18 @@
 }
 
 .box {
+    display: flex;
     background-color: white;
     padding: 20px;
     margin: 8px;
+    justify-content: start;
+    align-items: center;
     border-radius: 8px;
     flex: 1 1 calc(50% - 40px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     transition: all 0.3s ease;
+    height: 200px;
 }
 .box-items {
     display: flex;
@@ -48,10 +52,11 @@
 }
 .s_saque {
     border: 0px solid #12599c;
-    background-color: #07a74c;
+    background-color: #0a813d;
     padding: 10px;
     border-radius: 8px;
     color: #ffffff;
+    gap: 10px;
     font-size: 12px;
     cursor: pointer;
     text-decoration: none;
@@ -66,6 +71,12 @@
 @media (max-width: 600px) {
     .main-box {
         display: grid;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+    .box-items {
+        max-width: 300px;
     }
     .user_name {
         font-size: 18px;

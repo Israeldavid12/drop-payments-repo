@@ -1,39 +1,75 @@
-import {userData} from "../user/user_data.mjs";
+import { getUserId } from "../user/user_data.mjs";
 
 
 export const formatBalance = (balance) => {
     const formatter = new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "MZN",
-      });
+    });
     const f_balance = formatter.format(balance || 0);
-    console.log('work');
+    
     return f_balance;
 }
 
+async function userData() {
+    try {
+        const userId = await getUserId();
+        const userDataResponse = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+            userId: userId,
+            reqType: 'user_data',
+        });
 
-export default function financeHub() {
-    const container = document.createElement('div');
-    const user = userData();
-    const balance = formatBalance(user.balance);
-    const paypalBalance = formatBalance(user.paypalBalance);
-    const username  = 'Olá, '+ user.name;
-    const vendasHoje = formatBalance(user.vendasHoje);
+        const data = userDataResponse.data.data;
+        console.log(userDataResponse.data.data.email);
+        return {
+            name: data.user_name,
+            email: data.user_email,
+            balance: data.balance,
+            paypalBalance: data.paypalBalance
+        };
 
-    fetch(`/app/src/static-pages/finance-hub.html`)
-    .then((response) => {
-      if (!response.ok) throw new Error('Página não encontrada');
-      return response.text();
-    })
-    .then((html) => {
-        
-       // container.textContent = html;
-    })
-    .catch(() => {
-      return '<h1>404 - Página não encontrada</h1>';
-    });
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-   const template =  `<div class="finances-hub">
+
+
+export async function financeHub() {
+
+    try {
+        const userId = await getUserId();
+        const userDataResponse = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+            userId: userId,
+            reqType: 'user_data',
+        });
+
+        const data = userDataResponse.data;
+        console.log(data.user_name);
+
+        const container = document.createElement('div');
+        // const userdata = await userData();
+        // console.log(userdata.name);
+        const balance = formatBalance(data.balance);
+        const paypalBalance = formatBalance(data.paypalBalance);
+        const username = 'Olá, ' + data.user_name;
+        const vendasHoje = formatBalance(data.vendasHoje);
+
+        fetch(`/app/src/static-pages/finance-hub.html`)
+            .then((response) => {
+                if (!response.ok) throw new Error('Página não encontrada');
+                return response.text();
+            })
+            .then((html) => {
+
+                // container.textContent = html;
+            })
+            .catch(() => {
+                return '<h1>404 - Página não encontrada</h1>';
+            });
+
+        const template = `
+         <div class="finances-hub">
     <p class="user_name">${username}</p>
     <div class="main-box">
         <div class="box">
@@ -47,6 +83,13 @@ export default function financeHub() {
                      <a href='#withdraw' class="s_saque" ><i class="bi bi-credit-card-2-back"></i> Solicitar saque</a>
                     
                  </div>
+                 <div>
+                     <p class="balance_label">Saldo disponivel </p>
+                     <p class="balance">${balance}</p>
+                     <a href='#withdraw' class="s_saque" ><i class="bi bi-credit-card-2-back"></i> Solicitar saque</a>
+                    
+                 </div>
+                 
                  
              </div>
         </div>
@@ -91,8 +134,12 @@ export default function financeHub() {
     <canvas id="salesChart"></canvas>
    
 </div>`;
-container.innerHTML = template;
-return container;
+        container.innerHTML = template;
+        return container;
+
+    } catch (error) {
+        console.log(error);
+    }
 
 }
 

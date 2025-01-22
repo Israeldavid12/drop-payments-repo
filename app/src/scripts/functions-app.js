@@ -9,12 +9,12 @@ document.getElementById('close_side_menu').addEventListener('click', function ()
   document.getElementById('sidebar').classList.toggle('open-sidebar');
   u_state = !u_state;
   if (u_state === true) {
-    //document.getElementsByClassName('content')[0].style.paddingLeft = '100px';
+   document.getElementById('user_avatar').style.display = 'block';
+   document.querySelector('.content').style.paddingLeft = '200px';
   } else {
-   // document.getElementsByClassName('content')[0].style.paddingLeft = '0px';
+    document.getElementById('user_avatar').style.display = 'none';
+    document.querySelector('.content').style.paddingLeft = '10px';
   }
-  // document.getElementById('close_side_menu_mobile').style.display = 'none';
-
 });
 
 

@@ -297,4 +297,7 @@ button:hover {
     .left-container {
         display: none;
     } 
+    body {
+        background-color: #fff;
+    }
 }  

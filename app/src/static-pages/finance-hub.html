@@ -1,63 +1,78 @@
-
 <div class="finances-hub">
+    <p>Saques <a href="#withdraw"><i class="bi bi-arrow-bar-left"></i> Solocitar saque</a></p>
     <p class="user_name"></p>
     <div class="main-box">
         <div class="box">
-            <div class="box-items" >
+            <div class="box-items">
                 <div>
                     <i class="bi bi-wallet2"></i>
                 </div>
-                 <div>
-                     <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
-                     <button class="s_saque" >Solicitar saque</button>
-                    
-                 </div>
-                 
-             </div>
-        </div>
-        <div class="box">
-            <div class="box-items" >
-               <div>
-                <i class="bi bi-wallet2"></i>
-               </div>
                 <div>
                     <p class="balance_label">Saldo disponivel </p>
-                    <p class="balance">392.03 MZN </p>
-                    <button class="s_saque" >Solicitar saque</button>
+                    <p id="mobilePaymentsBalance" class="balance">392.03 MZN </p>
+                    <button id="s-saque_f" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar saque</button>
+
+
+                </div>
+                <div class="f-wallet">
+                    <p>Transacoes das Carteiras : </p>
+                    <div>
+                        <img id="emola" src="" alt="emola">
+                        <img id="mpesa" src="" alt="mpesa">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-items">
+                <div>
+                    <i class="bi bi-wallet2"></i>
+                </div>
+                <div>
+                    <p class="balance_label">Saldo disponivel </p>
+                    <p id="paypalBalance" class="balance">392.03 MZN </p>
+                    <button id="s_saque_2" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar saque</button>
+                </div>
+                <div class="f-wallet">
+                    <p>Transacoes das Carteiras : </p>
+                    <div>
+                        <img id="paypal" src="" alt="emola">
+
+                    </div>
+
                 </div>
             </div>
 
 
         </div>
         <div class="box">
-            <div class="box-items" >
-                <div>
-                 <i class="bi bi-coin"></i>
+            <div>
+
+                <p><strong>Ultíma transação</strong></p>
+                <div class="box-last" >
+                    <p>870000000 </p>
+                    <img src="" alt="">
+                    <p>200.00 MT</p>
+                    <p>200.00 MT</p>
                 </div>
-                 <div>
-                     <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
-                 </div>
-                 <div>
-                    <p class="balance_label">Saldo disponivel </p>
-                    <p class="balance">392.03 MZN </p>
-                </div>
-             </div>
+
+            </div>
         </div>
         <div class="box">
-            <div class="box-items" >
+            <div class="box-items">
                 <div>
-                 <i class="bi bi-coin"></i>
+                    <i class="bi bi-coin"></i>
                 </div>
-                 <div>
-                     <p class="balance_label">Saldo disponivel </p>
-                     <p class="balance">392.03 MZN </p>
-                 </div>
-             </div>
+                <div>
+                    <p class="balance_label">Vendas realizadas hoje  </p>
+                    <p id="sales-today" class="balance">0.03 MZN </p>
+                </div>
+            </div>
         </div>
         <p>&copy;DROP PAYMENTS TEAM 2.0</p>
     </div>
     <canvas id="salesChart"></canvas>
-   
+
 </div>

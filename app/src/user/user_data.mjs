@@ -40,6 +40,8 @@ export const getUserId = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        localStorage.setItem('userI', user.uid);
+        sessionStorage.setItem('userId', user.uid);
         resolve(user.uid); // Retorna o UID se o usuário estiver logado
       } else {
         reject("Nenhum usuário logado"); // Se não houver usuário logado, rejeita
@@ -66,7 +68,7 @@ get_data();
 
 
 export async function userData() {
- 
+
   try {
     const userId = await getUserId();
     const fech_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
@@ -82,11 +84,12 @@ export async function userData() {
       name: data.user_name,
       email: data.user_email,
       balance: data.balance,
-      paypalBalance: data.paypalBalance
-  };
+      paypalBalance: data.paypalBalance,
+      vendasHoje: data.vendasHoje,
+    };
   } catch (error) {
     console.log(error);
-    }
+  }
 
 }
 
@@ -173,8 +176,32 @@ userData();
 
 
 
-export const withdrawHistory = () => {
-  return userState.withdrawArray;
+export const withdrawHistory = async () => {
+
+  try {
+    const userId = await getUserId();
+   /// console.log(userId);
+    const withdrawHistoryRef = ref(db, `users/${userId}/withdrawHistory`);
+    const withdrawSnapshot = await get(withdrawHistoryRef);
+
+    if (withdrawSnapshot.exists()) {
+
+      const withdrawHistory = withdrawSnapshot.val();
+      userState.withdrawArray = Object.entries(withdrawHistory)
+        .map(([key, value]) => ({ id: key, ...value }))
+        .reverse();
+
+      // console.log("Histórico de saques:", userState.withdrawArray);
+    } else {
+      console.error("Nenhum histórico encontrado.");
+    }
+
+    return userState.withdrawArray;
+
+
+  } catch (error) {
+    return 'OCORREU UM ERRO  INESPERADO'
+  }
 };
 
 // // Inicializa o processamento do usuário

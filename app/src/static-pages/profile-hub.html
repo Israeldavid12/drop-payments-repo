@@ -1,78 +1,86 @@
-<div class="p-main-container">
-<div class="p-box" >
-    <p class="p-title" >Informacoes pessoais</p>
-    <p>Detalhes sobre o perfil e informações da conta.</p>
-    <br>
-    <div class="p-flex-container">
-        <div>
-            <p>Nome</p>
-            <div class="input" >
-                <i class="bi bi-person-badge"></i>
-                <input id="user-name" type="text">
-            </div>
-        </div>
-        <div>
-            <p>E-mail</p>
-            <div>
-                <i class="bi bi-envelope"></i>
-                <input id="user-email" value="" type="text" disabled>
-            </div>
-        </div>
-    </div>
-    
-</div>
+<div style="padding: 60px; padding: 30px;">
 
-<div class="p-box">
-    <p class="p-title" >Informacoes Pagamento</p>
-    <div class="p-flex-container">
-        <div>
-            <p>Titular</p>
-            <input id="payment-name" type="text">
-        </div>
-        <div>
-            <p>Numero</p>
-            <input id="payment-number" type="text">
-        </div>
-       
-      
-    </div>
-
-    <div class="p-select"  >
-      
-        <p>Selecione um metodo de pagamento</p>
-        <select id="tipo-conta" class="form-select form-select-sm" aria-label="Small select example">
-            <option disabled >Selecione um metodo de pagamento</option>
-            <option value="M-PESA">M-pesa </option>
-            <option value="E-MOLA">e-Mola</option>
-        </select>
-       <br>
-        <img id="imageELement" src="src/assets/mpesa.png" alt="">
-    </div>
-    
-    
-</div>
-
-<div class="p-box" >
-    <p class="p-title" >Contacto</p>
-    
-    <div class="p-flex-container">
-        <div>
-            <p>Numero</p>
-            <input placeholder="ex: 87xxxxxxx" type="text">
-        </div>
-        <div>
-            <p>Numero 2</p>
-            <input placeholder="ex: 87xxxxxxx" type="text">
-        </div>
+    <div id="p-box" class="p-box">
         
+        <p class="p-title">Informacoes pessoais</p>
+        <p>Detalhes sobre o perfil e informações da conta.</p>
+        <br>
+        <div class="p-flex-container">
+            <div>
+                <p>Nome</p>
+                <div class="input">
+
+                    <input id="user-name" type="text">
+                </div>
+            </div>
+            <div>
+                <p>E-mail</p>
+                <div>
+
+                    <input id="user-email" value="" type="text" disabled>
+                </div>
+            </div>
+        </div>
+
     </div>
-    
-</div>
-<button>
-    Salvar
-</button>
+
+    <div class="p-box">
+        <p class="p-title">Informacoes Pagamento</p>
+        <div class="p-flex-container">
+            <div>
+                <p>Titular</p>
+                <input id="payment-name" type="text">
+            </div>
+            <div>
+                <p>Numero</p>
+                <input id="payment-number" type="text">
+            </div>
+
+
+        </div>
+
+        <div class="p-select">
+
+            <p>Selecione um metodo de pagamento</p>
+            <select id="tipo-conta" class="form-select form-select-sm" aria-label="Small select example">
+                <option disabled>Selecione um metodo de pagamento</option>
+                <option value="M-PESA">M-pesa </option>
+                <option value="E-MOLA">e-Mola</option>
+            </select>
+            <br>
+            <img id="imageELement" src="src/assets/mpesa.png" alt="">
+        </div>
+
+
+    </div>
+
+    <div class="p-box">
+        <p class="p-title">Contacto</p>
+
+        <div class="p-flex-container">
+            <div>
+                <p>Numero</p>
+                <input id="contacto-1" placeholder="ex: 87xxxxxxx" type="text">
+            </div>
+            <div>
+                <p>Numero 2</p>
+                <input id="contacto-2" placeholder="ex: 87xxxxxxx" type="text">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
 
 </div>
-<div class="p-main-2" >
-    
+<div class="p-container-btn" >
+    <butto id="p-save" class="p-save-btn" n>
+        Salvar
+    </button>
+</div>
+
+<div class="p-footer" >
+    <p>&copy; DROP PAGAMENTOS E SERVIÇOS DIGITAIS E.I</p>
 </div>

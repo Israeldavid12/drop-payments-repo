@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
 }
 .box-items i {
     color: #1b398b;
@@ -60,22 +60,50 @@
     padding: 10px 0;
 }
 .s_saque {
-    border: 0px solid #12599c;
-    background-color: #0a813d;
-    padding: 10px;
+    border: 1px solid #12599c;
+    background-color: #ffffff;
+    padding:  5px 20px;
     border-radius: 8px;
-    color: #ffffff;
+    color: #1b398b;
     gap: 10px;
+    height: 35px;
     font-size: 12px;
     cursor: pointer;
     text-decoration: none;
 }
-.s_saque:hover {
-    background-color: #056930;
+.s_saque:active {
+    background-color: #c7c8c9;
 }
-.s_saque i {
-    color: #ffffff;
+
+
+.f-wallet {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: end;
+    justify-content: end;
+    gap: 8px;
 }
+.f-wallet p {
+    padding: 0px;
+    font-size: 12px;
+    color: rgb(107, 107, 107);
+    font-weight: bold;
+}
+.f-wallet img {
+  width: 35px;
+  border-radius: 8px;
+}
+.box-last {
+    display: flex;
+}
+
+
+
+
+
+
+
 
 @media (max-width: 600px) {
     .main-box {
@@ -84,10 +112,21 @@
         justify-content: center;
         align-items: center;
     }
+    .box {
+        max-width: 100%;
+    }
+    i {
+        display: none;
+    }
     .box-items {
         max-width: 300px;
     }
     .user_name {
         font-size: 18px;
+    }
+    .s_saque {
+        padding: 5px;
+        width: 150px;
+        font-size: 12px;
     }
 }

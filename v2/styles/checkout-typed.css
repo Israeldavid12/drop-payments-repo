@@ -35,7 +35,8 @@ body {
 }
 
 .body2 {
-  padding: 13px;
+  margin-top: 15px;
+  padding: 5px;
 }
 
 
@@ -355,7 +356,7 @@ input {
 .input-container {
   display: flex;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 10px;
   align-items: center;
   box-sizing: border-box;
   border: 1px solid #ddd;
@@ -523,4 +524,11 @@ select:hover {
   .container-timer {
     display: none;
   }
+  .container {
+    width: 600px;
+  }
+}
+
+@media (max-width: 600px) {
+  
 }

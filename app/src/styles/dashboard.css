@@ -6,7 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Nunito Sans", serif;
+    font-family: "Poppins", serif;
     font-weight: 400;
 }
 
@@ -22,7 +22,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #2d3541;
+    background-color: #062e49;
+    border-right: 1px solid silver;
     height: 100vh;
     border-radius: 0px 0px 0px 0px;
     position: fixed;
@@ -81,6 +82,7 @@ body {
     cursor: pointer;
     color: #ffffff;
     margin-top: 6px;
+   
 }
 
 .side-item.active {
@@ -89,12 +91,12 @@ body {
 
 .side-item:hover:not(.active),
 #logout_btn:hover {
-    background-color: #29303b;
-    color: #2c2c2c;
+    background-color: #143b75;
+    color: #ffffff;
 }
 
 #logout_btn {
-    color: #2c2c2c;
+    color: #ffffff;
 }
 
 .side-item a {
@@ -106,7 +108,7 @@ body {
 }
 
 .side-item.active a {
-    color: #ffffff;
+    color: #070707;
 }
 
 .side-item a i {
@@ -141,7 +143,7 @@ body {
     top: 30px;
     right: -10px;
     background-color: #4f46e5;
-    color: #e3e9f7;
+    color: #0f0f0f;
     border-radius: 100%;
     width: 20px;
     height: 20px;
@@ -259,6 +261,7 @@ main {
     width: 100%;
     height: 100%;
     padding-left: 200px;
+    margin-top: 20px;
   
 }
 
@@ -342,6 +345,7 @@ canvas {
         padding-right: 15px;
     }
     .content {
+        padding-top: 100px;
         padding-left: 20px;
     }
 

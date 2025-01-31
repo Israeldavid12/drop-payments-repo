@@ -3,9 +3,9 @@ import { withdrawHistory } from "../user/user_data.mjs";
 import { formatBalance } from "./finances-hub.js";
 import { setMaxEntries } from "../scripts/app.js";
 
-export const displayBalnace = () => {
+export const displayBalnace = async () => {
   // Acessando o elemento pelo ID e alterando o texto
-  const user = userData();
+  const user = await userData();
 
 
 
@@ -17,8 +17,9 @@ export const displayBalnace = () => {
   }
 }
 
-export const renderWithdrawHistory = (entries) => {
-  let w_array = withdrawHistory();
+export const renderWithdrawHistory = async(entries) => {
+  let w_array = await withdrawHistory();
+  displayBalnace();
   //const entries = setMaxEntries();
   console.log(entries);
 
@@ -67,8 +68,10 @@ export const renderWithdrawHistory = (entries) => {
 
     tr_container.innerHTML = th_rows;
     render_container.appendChild(tr_container);
-    console.log(withdraws);
+    
   }
+
+  return w_array
 }
 
 

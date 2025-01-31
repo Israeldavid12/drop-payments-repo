@@ -1,4 +1,20 @@
-export default function productHub() {
+import { getUserId } from "../user/user_data.mjs";
+
+export const displayProducts = async () => {
+  const userId = await getUserId();
+  const fecth_data = await axios.post('http://127.0.0.1:3010/api/balance', {
+    userId: userId,
+    reqType: 'fech_user_products',
+  });
+  const productCard = document.getElementById('product-card');
+  productCard.innerHTML = '';
+  console.log(fecth_data.data);
+
+}
+
+
+
+export function productHub() {
     const container = document.createElement('div');
     
     fetch(`/app/src/static-pages/product-hub.html`)

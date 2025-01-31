@@ -1,14 +1,19 @@
 import { userMenu } from "../modals/user-info-menu.js";
 import { financeHub } from "../pages/finances-hub.js";
-import productHub from "../pages/product-hub.js";
+import { productHub, displayProducts } from "../pages/product-hub.js";
 import withdrawPage from "../pages/withdraw-hub.js";
 import { displayBalnace, renderWithdrawHistory } from "../pages/withdraw-hub.js";
 import { profilePage } from "../pages/profile-hub.js";
-import { handleUserData } from "./profile-function-page.js";
+import { addLoadAnim, pageLoader } from "../animations/index.js";
 
 
-export default function loadRender() {
-    content.innerHTML = '';
+
+
+
+
+export default function loadRender(flag) {
+    if (flag === true) {
+        content.innerHTML = '';
 
     const load_template = `<div class='l-container'> <div class="loading-container">
     <div class="circle"></div>
@@ -18,6 +23,10 @@ export default function loadRender() {
     content.innerHTML = load_template;
 
     return load_template;
+    } else if (flag === false) {
+        const loader = document.querySelector('l-container');
+        loader.remove()
+    }
 }
 
 export function setMaxEntries() {
@@ -25,6 +34,9 @@ export function setMaxEntries() {
     return entries;
 }
 
+function changeTitle(title_text) {
+    document.title = title_text;
+}
 
 const createScript = (dir__name) => {
     const body = document.body;
@@ -34,10 +46,33 @@ const createScript = (dir__name) => {
     body.appendChild(script);
 };
 
+const removeScript = (dir_name) => {
+    // Seleciona a tag <script> com o atributo src igual a dir_name
+    const scriptTag = document.querySelector(`script[src="${dir_name}"]`);
+
+    if (scriptTag) {
+        scriptTag.remove(); // Remove a tag do DOM
+        console.log(`Script com src "${dir_name}" removido com sucesso!`);
+    } else {
+        console.log(`Script com src "${dir_name}" não encontrado.`);
+    }
+};
 
 
 
 
+// console.log('Clearing content...');
+// content.innerHTML = '';
+// console.log('Appending profilePage...');
+// content.appendChild(profilePage());
+// console.log('Awaiting handleUserData...');
+// removeScript('src/scripts/profile-function-page.js');
+// console.log('Creating script...');
+// createScript('src/scripts/profile-function-page.js');
+
+document.getElementById('create-product').addEventListener('click', () => {
+    addLoadAnim('create-product', 'Adicionar produto');
+});
 
 
 
@@ -66,30 +101,46 @@ open_user_menu.addEventListener('click', async () => {
 
 //ALTERNAR PAGINAS 
 
+window.addEventListener('popstate', () => {
+    
+    console.log('A URL mudou!', window.location.href);
+  });
+  
+
+
 const init = () => {
+
     window.addEventListener('hashchange', async () => {
+
         console.log(window.location.hash);
         switch (window.location.hash) {
             case '#panel':
-                loadRender();
+                loadRender(true);
                 setTimeout(async () => {
+                    changeTitle('Dashboard');
                     content.innerHTML = '';
                     content.appendChild(await financeHub());
+                    createScript('src/scripts/page-functions/finaces-hub.js')
+                    location.reload();
                 }, 2000);
 
                 break;
             case '#products/my':
-                loadRender();
-                setTimeout(() => {
+                loadRender(true);
+                setTimeout(async () => {
+                    changeTitle('Produtos');
                     content.innerHTML = '';
                     content.appendChild(productHub());
+                    await displayProducts();
                 }, 2000);
                 break;
             case '#withdraw':
-                loadRender();
+                loadRender(true);
                 setTimeout(() => {
+                    changeTitle('Saques');
                     content.innerHTML = '';
                     content.appendChild(withdrawPage());
+                    createScript('src/modals/solicitar-saque.js');
                 }, 2000);
                 setTimeout(() => {
                     displayBalnace();
@@ -99,11 +150,14 @@ const init = () => {
             case '#profile/user/data':
                 loadRender();
                 setTimeout(async () => {
+                    location.reload();
+                    changeTitle('Perfil');
                     content.innerHTML = '';
-                    content.appendChild(profilePage());
-                    await handleUserData();
+                    content.appendChild(await profilePage());
+                    createScript('src/scripts/page-functions/profile-function-page.js');
+
                 }, 2000);
-                break; 
+                break;
             default:
                 break;
         }
@@ -111,30 +165,33 @@ const init = () => {
 }
 window.addEventListener('load', async () => {
 
-    function applFillters() {
-        alert('xxxxxxxxxxxxx')
-    }
-
     switch (window.location.hash) {
         case '#panel':
-            loadRender();
+            pageLoader(true);
+            loadRender(true);
             setTimeout(async () => {
+                changeTitle('Dashboard');
                 content.innerHTML = ``;
                 content.appendChild(await financeHub());
+                createScript('src/scripts/page-functions/finaces-hub.js')
             }, 2500);
             break;
         case '#products/my':
             loadRender();
-            setTimeout(() => {
+            setTimeout(async () => {
+                changeTitle('Produtos');
                 content.innerHTML = '';
                 content.appendChild(productHub());
+                // await displayProducts();
             }, 2000);
             break;
         case '#withdraw':
             loadRender();
             setTimeout(() => {
+                changeTitle('Saques');
                 content.innerHTML = '';
                 content.appendChild(withdrawPage());
+                createScript('src/modals/solicitar-saque.js')
             }, 1500);
             setTimeout(() => {
                 displayBalnace();
@@ -143,11 +200,19 @@ window.addEventListener('load', async () => {
             break;
         case '#profile/user/data':
             loadRender();
-            setTimeout( async() => {
+            setTimeout(async () => {
+                changeTitle('Perfil');
+                console.log('Clearing content...');
                 content.innerHTML = '';
-                content.appendChild(profilePage());
-                await handleUserData();
-            }, 2000);
+                console.log('Appending profilePage...');
+                pageLoader(true);
+                content.appendChild(await profilePage());
+                console.log('Awaiting handleUserData...');
+                //  removeScript('src/scripts/profile-function-page.js');
+                console.log('Creating script...');
+                createScript('src/scripts/page-functions/profile-function-page.js');
+
+            }, 1000);
             break;
         default:
             break;

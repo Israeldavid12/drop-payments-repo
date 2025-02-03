@@ -1,50 +1,69 @@
-<div class="c-main-container">
-    <p class="c-title">Criar produto: * </p>
-    <div class="c-flex-container">
+
+<form id="product-form" action="">
+    <div class="c-main-container">
+        <p class="c-title">Criar produto: * </p>
+        <div class="c-flex-container">
+
+            <div>
+                <p>Nome do produto: *</p>
+                <input id="name-product" type="text" required>
+            </div>
+            <div>
+                <p>Preço do Produto: *</p>
+                <input id="price-product" placeholder="0.00 MT" type="number" min="1" max="99999" required>
+            </div>
+
+        </div>
+        <div class="c-textarena">
+            <p> Descrição do produto: *</p>
+            <textarea name="" id="description" required></textarea>
+            <p><span id="char-counter">0/200</span></p>
+        </div>
+
+        <label for="productImage"><i class="fas fa-image"></i> Imagem do PRoduto :</label><br>
+        <label class="upload-box" id="uploadArea">
+            <span>Upload Image</span>
+            <input type="file" id="imageInput" name="image-name" accept="image/*" required>
+            <img id="preview">
+        </label>
+        <br>
+        <hr>
+        <br>
+
+        <label for="productImage"><i class="fas fa-image"></i> Capa/Banner do Produto :</label>
+        <label class="upload-box" id="uploadArea">
+            <span>Upload Image</span>
+            <input type="file" name="banner-form" id="bannerInput" accept="image/*" required>
+            <img id="preview-2">
+        </label>
+
+        <br>
+        <div class="delivery-product-form">
+            <label for="delivery-method">Como o produto sera entregue</label>
+            <select name="" id="delivery-method" required>
+                <option value="link">Link externo</option>
+                <option value="doc">E-book (PDF, ePub)</option>
+                <option value="payment_only">Receber pagamento apenas</option>
+            </select>
+        </div>
+
+
+        <!-- Campo de link externo estilizado -->
+        <div id="productLinkDiv" >
+            <label for="productLink" >Insira o link Externo do Produto:</label>
+            <input type="url" id="productLink" placeholder="https://example.com">
+        </div>
+        
+        <br>
+
+        <!-- Campo de arquiv o PDF -->
+        <div id="productDocDiv" >
+            <label for="productDoc">Arquivo do Produto (.PDF):</label>
+            <input type="file" id="productDoc" accept=".pdf" >
+        </div>
 
         <div>
-            <p>Nome do produto: *</p>
-            <input type="text">
+            <button type="submit" id="create-product" class="c-create-p">Adicionar produto</button>
         </div>
-        <div>
-            <p>Preço do Produto</p>
-            <input placeholder="0.00 MT" type="number">
-        </div>
-
     </div>
-    <div class="c-textarena">
-        <p> Descrição do produto: *</p>
-        <textarea name="" id=""></textarea>
-        <p>0/200</p>
-    </div>
-    <div class="c-image-p">
-        <label for="productImage"><i class="fas fa-image"></i> Imagem do Produto:</label><br>
-        <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;">
-    </div>
-    <div class="c-baner-p">
-        <label for="productImage"><i class="fas fa-image"></i> Capa/Banner do Produto:</label><br>
-        <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;">
-    </div>
-    <div>
-        <label id="image-label" for="image-file">Upload image</label>
-        <input type="file" id="image-file" accept="image/x-png, image/jpeg" />
-
-    </div>
-    <!-- Campo de link externo estilizado -->
-    <div id="productLinkDiv" style="display:none; margin-bottom: 20px;">
-        <label for="productLink" style="display: block;">Insira o link Externo do Produto:</label>
-        <input type="url" id="productLink" placeholder="https://example.com"
-            style="width: 100%; height: 20px;  padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-    </div>
-
-
-    <!-- Campo de arquiv o PDF -->
-    <div id="productDocDiv">
-        <label for="productDoc">Arquivo do Produto (.PDF):</label><br>
-        <input type="file" id="productDoc" accept=".pdf" required style="margin: 8px 0;">
-        <p id="output0" style="color: red; font-weight: bold; display: none;"></p>
-    </div>
-    <div>
-        <button id="create-product" class="c-create-p">Adicionar produto</button>
-    </div>
-</div>
+</form>

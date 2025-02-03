@@ -23,12 +23,13 @@
     <link rel="stylesheet" href="src/styles/create-product-hub.css">
     <script type="module" src="src/user/user_data.mjs"></script>
     <link rel="stylesheet" href="src/styles/animation/animations.css">
-
+    <script src="src/scripts/change-active-menu.js"></script>
 </head>
+
 
 <body>
     <div class="overlay-popup">
-        
+
     </div>
 
     <nav id="sidebar" class="show_sidebar">
@@ -36,15 +37,15 @@
             <div id="company_info">
                 <img src="src/assets/logo-dp.png" id="user_avatar" alt="Avatar">
                 <span class="item-description logo_title">
-                    DROP PAYMENT E.I
+                    DROP PAY E.I
                 </span>
                 <i id="close_side_menu" class="bi bi-layout-sidebar-inset"></i>
                 <i id="close_side_menu_mobile" class="bi bi-x-lg"></i>
 
             </div>
 
-            <ul id="side_items">
-                <li class="side-item">
+            <ul id="side_items" >
+                <li class="side-item" onclick="setActive(this)">
                     <a href="#panel">
                         <i class="bi bi-house"></i>
                         <span class="item-description">
@@ -53,7 +54,7 @@
                     </a>
                 </li>
 
-                <li class="side-item">
+                <li class="side-item"  onclick="setActive(this)" >
                     <a href="#products/my">
                         <i class="bi bi-box"></i>
                         <span class="item-description">
@@ -62,8 +63,8 @@
                     </a>
                 </li>
 
-                <li class="side-item">
-                    <a href="#">
+                <li class="side-item" onclick="setActive(this)">
+                    <a href="#/vendas">
                         <i class="bi bi-graph-up-arrow"></i>
                         <span class="item-description">
                             Vendas
@@ -71,7 +72,7 @@
                     </a>
                 </li>
 
-                <li class="side-item">
+                <li class="side-item" onclick="setActive(this)" >
                     <a href="#withdraw">
                         <i class="bi bi-credit-card-2-back"></i>
                         <span class="item-description">
@@ -80,7 +81,7 @@
                     </a>
                 </li>
 
-                <li class="side-item">
+                <li class="side-item" onclick="setActive(this)">
                     <a href="#">
                         <i class="bi bi-gear"></i>
                         <span class="item-description">
@@ -146,59 +147,6 @@
 
         <!---CONTAINER--->
         <div id="content" class="content">
-
-            <div class="c-main-container">
-                <p class="c-title">Criar produto: * </p>
-                <div class="c-flex-container">
-
-                    <div>
-                        <p>Nome do produto: *</p>
-                        <input type="text">
-                    </div>
-                    <div>
-                        <p>Preço do Produto</p>
-                        <input placeholder="0.00 MT" type="number">
-                    </div>
-
-                </div>
-                <div class="c-textarena">
-                    <p> Descrição do produto: *</p>
-                    <textarea name="" id=""></textarea>
-                    <p>0/200</p>
-                </div>
-                <div class="c-image-p">
-                    <label for="productImage"><i class="fas fa-image"></i> Imagem do Produto:</label><br>
-                    <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;">
-                </div>
-                <div class="c-baner-p">
-                    <label for="productImage"><i class="fas fa-image"></i> Capa/Banner do Produto:</label><br>
-                    <input type="file" id="productImage" accept="image/*" required style="margin: 8px 0;">
-                </div>
-                <div>
-                    <label id="image-label" for="image-file">Upload image</label>
-                    <input type="file" id="image-file" accept="image/x-png, image/jpeg" />
-
-                </div>
-                <!-- Campo de link externo estilizado -->
-                <div id="productLinkDiv" style="display:none; margin-bottom: 20px;">
-                    <label for="productLink" style="display: block;">Insira o link Externo do Produto:</label>
-                    <input type="url" id="productLink" placeholder="https://example.com"
-                        style="width: 100%; height: 20px;  padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                </div>
-
-
-                <!-- Campo de arquiv o PDF -->
-                <div id="productDocDiv">
-                    <label for="productDoc">Arquivo do Produto (.PDF):</label><br>
-                    <input type="file" id="productDoc" accept=".pdf" required style="margin: 8px 0;">
-                    <p id="output0" style="color: red; font-weight: bold; display: none;"></p>
-                </div>
-                <div>
-                    <button id="create-product" class="c-create-p">Adicionar produto</button>
-                </div>
-            </div>
-
-
 
         </div>
 

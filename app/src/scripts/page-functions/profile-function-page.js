@@ -59,7 +59,7 @@ export async function handleUserData() {
     } catch (error) {
         console.error("Erro ao obter UID:", error);
         return error;
-        
+
     }
 }
 
@@ -105,28 +105,55 @@ async function saveData() {
 }
 
 
+export function limitInputData(id) {
+    const input = document.getElementById(id)
+    let input_text = input.value.length;
+    let text_limit = 100;
+
+    input.addEventListener('input', () => {
+        let input_text = input.value.length;
+        let text_limit = 200;
+
+        if (input_text >= text_limit) {
+            setAnOutPut('Os campos não podem conter mais de 200 caracteres!', 'E-M')
+            input.value = '';
+            return;
+        }
+    })
+}
+
+limitInputData('user-name');
+
+limitInputData('payment-name');
+
+limitInputData('payment-number');
+
+limitInputData('contacto-1');
+
+limitInputData('contacto-2');
 
 
 document.getElementById('p-save').addEventListener('click', async () => {
-   
+
     try {
-        addLoadAnim('p-save', 'Salvar');
+        addLoadAnim('p-save', 'Salvar', 4000);
+
 
         const save_data = await saveData();
 
         if (save_data.status) {
             const success = save_data.status;
             setAnOutPut(success, 'S-M');
-            
+
         } else if (save_data.erro) {
-            const erro  = save_data.data.erro;
+            const erro = save_data.data.erro;
             setAnOutPut(erro, 'E-M')
         } else if (save_data.message) {
             const erro = save_data.message;
             setAnOutPut(erro, 'E-M')
         }
-        
-    
+
+
 
     } catch (error) {
         setAnOutPut(error, 'E-M');

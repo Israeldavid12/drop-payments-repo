@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/mpesa-payment-c2b": {"origins": "https://www.dropaymentsmz.online"}})  # Substitua "*" por uma URL específica se necessário
 logging.basicConfig(level=logging.ERROR)
 
-@app.route('/api/mpesa-payment-c2b', methods=['POST'])
+@app.route('/ap1/mpesa-payment-c2b', methods=['POST'])
 
 
 

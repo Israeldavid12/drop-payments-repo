@@ -5,6 +5,12 @@ import withdrawPage from "../pages/withdraw-hub.js";
 import { displayBalnace, renderWithdrawHistory } from "../pages/withdraw-hub.js";
 import { profilePage } from "../pages/profile-hub.js";
 import { addLoadAnim, pageLoader } from "../animations/index.js";
+import { createProduct } from "../pages/create-product.js";
+
+
+
+
+
 
 
 
@@ -15,14 +21,14 @@ export default function loadRender(flag) {
     if (flag === true) {
         content.innerHTML = '';
 
-    const load_template = `<div class='l-container'> <div class="loading-container">
+        const load_template = `<div class='l-container'> <div class="loading-container">
     <div class="circle"></div>
     <span class="logo">D</span>
   </div> </div> `;
 
-    content.innerHTML = load_template;
+        content.innerHTML = load_template;
 
-    return load_template;
+        return load_template;
     } else if (flag === false) {
         const loader = document.querySelector('l-container');
         loader.remove()
@@ -61,21 +67,6 @@ const removeScript = (dir_name) => {
 
 
 
-// console.log('Clearing content...');
-// content.innerHTML = '';
-// console.log('Appending profilePage...');
-// content.appendChild(profilePage());
-// console.log('Awaiting handleUserData...');
-// removeScript('src/scripts/profile-function-page.js');
-// console.log('Creating script...');
-// createScript('src/scripts/profile-function-page.js');
-
-document.getElementById('create-product').addEventListener('click', () => {
-    addLoadAnim('create-product', 'Adicionar produto');
-});
-
-
-
 
 
 const content = document.getElementById('content');
@@ -100,12 +91,6 @@ open_user_menu.addEventListener('click', async () => {
 
 
 //ALTERNAR PAGINAS 
-
-window.addEventListener('popstate', () => {
-    
-    console.log('A URL mudou!', window.location.href);
-  });
-  
 
 
 const init = () => {
@@ -148,7 +133,7 @@ const init = () => {
                 }, 3000);
                 break;
             case '#profile/user/data':
-                loadRender();
+                loadRender(true);
                 setTimeout(async () => {
                     location.reload();
                     changeTitle('Perfil');
@@ -157,6 +142,15 @@ const init = () => {
                     createScript('src/scripts/page-functions/profile-function-page.js');
 
                 }, 2000);
+                break;
+            case '#/create/product':
+                loadRender(true);
+                setTimeout(async () => {
+                    changeTitle('Criar produto');
+                    content.innerHTML = '';
+                    content.appendChild(await createProduct());
+                    createScript('src/scripts/page-functions/create-product-hub.js');
+                }, 2000)
                 break;
             default:
                 break;
@@ -177,16 +171,16 @@ window.addEventListener('load', async () => {
             }, 2500);
             break;
         case '#products/my':
-            loadRender();
+            loadRender(true);
             setTimeout(async () => {
                 changeTitle('Produtos');
                 content.innerHTML = '';
                 content.appendChild(productHub());
-                // await displayProducts();
+                await displayProducts();
             }, 2000);
             break;
         case '#withdraw':
-            loadRender();
+            loadRender(true);
             setTimeout(() => {
                 changeTitle('Saques');
                 content.innerHTML = '';
@@ -199,7 +193,7 @@ window.addEventListener('load', async () => {
             }, 2500);
             break;
         case '#profile/user/data':
-            loadRender();
+            loadRender(true);
             setTimeout(async () => {
                 changeTitle('Perfil');
                 console.log('Clearing content...');
@@ -213,6 +207,15 @@ window.addEventListener('load', async () => {
                 createScript('src/scripts/page-functions/profile-function-page.js');
 
             }, 1000);
+            break;
+        case '#/create/product':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Criar produto');
+                content.innerHTML = '';
+                content.appendChild(await createProduct());
+                createScript('src/scripts/page-functions/create-product-hub.js');
+            }, 2000)
             break;
         default:
             break;

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.740.0",
     "@jsplumb/browser-ui": "^6.2.10",
     "@jsplumb/community": "^4.0.0-RC47",
     "@shopify/storefront-api-client": "^1.0.3",
@@ -8,13 +9,14 @@
     "braintree": "^3.26.0",
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "e2payments": "^1.0.0",
     "express": "^4.21.2",
     "firebase-admin": "^12.7.0",
     "googleapis": "^144.0.0",
     "hbs": "^4.2.0",
     "jsplumb": "^2.15.6",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
     "paypal-rest-sdk": "^1.8.1",
     "random": "^5.1.1",

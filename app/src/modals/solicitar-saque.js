@@ -37,7 +37,7 @@ const saque_template = `<form class="confirm-w" > <div class="overlay-content">
 
 document.body.addEventListener('click', function (event) {
     if (event.target && event.target.matches('.w-btn')) {
-        addLoadAnim('w-btn', 'Solicitar saque');
+        addLoadAnim('w-btn', 'Solicitar saque', 2000);
         showAnPopup(saque_template, true)
     }
 });
@@ -49,12 +49,25 @@ document.body.addEventListener('click', function (event) {
     }
 });
 
+document.getElementById('entries').value = localStorage.getItem('entries')
+document.getElementById('entries_value').textContent = localStorage.getItem('entries')
+
+document.body.addEventListener('click', function (event) {
+    if (event.target && event.target.matches('.apply-filters')) {
+        const input_entries = document.getElementById('entries').value
+        const entries = sessionStorage.getItem('entries')
+        localStorage.setItem('entries', input_entries )
+        console.log(localStorage.getItem('entries'))
+        location.reload()
+    }
+});
+
 
 
 document.body.addEventListener('submit', async function (event) {
     if (event.target && event.target.matches('.confirm-w')) {
         event.preventDefault();
-        addLoadAnim('b-confirm', 'Solicitar');
+        addLoadAnim('b-confirm', 'Solicitar', 5000);
 
         const balance_type = document.getElementById('balance-type').value;
         const amount_to_withdraw = document.getElementById('amount').value;

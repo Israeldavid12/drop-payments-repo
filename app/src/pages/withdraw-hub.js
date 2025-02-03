@@ -17,13 +17,14 @@ export const displayBalnace = async () => {
   }
 }
 
+
 export const renderWithdrawHistory = async(entries) => {
   let w_array = await withdrawHistory();
   displayBalnace();
-  //const entries = setMaxEntries();
-  console.log(entries);
+  const entries_ = localStorage.getItem('entries');
+  console.log(entries_);
 
-  w_array = w_array.slice(0, entries);
+  w_array = w_array.slice(0, entries_ || 10);
 
   const render_container = document.getElementById('tbody');
 

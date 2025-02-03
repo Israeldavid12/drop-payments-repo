@@ -79,7 +79,7 @@ export async function userData() {
 
     localStorage.setItem('name', data.user_name);
     localStorage.setItem('email', data.user_email);
-    console.log(data.user_name);
+    // console.log(data.user_name);
     return {
       name: data.user_name,
       email: data.user_email,

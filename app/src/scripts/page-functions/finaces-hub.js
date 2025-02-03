@@ -8,7 +8,7 @@ const balance = Number(data.balance);
 const paypalBalance = Number(data.paypalBalance)
 const vendasHoje = Number(data.vendasHoje)
 
-
+document.querySelector('.user_name').textContent = 'Olá, '+data.name;
 document.getElementById('mobilePaymentsBalance').textContent = formatBalance(balance);
 document.getElementById('paypalBalance').textContent = formatBalance(paypalBalance);
 document.getElementById('sales-today').textContent = formatBalance(vendasHoje)
@@ -21,6 +21,7 @@ document.querySelector('.s_saque').addEventListener('click', () => {
    window.location.hash = '#withdraw';
    
 });
+
 document.getElementById('s_saque_2').addEventListener('click', () => {
     window.location.hash = '#withdraw';
  });

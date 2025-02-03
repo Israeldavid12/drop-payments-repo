@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require('uuid');
 const axios = require('axios');
 
+
+
 // Inicialize o Firebase Admin SDK
 const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); // Substitua pelo seu arquivo de credenciais
 
@@ -13,7 +15,8 @@ admin.initializeApp({
 });
 
 const db = admin.database();
-const fb_firestore = admin.firestore();;
+const fb_firestore = admin.firestore();
+const storage = admin.storage();
 const app = express();
 
 
@@ -30,8 +33,14 @@ app.use(bodyParser.json());
 // Rota para calcular e atualizar o saldo
 app.post("/api/balance", async (req, res) => {
   console.log("Dados recebidos:", req.body);
- 
+  
+
+
   const { userId, reqType, name, email, p_number, p_name, p_metodo, contacto_1, contacto_2, productId } = req.body;
+
+  if (!reqType) {
+    return res.status(400).send({ error: "reqType indefinido." });
+  }
 
 
 
@@ -56,6 +65,8 @@ app.post("/api/balance", async (req, res) => {
 
 
   } 
+
+
 
   if (reqType === 'product_data') {
     try {
@@ -82,9 +93,6 @@ app.post("/api/balance", async (req, res) => {
     }
    
   }
-
-
-
 
 
 

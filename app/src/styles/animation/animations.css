@@ -11,7 +11,7 @@
 }
 
 .error-alert {
-    background-color: rgb(201, 85, 85);
+    background-color: #B22222;
     color: black;
     display: flex;
     justify-content: space-between;

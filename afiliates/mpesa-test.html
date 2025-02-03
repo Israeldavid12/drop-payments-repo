@@ -103,7 +103,11 @@
             <input type="text" id="thirdPartyReference" name="thirdPartyReference" required>
 
             <button type="submit">Realizar Pagamento</button>
+            <img src="https://megaofertasco.store/uploads/1738504302685-Capturar-1.webp" alt="Imagem do produto">
+
         </form>
+
+        
 
         <div id="response" class="response"></div>
     </div>
@@ -130,7 +134,7 @@
 
             try {
                 // Realizando a requisição POST ao backend (substitua pela URL do seu backend)
-                const response = await fetch('https://www.dropaymentsmz.online/api/mpesa-payment-c2b', {
+                const response = await fetch('http://127.0.0.1:5000/ap1/mpesa-payment-c2b', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

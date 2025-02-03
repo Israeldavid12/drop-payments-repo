@@ -31,8 +31,7 @@ body {
     min-width: 82px;
     z-index: 100;
     color: #ffffff;
-   
-    
+    transition: margin-right 2s, color 1s;
 }
 
 
@@ -44,6 +43,7 @@ body {
 
 #sidebar_content {
     padding: 12px;
+    transition: all 0.5s ease-out;
 }
 
 #user {
@@ -86,12 +86,13 @@ body {
 }
 
 .side-item.active {
-    background-color: #062858;
+    background-color: #0b4a74;
+    color: #ffffff;
 }
 
 .side-item:hover:not(.active),
 #logout_btn:hover {
-    background-color: #143b75;
+    background-color: #0b4a74;
     color: #ffffff;
 }
 
@@ -108,7 +109,7 @@ body {
 }
 
 .side-item.active a {
-    color: #070707;
+    color: #ffffff;
 }
 
 .side-item a i {
@@ -165,9 +166,9 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 14px;
-    transition: width .2s;
     height: 0px;
     color: #ffffff;
+    transition: all 0.3s ease-out;
 }
 
 #sidebar.open-sidebar {

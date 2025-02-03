@@ -1,12 +1,12 @@
-export function addLoadAnim(id, text) {
+export function addLoadAnim(id, text, time) {
     const btn = document.getElementById(id);
     if (btn) {
-        btn.innerHTML = ` <i class="fas fa-circle-notch fa-spin spinner"></i> ${text}`;
+        btn.innerHTML = ` <i class="fas fa-circle-notch fa-spin spinner" ></i> ${text}`;
         btn.style.opacity = '65%';
         setTimeout(() => {
             btn.innerHTML = `${text}`;
             btn.style.opacity = '100%';
-        }, 3500);
+        }, time);
     } else {
         return console.error('O botao nao existe');
     }
@@ -89,3 +89,4 @@ export function showAnPopup(template1, flag) {
         console.error('ERRO DE CHAMADA {setPopup} - flag inválida');
     }
 }
+

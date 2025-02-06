@@ -1,12 +1,15 @@
-export function addLoadAnim(id, text, time) {
+export function addLoadAnim(id, text, flag) {
     const btn = document.getElementById(id);
+    const btn_text = btn.textContent;
     if (btn) {
-        btn.innerHTML = ` <i class="fas fa-circle-notch fa-spin spinner" ></i> ${text}`;
-        btn.style.opacity = '65%';
-        setTimeout(() => {
+        if (flag === true) {
+            btn.innerHTML = ` <i class="fas fa-circle-notch fa-spin spinner" ></i> ${text}`;
+            btn.style.opacity = '65%';
+
+        } else if (flag === false) {
             btn.innerHTML = `${text}`;
             btn.style.opacity = '100%';
-        }, time);
+        }
     } else {
         return console.error('O botao nao existe');
     }
@@ -66,6 +69,7 @@ export async function pageLoader(flag) {
     }
 }
 
+
 export function showAnPopup(template1, flag) {
     const overlay = document.querySelector('.overlay-popup');
 
@@ -78,15 +82,31 @@ export function showAnPopup(template1, flag) {
         const template = document.createElement('div');
         template.innerHTML = template1;
         overlay.innerHTML = ''; // Limpa o conteúdo anterior
-        
-        setTimeout(() => {
-            overlay.appendChild(template);
-        })
+        overlay.appendChild(template);
+
+        // Define visibilidade antes de iniciar a transição
         overlay.style.display = 'flex';
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+
+        // Usa um pequeno timeout para permitir a transição
+        setTimeout(() => {
+            overlay.classList.add("show");
+            overlay.style.opacity = '1';
+            overlay.style.visibility = 'visible';
+        }, 10); // Pequeno atraso para garantir que o navegador processe a exibição
     } else if (flag === false) {
-        overlay.style.display = 'none'; // Apenas oculta o popup
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+
+        // Espera a transição antes de remover do fluxo do layout
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 200); // Tempo igual à transição no CSS
     } else {
         console.error('ERRO DE CHAMADA {setPopup} - flag inválida');
+        return
     }
 }
+
 

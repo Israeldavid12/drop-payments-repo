@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 import { formatBalance } from "../pages/finances-hub.js";
+import { setAnOutPut } from "../animations/index.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
@@ -45,7 +46,7 @@ export const getUserId = () => {
         resolve(user.uid); // Retorna o UID se o usuário estiver logado
       } else {
         reject("Nenhum usuário logado"); // Se não houver usuário logado, rejeita
-        window.location.href = 'https://www.dropaymentsmz.online/register';
+        window.location.href = 'http://127.0.0.1:5501/entrar.html';
       }
     });
   });
@@ -96,7 +97,20 @@ export async function userData() {
 userData();
 
 
+export async function logOut() {
+  const auth = getAuth(); // Obtém a instância de autenticação
 
+  signOut(auth)
+    .then(() => {
+      console.log("Logout realizado com sucesso!");
+      window.location.href = 'http://127.0.0.1:5501/entrar.html'
+      // Aqui você pode redirecionar o usuário ou atualizar a interface
+    })
+    .catch((error) => {
+      console.error("Erro ao fazer logout:", error);
+      setAnOutPut(error, 'E-M')
+    });
+}
 
 
 

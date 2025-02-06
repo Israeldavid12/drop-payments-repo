@@ -305,6 +305,21 @@ canvas {
     animation: fadeIn 0.3s ease forwards;
 }
 
+.drop-down {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 @media (max-width: 600px) {
 

@@ -54,7 +54,7 @@
               .then((userCredential) => {
                 // Usuário logado com sucesso
                 const user = userCredential.user;       
-                window.location.href = "index.html";
+                window.location.href = "app/";
                 console.log('Usuário logado:');
               })
               .catch((error) => {
@@ -71,7 +71,7 @@
                     // Sucesso no login com Google
                     const user = result.user;
                     console.log('Usuário logado com Google:');
-                    window.location.href = "index.html";  // Redireciona para a página principal após o login
+                    window.location.href = "app/";  // Redireciona para a página principal após o login
                 })
                 .catch((error) => {
                     const errorMessage = traduzirErro(error.code);

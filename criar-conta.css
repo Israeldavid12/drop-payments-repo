@@ -300,4 +300,7 @@ button:hover {
     body {
         background-color: #fff;
     }
+    .container {
+        background-color: #fff;
+    }
 }  

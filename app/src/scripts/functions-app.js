@@ -47,3 +47,8 @@ document.getElementById('close_side_menu_mobile').addEventListener('click', () =
   document.getElementById('blur').classList.remove('blur-container');
 })
 
+
+
+
+
+

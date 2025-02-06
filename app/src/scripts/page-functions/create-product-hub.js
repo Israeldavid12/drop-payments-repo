@@ -52,6 +52,62 @@ const productLink = document.getElementById('productLink')
 const limite = 200;
 
 
+ async function generatePresignedUrl(file_id, dir_file) {
+    const file = document.getElementById(file_id);
+    const file_name = file.files[0].name;
+    const file_type = file.files[0].type;
+
+
+    const response = await axios.post('https://www.dropaymentsmz.online/api/create-product', {
+        reqType: 'presigned_url',
+        userId: await getUserId(),
+        dir_file: dir_file,
+        fileName: file_name,
+        contentType: file_type
+    })
+
+    console.log(response)
+
+    return {
+        presignedUrl: response.data.presignedUrl,
+        filePath: response.data.filePath
+    };
+}
+
+
+
+
+
+
+async function uploadFile(file_id, presignedUrl, file_path) {
+    const file = document.getElementById(file_id).files[0];
+
+    if (!file) {
+        console.error("Nenhum arquivo selecionado!");
+        return;
+    }
+
+    console.log("Presigned URL:", presignedUrl);
+
+    const response = await axios.put(presignedUrl, file, {
+        headers: {
+            "Content-Type": file.type, // Importante para arquivos com tipo correto
+        }
+    });
+
+    console.log(response)
+
+    if (response.status === 200) {
+        console.log("Upload concluído com sucesso!");
+        const fileUrl = `https://megaofertasco.store/${file_path}`;
+        console.log("Acesse o arquivo em:", fileUrl);
+        return fileUrl;
+    } else {
+        console.error("Erro ao enviar arquivo:", response.statusText);
+        return response.statusText;
+    }
+}
+
 
 
 description.addEventListener("input", () => {
@@ -60,6 +116,7 @@ description.addEventListener("input", () => {
 
     if (tamanhoTexto >= limite) {
         setAnOutPut('Você atingiu o limite de 200 caracteres!', 'E-M')
+        description.value = '';
         return
 
     }
@@ -70,6 +127,7 @@ product_name.addEventListener("input", () => {
 
     if (tamanhoTexto >= 150) {
         setAnOutPut('Você atingiu o limite de 150 caracteres para o nome do produto!', 'E-M')
+        product_name.value = '';
         return
 
     }
@@ -172,8 +230,18 @@ async function saveProduct() {
         const productName = document.getElementById('name-product').value
         const productPrice = document.getElementById('price-product').value
         const productDescription = document.getElementById('description').value
-        const productImage = document.getElementById('imageInput').files[0]
-        const productBanner = document.getElementById('bannerInput').files[0]
+
+        //PRESIGNED IMAGE URL
+        const image_data = await generatePresignedUrl('imageInput', 'images');
+        const image_url_signed = image_data.presignedUrl;
+        const image_path = image_data.filePath;
+        const upload_image = await uploadFile('imageInput', image_url_signed, image_path);
+
+        //PRESIGNED BANNER URL 
+        const banner_data = await generatePresignedUrl('bannerInput', 'banners');
+        const banner_url_signed = banner_data.presignedUrl;
+        const banner_path = banner_data.filePath;
+        const upload_banner = await uploadFile('bannerInput', banner_url_signed, banner_path);
 
 
         if (DocURl === 'link') {
@@ -181,44 +249,52 @@ async function saveProduct() {
             console.log(product_url)
 
         } else if (DocURl === 'doc') {
-            product_url = document.getElementById('productDoc').files[0]
+            // PRESIGNED DOCUMENT URL
+            const doc_data = await generatePresignedUrl('productDoc', 'docs');
+            const doc_url_signed = doc_data.presignedUrl;
+            const doc_path = doc_data.filePath;
+            product_url = await uploadFile('productDoc', doc_url_signed, doc_path);
             console.log(product_url)
+
         } else if (DocURl === 'PAYMENT-ONLY') {
             product_url = DocURl
             console.log(product_url)
         } else {
             product_url = document.getElementById('productLink').value
         }
-        const formData = new FormData();
+       
+        
 
-        // Append data to the FormData object
-        formData.append('userId', await getUserId());
-        formData.append('reqType', 'save_product'),
-        formData.append('product_name', productName);
-        formData.append('product_price', productPrice);
-        formData.append('product_description', productDescription);
-        formData.append('product_image', productImage);
-        formData.append('product_banner', productBanner);
-        formData.append('docUrl', product_url);
+        const response = await axios.post('https://www.dropaymentsmz.online/api/create-product', {
+            reqType: 'create',
+            userId: await getUserId(),  
+            product_name: productName, 
+            product_price: productPrice, 
+            product_description: productDescription, 
+            docUrl: product_url, 
+            image_url: upload_image, 
+            banner_url: upload_banner,
 
-        const response = await axios.post('http://127.0.0.1:3000/api/upload', formData, {
-            headers: {
-                "Content-Type": "multipart/form-data", // Required for file uploads
-            },
         });
 
-        setAnOutPut(response.data.message, 'S-M')
-
-        console.log(response)
+      
+        
+        if (response.data.message) {
+            setAnOutPut(response.data.message, "S-M")
+            return
+        } else {
+            setAnOutPut(response, 'S-M')
+            return;
+        }
 
 
     } catch (error) {
         console.log(error)
-       if (error.response) {
-        setAnOutPut(error.response.data.message, 'E-M')
-       } else {
-        setAnOutPut(error, 'E-M')
-       }
+        if (error.response) {
+            setAnOutPut(error.response.data.message, 'E-M')
+        } else {
+            setAnOutPut(error, 'E-M')
+        }
 
     }
 }
@@ -233,8 +309,9 @@ async function saveProduct() {
 
 form.addEventListener('submit', async (e, product_name) => {
     e.preventDefault();
-    addLoadAnim('create-product', 'Adicionar produto', 15000);
-    saveProduct();
+    addLoadAnim('create-product', 'Adicionar produto', true);
+    await saveProduct();
+    addLoadAnim('create-product', 'Adicionar produto', false);
 
 
 });

@@ -3,7 +3,18 @@ const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require('uuid');
 const axios = require('axios');
+const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+require("dotenv").config();
 
+
+const s3 = new S3Client({
+  region: "auto",
+  endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
+  },
+});
 
 
 // Inicialize o Firebase Admin SDK
@@ -12,11 +23,12 @@ const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsd
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app", // Substitua pela URL do seu banco de dados
+  storageBucket: "drop-payments-mz.appspot.com", // Adicione esta linha!
 });
 
 const db = admin.database();
 const fb_firestore = admin.firestore();
-const storage = admin.storage();
+const bucket = admin.storage().bucket();
 const app = express();
 
 
@@ -30,10 +42,20 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+function urlToRelativePath(url) {
+  // Regex para remover parâmetros de consulta
+  const path = url.split('?')[0]; // Retira a parte depois do "?"
+
+  // Extrai o caminho após "o/" e decodifica caracteres especiais
+  const relativePath = path.replace("https://firebasestorage.googleapis.com/v0/b/drop-payments-mz.appspot.com/o/", "");
+
+  return decodeURIComponent(relativePath); // Decodifica espaços e outros caracteres especiais
+}
+
 // Rota para calcular e atualizar o saldo
 app.post("/api/balance", async (req, res) => {
   console.log("Dados recebidos:", req.body);
-  
+
 
 
   const { userId, reqType, name, email, p_number, p_name, p_metodo, contacto_1, contacto_2, productId } = req.body;
@@ -41,6 +63,132 @@ app.post("/api/balance", async (req, res) => {
   if (!reqType) {
     return res.status(400).send({ error: "reqType indefinido." });
   }
+
+  if (reqType === 'delete_product') { 
+    try {
+      console.log(productId);
+
+      const userProductRef = fb_firestore.collection('products').doc(productId);
+      const doc = await userProductRef.get(); // Aguarda os dados do produto
+
+
+
+      const productData = doc.data();
+      console.log("Dados do produto:", productData);
+
+      const product_image = String(productData.imageUrl || '');
+      const product_banner = String(productData.bannerUrl);
+      const product_doc_url = String(productData.docUrl);
+
+      console.log('1 stage')
+
+      const image_relativePath_for_storage = urlToRelativePath(product_image);
+      const banner_relativePath_for_storage = urlToRelativePath(product_banner);
+      const doc_relativePath_for_storage = urlToRelativePath(product_doc_url);
+      console.log('2 stage')
+      const [exists1] = await bucket.file(image_relativePath_for_storage).exists();
+      const [exists2] = await bucket.file(banner_relativePath_for_storage).exists();
+      const [exists3] = await bucket.file(doc_relativePath_for_storage || "N/A").exists();
+      console.log('3 stage')
+
+
+      // EXCLUSAO DO BANNER
+      if (exists2) {
+        if (product_banner.includes('firebasestorage')) {
+          const banner_relativePath = urlToRelativePath(product_banner);
+          await bucket.file(banner_relativePath).delete()
+          console.log(`Banner excluído com sucesso.`);
+        }
+
+      } else {
+        console.log('O banner NÃO existe no Storage.');
+      }
+
+      if (product_banner.includes('megaofertasco.store')) {
+        const fileKey = product_banner.replace(/^https?:\/\/[^\/]+\//, "");
+        console.log(fileKey);
+
+        const command = new DeleteObjectCommand({
+          Bucket: process.env.CLOUDFLARE_R2_BUCKET,
+          Key: fileKey,
+        });
+
+        await s3.send(command);
+        console.log('Banner excluido com sucesso')
+
+      }
+      console.log('4 stage')
+      //EXLUSAO DA IMAGEM
+      if (exists1) {
+        if (product_image.includes('firebasestorage') && product_banner.includes('')) {
+          const image_relativePath = urlToRelativePath(product_image);
+          await bucket.file(image_relativePath).delete()
+          console.log(`Imagem excluída com sucesso.`);
+        }
+      } else {
+        console.log('A imagem NÃO existe no Storage.');
+      }
+
+      if (product_image.includes('megaofertasco.store')) {
+        const fileKey = product_image.replace(/^https?:\/\/[^\/]+\//, "");
+        console.log(fileKey);
+
+        const command = new DeleteObjectCommand({
+          Bucket: process.env.CLOUDFLARE_R2_BUCKET,
+          Key: fileKey,
+        });
+
+        await s3.send(command);
+        console.log('Imagem excluida com sucesso')
+
+      }
+
+
+
+      // EXCLUSAO DO DOCUMENTO
+      if (exists3) {
+        if (product_doc_url.includes('firebasestorage')) {
+          const doc_relativePath = urlToRelativePath(product_doc_url);
+          await bucket.file(doc_relativePath).delete()
+          console.log('Documento exluido com sucesso')
+        }
+      } else {
+        console.log('O documento NÃO existe')
+      }
+
+      if (product_doc_url.includes('megaofertasco.store')) {
+        const fileKey = product_doc_url.replace(/^https?:\/\/[^\/]+\//, "");
+        console.log(fileKey);
+
+        const command = new DeleteObjectCommand({
+          Bucket: process.env.CLOUDFLARE_R2_BUCKET,
+          Key: fileKey,
+        });
+
+        const data = await s3.send(command);
+        console.log('Documento excluido com sucesso', data)
+      } else {
+        console.log('Documento nao excluido')
+      }
+
+
+
+      await userProductRef.delete(); // Exclui o documento
+
+      // Deduz a quantidade de produtos no Firebase
+      const quantityRef = db.ref(`users/${userId}/quantity`);
+      const q_snapshot = await quantityRef.once("value");
+      const quantity = Number(q_snapshot.val());
+      await quantityRef.set(quantity - 1);
+
+      return res.status(200).json({ message: 'Produto excluído com sucesso.' });
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Erro interno do servidor.', err: error });
+    }
+  }
+
 
 
 
@@ -51,47 +199,47 @@ app.post("/api/balance", async (req, res) => {
     }
 
     try {
-      
+
       const checkoutconfigRef = db.ref(`users/${userId}/checkoutUserConfig`);
-      
+
       const checkSnapShot = await checkoutconfigRef.once('value');
       const checkout = checkSnapShot.val();
-      
-      return res.status(200).json({checkout: checkout });
-      
+
+      return res.status(200).json({ checkout: checkout });
+
     } catch (error) {
-      return res.status(500).json({ status: 'Erro interno do servidor!',error: error});
+      return res.status(500).json({ status: 'Erro interno do servidor!', error: error });
     }
 
 
-  } 
+  }
 
 
 
   if (reqType === 'product_data') {
     try {
-      
+
       const productRef = fb_firestore.collection("products").doc(productId);
       const snapDoc = await productRef.get();
 
       if (snapDoc.exists) {
         const product = snapDoc.data();
-        console.log(product)   
-  
-        return res.status(200).json({ status: 'succcess', product: product});
+        console.log(product)
+
+        return res.status(200).json({ status: 'succcess', product: product });
       } else {
         console.log("Produto não encontrado!");
-        return res.status(200).send({ status: 'Produto nao encontrado!', code: 'E-0'});
+        return res.status(200).send({ status: 'Produto nao encontrado!', code: 'E-0' });
       }
 
-     
+
 
 
     } catch (error) {
       console.error("Erro ao buscar produto:", error); // Adicionado para debug
-      return res.status(500).json({ status: 'Erro interno do servidor!',error: error});
+      return res.status(500).json({ status: 'Erro interno do servidor!', error: error });
     }
-   
+
   }
 
 
@@ -109,7 +257,7 @@ app.post("/api/balance", async (req, res) => {
 
       if (querySnapshot.empty) {
         console.log("Nenhum produto encontrado para este usuário.");
-        return res.status(404).json({ error: 'Nenhum produto encontrado para este usuário.' });
+        return res.status(200).json({ error: 'Nenhum produto encontrado para este usuário.', code: '404' });
       }
 
       // Converter os documentos para um array

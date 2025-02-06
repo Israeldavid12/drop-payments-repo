@@ -12,7 +12,7 @@ export async function handleUserData() {
             userId: userId,
             reqType: 'user_payment_data',
         });
-        const fech_data = await axios.post('http://127.0.0.1:3013/api/balance', {
+        const fech_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
             userId: userId,
             reqType: 'user_data',
         });
@@ -91,7 +91,7 @@ async function saveData() {
             contacto_2: contacto_2
         }
         console.log(payload);
-        const response = await axios.post('http://127.0.0.1:3013/api/balance', payload);
+        const response = await axios.post('https://www.dropaymentsmz.online/api/balance', payload);
 
         console.log(response.data);
 

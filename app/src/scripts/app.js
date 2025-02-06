@@ -4,11 +4,17 @@ import { productHub, displayProducts } from "../pages/product-hub.js";
 import withdrawPage from "../pages/withdraw-hub.js";
 import { displayBalnace, renderWithdrawHistory } from "../pages/withdraw-hub.js";
 import { profilePage } from "../pages/profile-hub.js";
-import { addLoadAnim, pageLoader } from "../animations/index.js";
+import { addLoadAnim, pageLoader, setAnOutPut, showAnPopup } from "../animations/index.js";
 import { createProduct } from "../pages/create-product.js";
+import { logOut } from "../user/user_data.mjs";
 
 
 
+
+
+document.getElementById('logout_btn').addEventListener('click', () => {
+    logOut();
+})
 
 
 

@@ -1,3 +1,4 @@
+
 function closePopup() {
     document.getElementById('overlay').style.display = 'none';
     document.getElementById('mpesaPopup').style.display = 'none';
@@ -66,3 +67,7 @@ function selectPayPal() {
 
 
 
+
+
+const hash = window.location.hash
+console.log(hash)

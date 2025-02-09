@@ -52,6 +52,7 @@ export function setAnOutPut(text, type) {
 
 export async function pageLoader(flag) {
     const div = document.createElement('div');
+    div.classList.add('load-container')
     const template = ` <div class="page-loader" >
         <div class='l-container'> <div class="loading-container">
             <div class="circle"></div>

@@ -1,0 +1,119 @@
+.sales-hub-container {
+    padding: 40px;
+}
+
+.sales-hub-container  .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 0 0 10px 0;
+}
+.sales-hub-container a {
+    text-decoration: none;
+    color: #3b3b3b;
+}
+.sales-hub-container .info {
+    font-size: 14px;
+    color: #3b3b3b;
+}
+
+.sales-balance-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-radius: 7px;
+    box-shadow: 4px 4px #0000;
+    margin: 10px 0;
+
+}
+.sales-box {
+    display: grid;
+    gap: 6px;
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 10px 4px #0000;
+}
+.sales-box p {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b3b3b;
+}
+.sales-box span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #3b3b3b;
+}
+.filter-sales {
+    display: grid;
+    background-color: #ffffff;
+    width: 100%;
+    border-radius: 7px;
+    padding: 10px 0;
+}
+.sales-filter-form {
+    display: flex;
+    padding: 10px;
+    text-align: center;
+    gap: 10px;
+}
+.sales-filter-form .filter-sales {
+   max-width: 250px;
+}
+.sales-filter-form input {
+    width: 100%;
+    padding: 10px 10px;
+    outline: none;
+    border: 1px solid silver;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.sales-filter-form button {
+    background-color: #ffffff;
+    border: 1px solid #062858;
+}
+.sales-filter-form button:hover, input:hover {
+    border: 1px solid #062859;
+    box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.table-sales-container {
+    width: 100%;
+}
+
+.table-sales-title th {
+    font-size: 14px;
+    color: #3b3b3b;
+}
+.sale-p-image {
+    width: 25px; 
+    height: 25px; 
+    border-radius: 50%;
+}
+
+
+
+
+@media (max-width: 600px) {
+    .sales-balance-container {
+        display: grid;
+        width: 100%;
+    }
+    .sales-filter-form {
+        display: grid;
+    }
+    #filter-sales {
+        align-self: center;
+        justify-self: center;
+    }
+    thead {
+        display: none;
+    }
+    td {
+        display: block;
+    }
+    td::before {
+        content: attr(data-th) ": " ;
+    }
+}

@@ -64,7 +64,36 @@ app.post("/api/balance", async (req, res) => {
     return res.status(400).send({ error: "reqType indefinido." });
   }
 
-  if (reqType === 'delete_product') { 
+  if (reqType === "user_sales") {
+    if (!userId) {
+      return res.status(400).send({ error: "userId é obrigatório." });
+    }
+
+    try {
+      const salesUserRef = db.ref(`users/${userId}/payments`);
+      const salesSnapshot = await salesUserRef.once("value");
+
+      if (salesSnapshot.exists()) {
+        const sales = salesSnapshot.val();
+        let sales_array = [];
+        sales_array = sales;
+        sales_array = Object.entries(sales_array).map(([id, objeto]) => ({ id, ...objeto }));
+        return res.status(200).json({ sales: sales_array }) 
+      } else {
+        console.log("Nenhum produto encotrado.")
+        return res.status(200).json({mesage : "Nenhum produto encotrado."})
+      }
+
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({mesage : "Erro interno do servidor."})
+ 
+    }
+
+  }
+
+  if (reqType === 'delete_product') {
     try {
       console.log(productId);
 

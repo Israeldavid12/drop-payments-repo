@@ -5,8 +5,8 @@ const paypal = require('paypal-rest-sdk');
 // Configuração do PayPal
 paypal.configure({
   mode: 'sandbox', // Use 'live' para produção
-  client_id: 'Ac-X_2mSdDUlHyk9_Ej-gCzGN3Jc_7QKJI97QIFRT7q99zV5L-Qau9UWl8Iu4tvR6b16Jr10CDCywoO9',
-  client_secret: 'Ac-X_2mSdDUlHyk9_Ej-gCzGN3Jc_7QKJI97QIFRT7q99zV5L-Qau9UWl8Iu4tvR6b16Jr10CDCywoO9',
+  client_id: 'ASqxMwsdnMl-ebsp3qZ6BXLFsGJmv1Ui2pfPKBD9RWXWeDsjUa19J2Ck6C4n3a_zOw8XKGt1WGwubn_h',
+  client_secret: 'EOX5_bS71GZj5X9K_Siv1UeTN9RSlivL3_zQtp0IBgDxN-8Gw1P86Z-4jbagDzaNxbdb9oQi3PRboHEM',
 });
 
 // Criar servidor Express

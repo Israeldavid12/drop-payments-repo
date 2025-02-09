@@ -41,8 +41,8 @@ export const getUserId = () => {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        localStorage.setItem('userI', user.uid);
-        sessionStorage.setItem('userId', user.uid);
+        // localStorage.setItem('userI', user.uid);
+        // sessionStorage.setItem('userId', user.uid);
         resolve(user.uid); // Retorna o UID se o usuário estiver logado
       } else {
         reject("Nenhum usuário logado"); // Se não houver usuário logado, rejeita

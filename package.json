@@ -4,6 +4,7 @@
     "@aws-sdk/s3-request-presigner": "^3.741.0",
     "@jsplumb/browser-ui": "^6.2.10",
     "@jsplumb/community": "^4.0.0-RC47",
+    "@paypal/paypal-server-sdk": "^0.6.1",
     "@shopify/storefront-api-client": "^1.0.3",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",

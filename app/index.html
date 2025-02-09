@@ -24,6 +24,7 @@
     <script type="module" src="src/user/user_data.mjs"></script>
     <link rel="stylesheet" href="src/styles/animation/animations.css">
     <link rel="stylesheet" href="src/styles/modals-styles/edit-product.css">
+    <link rel="stylesheet" href="src/styles/sales-hub.css">
     <script src="src/scripts/change-active-menu.js"></script>
 </head>
 
@@ -102,31 +103,19 @@
                     <a href="#">
                         <i class="bi bi-gear"></i>
                         <span class="item-description">
-                            Configurações 
+                            Configurações
                         </span>
                     </a>
                 </li>
-                <div class="side-item" >
-                    <span class="item-description">
-                        <span class="drop-down" > <div><i class="bi bi-gear" style="margin-right: 8px;" ></i> Configurações</div> <i class="bi bi-caret-right-fill"></i></span>
-                    </span>
-                </div>
-                <li class="side-item drop-down-active">
-                    <a href="#">
-                        <i class="bi bi-gear"></i>
-                        <span class="item-description">
-                            Configurações 
-                        </span>
-                    </a>
-                </li>
-  
+
+
             </ul>
 
 
         </div>
 
         <div id="logout">
-            <button id="logout_btn" onclick="logOut()" >
+            <button id="logout_btn" onclick="logOut()">
                 <i class="bi bi-box-arrow-right"></i>
                 <span class="item-description">
                     Logout
@@ -162,8 +151,8 @@
 
         <!---CONTAINER--->
         <div id="content" class="content">
+
            
-            
 
         </div>
 
@@ -179,6 +168,7 @@
     <script type="module" src="src/scripts/sales-graphic.js"></script>
     <script type="module" src="src/modals/product_modals_events.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1180.0/aws-sdk.min.js"></script>
+    <script type="module" src="src/pages/sales-hub.js"></script>
 
 
 

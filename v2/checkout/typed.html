@@ -10,6 +10,9 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=ASqxMwsdnMl-ebsp3qZ6BXLFsGJmv1Ui2pfPKBD9RWXWeDsjUa19J2Ck6C4n3a_zOw8XKGt1WGwubn_h&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo&disable-funding=paylater"
+        data-sdk-integration-source="developer-studio"></script>
     <link rel="stylesheet" href="../styles/checkout-typed.css">
     <link rel="stylesheet" href="../styles/sales-made.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -19,21 +22,17 @@
     <link rel="stylesheet" href="../styles/select-tag.css">
     <link rel="stylesheet" href="../../app/src/styles/animation/animations.css">
     <link rel="stylesheet" href="../styles/modals/produc-not-found.css">
+    <link rel="stylesheet" href="../styles/modals/index.css">
     <script type="module" src="../scripts/loader.js"></script>
 
 </head>
 
 <body>
-    
+
     <div id="pixel"> </div>
-    
-    <div id="overlay"></div>
-    <div class="c-popup"></div>
 
     <!-- Área da notificação -->
-    <div id="purchase-notification" class="notification hidden">
-
-    </div>
+    <div id="purchase-notification" class="notification hidden"></div>
 
     <!-- Cronômetro movido para fora do contêiner -->
     <div class="container-timer">
@@ -53,6 +52,7 @@
             <div class="info-secure-coneteiner">
 
                 <hr style="margin-bottom: 18px;">
+
             </div>
             <select name="cars" id="cars">
                 <option value="volvo">MZ</option>
@@ -63,7 +63,6 @@
 
             <div>
 
-
                 <div class="product-info">
                     <img id="image-url" src="../../checkou-assets/default-img.jpg" alt="logo">
                     <div class="product-details">
@@ -72,10 +71,9 @@
                         <p style="font-size: 14px;">COMPRA 100% SEGURA</p>
                         <p id="productPrice" class="product-price">
                         <p class="product-price">
-
-
                     </div>
                 </div>
+
                 <hr style="margin-bottom: 16px;">
                 <form>
 
@@ -114,11 +112,11 @@
                     <div class="payment-options">
 
                         <div style="margin-bottom: 40px;" class="form-group">
-                            <label style="font-size: 14px; text-align: start; display: none; " id="labeInserted" for="tel">Insira o montante a pagar</label>
+                            <label style="font-size: 14px; text-align: start; display: none; " id="labeInserted"
+                                for="tel">Insira o montante a pagar</label>
 
 
-                            <div class="input-container" id="divpriceInserted"
-                                style="display: none;">
+                            <div class="input-container" id="divpriceInserted" style="display: none;">
                                 <img src="../../assests/vendas-black.png" alt="whatsapp">
                                 <input id="priceInserted" type="number" placeholder="0.00 MT">
                             </div>
@@ -128,12 +126,11 @@
                                 style="color: red; display: none; font-size: 14px; margin-bottom: 30px; font-weight: bold; text-align: center;">
                                 .</p>
                         </div>
-                        <p style="font-weight: bold; margin-bottom: 15px; color: #062858; font-size: 14px;">Escolha seu
-                            metodo de pagamento</p>
-
+                        <p style="font-weight: bold; margin-bottom: 15px; color: #062858; font-size: 14px;">Escolha seumetodo de pagamento</p>
 
                         <img class="mpesa" src="../assets/mpesa.png" alt="M-Pesa" id="mpesa" onclick="selectMpesa()">
                         <img src="../assets/emola.png" alt="e-Mola" id="emola" onclick="selectEmola()">
+                       
                         <img src="../assets/paypal.png" alt="paypal" id="paypal" onclick="selectPayPal()">
                     </div>
 
@@ -151,6 +148,7 @@
             </div>
 
             <button class="pay-btn paypal" id="pay-btn">Pagar com M-Pesa</button>
+            <div id="paypal-button-container" class="paypal-button-container"></div>
             </form>
 
         </div>
@@ -164,7 +162,8 @@
 
 
     <script src="../scripts/app.js"></script>
-    <script type="module" src="../scripts/product-data/index.js" ></script>
+    <script type="module" src="../scripts/product-data/index.js"></script>
+    <script type="module" src="../scripts/payments/paypal.js"></script>
 </body>
 
 </html>

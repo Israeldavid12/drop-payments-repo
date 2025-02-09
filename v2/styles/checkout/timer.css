@@ -1,0 +1,30 @@
+.timer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #C33939;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border-radius: 3px;
+    gap: 6px;
+
+}
+
+.timer-container i {
+    font-size: 30px;
+}
+
+
+@media (max-width: 600px) {
+    .timer-container i {
+        font-size: 30px;
+    }
+
+    .timer-container p {
+        font-size: 14px;
+    }
+}

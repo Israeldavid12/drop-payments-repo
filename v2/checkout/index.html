@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=test&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,card&disable-funding=paylater"
+        data-sdk-integration-source="developer-studio"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../styles/modals/index.css">
+    <link rel="stylesheet" href="../styles/checkout/index.css">
+    <link rel="stylesheet" href="../styles/checkout/timer.css">
+    <link rel="stylesheet" href="../styles/modals/loading-icon.css">
+    <link rel="stylesheet" href="../styles/modals/produc-not-found.css">
+    <script type="module" src="../scripts/payments/process.js"></script>
+    <script type="module" src="../scripts/product-data/get-product-data.js"></script>
+   
+</head>
+
+<body>
+    <div class="timer-container" >
+        <p  class="text-[20px]" id="timer" >00 : 00 : 00</p>
+        <i class="bi bi-clock-history"></i>
+        <p>Preencha os seus dados antes <br> que o cronômetro termine</p>
+    </div>
+    <div class="main-container-checkout">
+        <div class="box-checkout box-1">
+          
+            <img class="banner" src="../assets/deafult-banner.png" alt="">
+            <div>
+                <select name="cars" id="cars">
+                    <option value="volvo">MZ</option>
+                    <option value="saab">BR</option>
+                    <option value="mercedes">USA</option>
+                    <option value="audi">RSA</option>
+                </select>
+            </div>
+            <div class="product-info-checkout ">
+                <div>
+                    <img id="image-url" class="product-image" src="../assets/deafult-banner.png" alt="">
+                </div>
+                <div>
+                    <p>Esta a pagar:</p>
+                    <br>
+                    <p id="productName" class="product-name text-[18px]">ZERO BARRIGA</p>
+                    <p class="text-[12px]">COMPRA 100% SEGURA</p>
+
+                    <p id="productPrice" class="product-price">207.00 MT</p>
+                </div>
+            </div>
+        </div>
+        <div class="box-checkout box-2">
+            
+            <div class="box-2-logo"><img src="../assets/dp-logo.png" alt=""></div>
+            <hr>
+            <p>Endereço de Cobrança</p>
+            <div class="input-billing-adress">
+                <i class="bi bi-person-circle"></i>
+                <input type="text" placeholder="Nome">
+            </div>
+            <div class="input-billing-adress">
+                <i class="bi bi-envelope"></i>
+                <input type="text" placeholder="E-mail">
+            </div>
+            <div class="input-billing-adress">
+                <i class="bi bi-telephone"></i>
+                <input type="text" placeholder="Telefone">
+            </div>
+            <hr>
+
+
+            <div class="box-manual-payment">
+                <p>Insira om montante a pagar</p>
+                <div class=" input-billing-adress">
+                    <i class="bi bi-tag"></i>
+                    <input type="text" placeholder="0.00">
+                </div>
+            </div>
+
+            <div class="payment-options-container">
+                <p>Selecione um metodo de pagamento</p>
+                <div class="payment-options">
+                    <a href="#/e-mola"><img class="method" onclick="handlePayment(this)" src="../assets/emola.png"
+                            alt=""></a>
+                    <a href="#/m-pesa"><img class="method" src="../assets/mpesa.png" onclick="handlePayment(this)"
+                            alt=""></a>
+                    <a href="#/paypal"><img class="method" src="../assets/paypal.png" onclick="handlePayment(this)"
+                            alt=""></a>
+                </div>
+
+                <div class="payment-methods-container">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+<script type="module" src="../scripts/product-data/index.js"></script>
+<script type="module" src="../scripts/product-data/get-product-data.js"></script>
+<script src="../scripts/timer/index.js"></script>
+<script>
+    function handlePayment(element) {
+        const elemnts = document.querySelectorAll(".method")
+        // console.log(elemnts)
+        for (let i = 0; i < elemnts.length; i++) {
+            elemnts[i].classList.remove('payment-selected')
+        }
+        element.classList.add("payment-selected")
+    }
+    
+   
+</script>
+
+
+</html>

@@ -1,8 +1,44 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const paypal = require('paypal-rest-sdk');
-const admin = require('firebase-admin');
+const admin = require('firebase-admin'); 
 require('dotenv').config();
+const { 
+  ApiError, 
+  CheckoutPaymentIntent, 
+  Client, 
+  Environment, 
+  LogLevel, 
+  OrdersController, 
+  PaymentsController 
+} = require("@paypal/paypal-server-sdk");
+
+
+
+
+
+
+const {
+  PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET,
+} = process.env;
+
+const client = new Client({ 
+  clientCredentialsAuthCredentials: {
+      oAuthClientId: PAYPAL_CLIENT_ID,
+      oAuthClientSecret: PAYPAL_CLIENT_SECRET,
+  },
+  timeout: 0,
+  environment: Environment.Sandbox,
+  logging: { 
+      logLevel: LogLevel.Info,
+      logRequest: { logBody: true },
+      logResponse: { logHeaders: true },
+  },
+}); 
+const ordersController = new OrdersController(client);
+const paymentsController = new PaymentsController(client);
+
 
 // Função para inicializar o Firebase
 async function initializeFirebase() {
@@ -23,12 +59,12 @@ async function initializeFirebase() {
 
 initializeFirebase();
 
-// Configuração do PayPal
-paypal.configure({
-  mode: 'live', // Use 'sandbox' para testes, 'live' para produção
-  client_id: process.env.PAYPAL_CLIENT_ID,
-  client_secret: process.env.PAYPAL_CLIENT_SECRET,
-});
+// // Configuração do PayPal
+// paypal.configure({
+//   mode: 'live', // Use 'sandbox' para testes, 'live' para produção
+//   client_id: process.env.PAYPAL_CLIENT_ID,
+//   client_secret: process.env.PAYPAL_CLIENT_SECRET,
+// });
 
 // Criar servidor Express
 const app = express();
@@ -44,6 +80,113 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
+
+
+//CRIAR PEDIDO
+
+const createOrder = async (cart) => {
+  const collect = {
+      body: {
+          intent: "CAPTURE",
+          purchaseUnits: [
+              {
+                  amount: {
+                      currencyCode: "USD",
+                      value: "100",
+                  },
+              },
+          ],
+      },
+      prefer: "return=minimal",
+  }; 
+
+  try {
+      const { body, ...httpResponse } = await ordersController.ordersCreate(
+          collect
+      );
+      // Get more response info...
+      const { statusCode, headers } = httpResponse;
+      return {
+          jsonResponse: JSON.parse(body),
+          httpStatusCode: httpResponse.statusCode,
+          statusCode: statusCode,
+          headers: headers
+      };
+  } catch (error) {
+      if (error instanceof ApiError) {
+          const { statusCode, headers } = error;
+          console.log(error)
+          // throw new Error(error.message);
+      }
+  }
+};
+
+
+
+// CAPTURAR PEDIDO /**
+const captureOrder = async (orderID) => {
+   const collect = {
+       id: orderID,
+       prefer: "return=minimal",
+   };
+
+   try {
+       const { body, ...httpResponse } = await ordersController.ordersCapture(
+           collect
+       );
+       // Get more response info...
+       // const { statusCode, headers } = httpResponse;
+       return {
+           jsonResponse: JSON.parse(body),
+           httpStatusCode: httpResponse.statusCode,
+       };
+   } catch (error) {
+       if (error instanceof ApiError) {
+           // const { statusCode, headers } = error;
+           throw new Error(error.message);
+       }
+   }
+};
+
+
+app.post("/api/all-payment", async (req, res) => {
+  const { reqType, cart, orderId } = req.body;
+  console.log(req.body)
+
+
+  if (reqType === '/api/orders') {
+    try {
+      // use the cart information passed from the front-end to calculate the order amount detals
+      const { cart } = req.body;
+      const { jsonResponse, httpStatusCode } = await createOrder(cart);
+      res.status(httpStatusCode).json(jsonResponse);
+  } catch (error) {
+      console.error("Failed to create order:", error);
+      res.status(500).json({ error: "Failed to create order.", error_datails: error });
+  }
+  }
+
+
+  if (reqType === "/api/orders/:orderID/capture") {
+    try {
+      const { orderID } = req.params;
+      const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+      res.status(httpStatusCode).json(jsonResponse);
+  } catch (error) {
+      console.error("Failed to create order:", error);
+      res.status(500).json({ error: "Failed to capture order." });
+  }
+  }
+  
+
+
+});
+
+
+
+
+
+
 
 // Endpoint para iniciar pagamento com PayPal
 app.post('/api/paypal-back-payment', (req, res) => {
@@ -84,7 +227,7 @@ app.post('/api/paypal-back-payment', (req, res) => {
 // Endpoint para processar sucesso do pagamento
 app.get('/api/paypal-success', async (req, res) => {
   const { PayerID, paymentId, clientId, sucessPage, bidUSD, productId, nameProduct } = req.query;
-  
+
   console.log('Parâmetros recebidos:', req.query);
 
   if (!PayerID || !paymentId || !clientId) {
@@ -157,7 +300,7 @@ app.get('/api/paypal-success', async (req, res) => {
 
     console.log('Pagamento salvo com sucesso!');
     const successPageUrl = `${sucessPage}?id=${encodeURIComponent(productId)}&emailPayer=${encodeURIComponent(payerEmail)}&namePayer=${encodeURIComponent(payerName)}&nameProduct=${encodeURIComponent(nameProduct)}`;
-    return res.redirect(successPageUrl); 
+    return res.redirect(successPageUrl);
   } catch (error) {
     console.error('Erro ao processar pagamento:', error);
     return res.status(500).json({ message: 'Erro ao processar ou salvar pagamento.', error });
@@ -177,7 +320,7 @@ app.get('/api/paypal-cancel', (req, res) => {
 });
 
 // Iniciar o servidor
-const port = process.env.PORT || 3010;
+const port = 3010;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });

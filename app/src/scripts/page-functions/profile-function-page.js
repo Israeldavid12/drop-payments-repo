@@ -136,10 +136,9 @@ limitInputData('contacto-2');
 document.getElementById('p-save').addEventListener('click', async () => {
 
     try {
-        addLoadAnim('p-save', 'Salvar', 4000);
-
-
+        addLoadAnim('p-save', 'Salvar', true);
         const save_data = await saveData();
+        addLoadAnim('p-save', 'Salvar', false);
 
         if (save_data.status) {
             const success = save_data.status;

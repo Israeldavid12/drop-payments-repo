@@ -6,7 +6,8 @@ export function productNotFoundAlert() {
         <p>PRODUTO NÃO ENCONTRADO <br> OU REMOVIDO! [ E-015 ]</p>
     </div>`;
     div.innerHTML = template;
+    document.body.innerHTML = '';
 
-    document.body.insertBefore(div, document.body.firstChild);
+    document.body.appendChild(div);
     
 }

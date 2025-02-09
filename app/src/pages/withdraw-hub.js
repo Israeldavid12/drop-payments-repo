@@ -63,7 +63,7 @@ export const renderWithdrawHistory = async(entries) => {
     <td data-th="Valor solicitado"  >${formatBalance(withdraws.valueAmount)}</td>
     <td data-th="Valor a receber" >${formatBalance(withdraws.amountPaid)}</td>
     <td data-th="Fee" >MZN 10,00 </td>
-    <td data-th="Conta" ><img style="width: 25px; height: 25px; border-radius: 50%;" src="${metodo_image}"</td>
+    <td data-th="Conta" ><img style="width: 25px; height: 25px; border-radius: 50%;" src="${metodo_image}"></td>
     <td data-th="Estado" >${withdraws.status}</td>
     <td data-th='ID  do saque' >${withdraws.id}</td>`;
 

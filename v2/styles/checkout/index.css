@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    width: 100%;
+    height: 100vh;
+    padding: 10px;
+}
+
+.main-container-checkout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+}
+
+.box-checkout {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    padding: 80px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(32, 32, 32, 0.2);
+    border-radius: 5px;
+}
+.box-checkout.box-2 {
+    padding: 20px 80px 80px 80px;
+}
+
+.box-checkout .banner {
+    width: 100%;
+    border-radius: 8px;
+}
+
+select {
+    align-self: flex-start;
+    justify-self: start;
+}
+
+.product-info-checkout {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+}
+
+.product-info-checkout .product-image {
+    width: 125px;
+
+    border-radius: 8px;
+}
+
+.product-info-checkout .product-price {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #5C5CC0;
+}
+
+.product-info-checkout .product-name {
+    color: #1b1b1b;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+select {
+    background-color: #fff;
+    height: 30px;
+    font-size: 12px;
+    padding: 0;
+    width: 50px;
+    border: 0px;
+    outline: none;
+}
+
+.box-2-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.box-2-logo img {
+    width: 40px;
+}
+
+.input-billing-adress {
+    display: flex;
+    gap: 8px;
+    border: 1px solid silver;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.input-billing-adress:hover {
+    border: 1px solid #05056d;
+}
+
+.input-billing-adress input {
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+.box-manual-payment {
+    display: grid;
+}
+
+.message-payment-options {
+    display: flex;
+    justify-content: center;
+}
+
+.payment-options {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+}
+
+.payment-options img {
+    border-radius: 8px;
+    width: 70px;
+}
+
+.mpesa-button {
+    background-color: #FF0000;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+}
+
+
+.emola-button {
+    background-color: #F4861E;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+}
+
+.mpesa-button:hover,
+.emola-button:hover {
+    opacity: 50%;
+}
+
+.payment-methods-container {
+    padding: 10px 0;
+}
+
+.box-1 {
+    justify-self: start;
+    align-self: self-start;
+}
+.box-checkout.box-1 {
+    padding: 15px 80px 80px 80px;
+}
+
+.payment-selected {
+    opacity: 0.5;
+    border: 1.5px solid #062858;
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 736px) {
+    .main-container-checkout {
+        display: block;
+        gap: 0px;
+        padding: 10px;
+    }
+
+    .product-info-checkout {
+        justify-content: start;
+        gap: 20px;
+    }
+
+    .product-info-checkout .product-price {
+        margin-top: 0px;
+    }
+
+    body {
+        padding: 0px;
+       
+    }
+
+    .box-checkout {
+        padding: 10px;
+    }
+
+    .box-2-logo {
+        display: none;
+    }
+    .box-checkout.box-2 {
+        padding: 20px;
+    }
+    .box-checkout.box-1 {
+        padding: 20px;
+    }
+ 
+}

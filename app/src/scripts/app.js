@@ -7,7 +7,7 @@ import { profilePage } from "../pages/profile-hub.js";
 import { addLoadAnim, pageLoader, setAnOutPut, showAnPopup } from "../animations/index.js";
 import { createProduct } from "../pages/create-product.js";
 import { logOut } from "../user/user_data.mjs";
-
+import { salesPage } from "../pages/sales-hub.js";
 
 
 
@@ -158,6 +158,14 @@ const init = () => {
                     createScript('src/scripts/page-functions/create-product-hub.js');
                 }, 2000)
                 break;
+            case '#/vendas':
+                loadRender(true);
+                setTimeout(async () => {
+                    changeTitle("Vendas")
+                    content.innerHTML = '';
+                    content.appendChild(await salesPage())
+                }, 2000);
+                break;
             default:
                 break;
         }
@@ -222,6 +230,14 @@ window.addEventListener('load', async () => {
                 content.appendChild(await createProduct());
                 createScript('src/scripts/page-functions/create-product-hub.js');
             }, 2000)
+            break;
+        case '#/vendas':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle("Vendas")
+                content.innerHTML = '';
+                content.appendChild(await salesPage())
+            }, 2000);
             break;
         default:
             break;

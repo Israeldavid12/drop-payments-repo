@@ -1,3 +1,4 @@
-import { pageLoader} from "../../app/src/animations/index.js";
+import { pageLoader } from "../../app/src/animations/index.js"
 
 pageLoader(true)
+

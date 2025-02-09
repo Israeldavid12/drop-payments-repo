@@ -1,26 +1,38 @@
-export const purchasePopup = () => {
-    const template = ` <div id="mpesaPopup">
-        <div class="inline">
-            <div class="lds-ring" bis_skin_checked="1">
-                <div bis_skin_checked="1"></div>
-                <div bis_skin_checked="1"></div>
-                <div bis_skin_checked="1"></div>
-                <div bis_skin_checked="1"></div>
-            </div>
-            <p id="infoError" style="color: #E21923; font-size: 16px; font-weight: bold; margin-left: 8px;">Insira o PIN
-                e aguarde...</p>
-        </div>
+export async function getPage(dir_name) {
+    const page = await axios.get(dir_name)
+    return page.data
+}
 
-        <hr>
-        <img class="imagePopup" id="imagePopup" src="../../checkou-assets/mpesa-red.png" alt="emola"
-            style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;">
-        <p>Introduza o PIN no Popup que aparecerá no seu telemóvel com o número indicado para finalizar o pagamento</p>
-        <p style="font-size: 12px; margin-top: 4px; color: #0e0e0e; "><strong>*Por favor não recarregue ou saia desta
-                página antes de concluir o pagamento!</strong></p>
-        <button id="fechar" onclick="closePopup()" class="supporteEmail">Tentar novamente</button>
-    </div>`;
 
-    
+
+
+export const purchasePopup = async (flag, type) => {
+
+    if (flag === true) {
+        if (type === "e-mola") {
+            const div = document.createElement('div');
+            div.classList.add('dynamic-popup')
+            div.innerHTML = await getPage("../checkout/modals-statics/purcchase-popup.html");
+            document.body.appendChild(div);
+            document.getElementById("imagePopup").src = "../assets/emola.png";
+            document.querySelector(".info-error").style.color = "#F4861E";
+            const allLdsRingDivs = document.querySelectorAll('.lds-ring div');
+            allLdsRingDivs.forEach(div => {
+                div.style.borderColor = `#F4861E transparent transparent transparent`;
+            });
+        } else if (type === "m-pesa") {
+            const div = document.createElement('div');
+            div.classList.add('dynamic-popup')
+            div.innerHTML = await getPage("../checkout/modals-statics/purcchase-popup.html");;
+            document.body.appendChild(div);
+        }
+    } else if (flag === false) {
+        document.body.querySelector('.dynamic-popup').remove()
+    } else {
+        console.error('ERRO AO CHMAR FUNCAO')
+    }
+
+
 }
 
 

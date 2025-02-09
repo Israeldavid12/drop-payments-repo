@@ -76,9 +76,6 @@ const limite = 200;
 
 
 
-
-
-
 async function uploadFile(file_id, presignedUrl, file_path) {
     const file = document.getElementById(file_id).files[0];
 
@@ -298,11 +295,6 @@ async function saveProduct() {
 
     }
 }
-
-
-
-
-
 
 
 

@@ -1,4 +1,22 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function closePopup() {
     document.getElementById('overlay').style.display = 'none';
     document.getElementById('mpesaPopup').style.display = 'none';
@@ -64,7 +82,6 @@ function selectPayPal() {
     document.getElementById("pay-btn").classList.add('paypal-button');
     document.getElementsByClassName('input-container')[4].style.display = 'none';
 }
-
 
 
 

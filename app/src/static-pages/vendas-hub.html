@@ -5,19 +5,19 @@
     <div class="sales-balance-container">
         <div class="sales-box">
             <p>Total de vendas realizadas <i class="bi bi-info-circle-fill"></i></p>
-            <span>0.00 MT</span>
+            <span id="sales-lenght" ></span>
         </div>
         <div class="sales-box">
             <p>Valor líquido <i class="bi bi-info-circle-fill"></i></p>
-            <span>0.00 MT</span>
+            <span id="sales-made" ></span>
         </div>
     </div>
-    <label>Ultimas <span id="entries_value">10</span> entradas</label>
+    <label>Ultimas <span id="entries_value"></span> entradas</label>
     <div class="filter-sales">
 
         <div class="sales-filter-form">
             <label for="entries">Entradas:</label>
-            <input type="number" id="sales-entries" placeholder="10" min="1" value="10">
+            <input type="number" id="sales-entries" placeholder="10" min="1" >
 
             <button class="filter-sales" id="filter-sales">Aplicar Filtros</button>
         </div>
@@ -39,18 +39,7 @@
         </thead>
         <tbody id="tbody-sales">
 
-            <tr>
-                <td data-th="Nome do produto:" >sssss</td>
-                <td data-th="ID do Produto:" >sssss</td>
-                <td data-th="Montante:" >sssss</td>
-                <td data-th="M. de Pagamento:" ><img class="sale-p-image" src="src/assets/NA.png" alt="N/A"></td>
-                <td data-th="Nº do Pagamento:" >sssss</td>
-                <th data-th="Nome:" >Nome:</th>
-                <td data-th="Email:" >sssss</td>
-                <td data-th="WhatsApp:" >sssss</td>
-                <td data-th="Data:" >sssss</td>
-            </tr>
-
+            
         </tbody>
     </table>
 </div>

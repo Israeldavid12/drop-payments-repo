@@ -1,5 +1,6 @@
 <div class="finances-hub">
-    <p>Saques <a href="#withdraw" style="text-decoration: none;"><i class="bi bi-arrow-bar-left"></i> Solicitar saque</a></p>
+    <p>Saques <a href="#withdraw" style="text-decoration: none;"><i class="bi bi-arrow-bar-left"></i> Solicitar
+            saque</a></p>
     <p class="user_name"></p>
     <div class="main-box">
         <div class="box">
@@ -10,7 +11,8 @@
                 <div>
                     <p class="balance_label">Saldo disponivel </p>
                     <p id="mobilePaymentsBalance" class="balance">392.03 MZN </p>
-                    <button id="s-saque_f" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar saque</button>
+                    <button id="s-saque_f" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar
+                        saque</button>
 
 
                 </div>
@@ -33,7 +35,8 @@
                 <div>
                     <p class="balance_label">Saldo disponivel </p>
                     <p id="paypalBalance" class="balance">392.03 MZN </p>
-                    <button id="s_saque_2" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar saque</button>
+                    <button id="s_saque_2" class="s_saque"><i class="bi bi-credit-card-fill"></i> Solicitar
+                        saque</button>
                 </div>
                 <div class="f-wallet">
                     <p>Transacoes das Carteiras : </p>
@@ -51,11 +54,26 @@
             <div>
 
                 <p><strong>Ultíma transação</strong></p>
-                <div class="box-last" >
-                    <p>870000000 </p>
-                    <img src="" alt="">
-                    <p>200.00 MT</p>
-                    <p>200.00 MT</p>
+                <div class="box-last">
+                    <table class="table-sales-container">
+                        <thead>
+                            <tr class="table-sales-title">
+                                <th>Nome do produto:</th>
+                                <th>ID do Produto:</th>
+                                <th>Montante:</th>
+                                <th>M. de Pagamento:</th>
+                                <th>Nº do Pagamento:</th>
+                                <th>Email:</th>
+                                <th>Nome:</th>
+                                <th>WhatsApp: </th>
+                                <th>Data:</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-sales">
+                            
+
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -66,13 +84,14 @@
                     <i class="bi bi-coin"></i>
                 </div>
                 <div>
-                    <p class="balance_label">Vendas realizadas hoje  </p>
+                    <p class="balance_label">Vendas realizadas hoje </p>
                     <p id="sales-today" class="balance">0.03 MZN </p>
                 </div>
             </div>
         </div>
-        <p>&copy;DROP PAYMENTS TEAM 2.0</p>
+       
     </div>
+    <p>&copy;DROP PAYMENTS TEAM 2.0</p>
     <canvas id="salesChart"></canvas>
 
 </div>

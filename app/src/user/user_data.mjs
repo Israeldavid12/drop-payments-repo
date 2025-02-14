@@ -1,8 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-import { formatBalance } from "../pages/finances-hub.js";
 import { setAnOutPut } from "../animations/index.js";
+import { formatBalance } from "../animations/index.js";
+
+
+
+
 
 // Configuração do Firebase
 const firebaseConfig = {

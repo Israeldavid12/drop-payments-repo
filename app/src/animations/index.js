@@ -5,10 +5,12 @@ export function addLoadAnim(id, text, flag) {
         if (flag === true) {
             btn.innerHTML = ` <i class="fas fa-circle-notch fa-spin spinner" ></i> ${text}`;
             btn.style.opacity = '65%';
+            btn.disabled = true;
 
         } else if (flag === false) {
             btn.innerHTML = `${text}`;
             btn.style.opacity = '100%';
+            btn.disabled = false;
         }
     } else {
         return console.error('O botao nao existe');
@@ -111,3 +113,12 @@ export function showAnPopup(template1, flag) {
 }
 
 
+export const formatBalance = (balance, currency) => {
+    const formatter = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: currency,
+    });
+    const f_balance = formatter.format(balance || 0);
+    
+    return f_balance;
+}

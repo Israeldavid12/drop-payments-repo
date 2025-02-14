@@ -1,0 +1,37 @@
+.config-checkout-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 80px;
+    gap: 10px;
+    background-color: rgb(255, 255, 255);
+    margin: 8px;
+    width: 100%;
+}
+
+.save-config-checkout {
+    max-width: 300px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 20px;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+
+
+.config-checkout-payments-options {
+    display: grid;
+    gap: 20px;
+
+}
+
+.config-checkout-payments-container {
+    display: grid;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .config-checkout-container {
+        display: grid;
+    }
+}

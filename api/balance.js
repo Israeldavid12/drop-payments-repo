@@ -52,16 +52,93 @@ function urlToRelativePath(url) {
   return decodeURIComponent(relativePath); // Decodifica espaços e outros caracteres especiais
 }
 
+
+const convertCurrency = async (price_geted, type) => {
+  if (type === "MZN-BRL") {
+    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/BRL`;
+    const brl_currency = await axios.get(apiUrl)
+    console.log(brl_currency.data.conversion_rates.MZN)
+    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
+    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
+    console.log(result)
+    return {
+      result: result,
+      c_rate: brl_exhanged
+    } 
+  } else if (type === "MZN-USD") {
+    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/USD`;
+    const brl_currency = await axios.get(apiUrl)
+    console.log(brl_currency.data.conversion_rates.MZN)
+    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
+    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
+    console.log(result)
+    return {
+      result: result,
+      c_rate: brl_exhanged
+    } 
+  }
+  else if (type === "MZN-ZAR") {
+    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/ZAR`;
+    const brl_currency = await axios.get(apiUrl)
+    console.log(brl_currency.data.conversion_rates.MZN)
+    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
+    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
+    console.log(result)
+    return {
+      result: result,
+      c_rate: brl_exhanged
+    } 
+  }
+
+}
+
 // Rota para calcular e atualizar o saldo
 app.post("/api/balance", async (req, res) => {
   console.log("Dados recebidos:", req.body);
 
 
 
-  const { userId, reqType, name, email, p_number, p_name, p_metodo, contacto_1, contacto_2, productId } = req.body;
+  const { userId, reqType, name, email, p_number, p_name, p_metodo, contacto_1, contacto_2, productId, currency, price, exchange_type } = req.body;
 
   if (!reqType) {
     return res.status(400).send({ error: "reqType indefinido." });
+  }
+  let exchange_price = 0
+  if (reqType === "exchange") {
+    try {
+
+      exchange_price = Number(price)
+
+      if (exchange_type) {
+
+        switch (exchange_type) {
+          case "MZN-BRL":
+            const brl = await convertCurrency(Number(price), "MZN-BRL")
+            return res.status(200).json({ result: brl.result , cot: brl.c_rate })
+            break;
+          case "MZN-USD":
+            const usd = await convertCurrency(Number(price), "MZN-USD")
+            return res.status(200).json({ result: usd.result, cot: usd.c_rate  })
+            break;
+          case "MZN-ZAR":
+            const zar = await convertCurrency(Number(price), "MZN-ZAR")
+            return res.status(200).json({ result: zar.result, cot: zar.c_rate })
+            break;
+          default:
+            break;
+        }
+
+      } else {
+        return res.status(500).json({ mesage: "Tipo de conersao indefinido" })
+      }
+
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ mesage: "Erro interno do servidor." })
+
+    }
+
   }
 
   if (reqType === "user_sales") {
@@ -78,17 +155,17 @@ app.post("/api/balance", async (req, res) => {
         let sales_array = [];
         sales_array = sales;
         sales_array = Object.entries(sales_array).map(([id, objeto]) => ({ id, ...objeto }));
-        return res.status(200).json({ sales: sales_array }) 
+        return res.status(200).json({ sales: sales_array })
       } else {
         console.log("Nenhum produto encotrado.")
-        return res.status(200).json({mesage : "Nenhum produto encotrado."})
+        return res.status(200).json({ mesage: "Nenhum produto encotrado." })
       }
 
 
     } catch (error) {
       console.log(error)
-      return res.status(500).json({mesage : "Erro interno do servidor."})
- 
+      return res.status(500).json({ mesage: "Erro interno do servidor." })
+
     }
 
   }
@@ -436,6 +513,20 @@ app.post("/api/balance", async (req, res) => {
       snapshot.forEach((childSnapshot) => {
         const payment = childSnapshot.val();
         const paymentKey = childSnapshot.key;
+        
+        // let array_payments = [];
+        // array_payments = payment;
+        // array_payments  = Object.entries(array_payments).map(([id, objeto]) => ({ id, ...objeto }));
+        // console.log(array_payments)
+
+        // let total = array_payments.reduce( async (acumulador, item) => {
+        //   let originalAmount = parseFloat(item.originalAmount) || 0; // Converte para número e evita NaN
+        //   return acumulador + originalAmount;
+        // }, 0);
+
+        // console.log( await total())
+
+
 
         // Verifique o estado da transação para saldo geral
         if (payment.estado !== "computado" &&

@@ -2,11 +2,19 @@ import { pageLoader } from "../../../app/src/animations/index.js";
 import { productNotFoundAlert } from "../alerts/product-not-found.js";
 pageLoader(true)
 
+export function productId() {
+
+    const urlParams = new URLSearchParams(document.location.search)
+    const productId = urlParams.get('id')
+    return productId
+}
+
+
 export async function displayProductData() {
 
     const urlParams = new URLSearchParams(document.location.search)
     const productId = urlParams.get('id')
-    console.log(productId)
+
 
     try {
         const productData = await axios.post('https://www.dropaymentsmz.online/api/balance', {
@@ -18,21 +26,24 @@ export async function displayProductData() {
             console.log('Produto nao encontrado');
             pageLoader(false);
             productNotFoundAlert();
-           
+
             return
 
         } else {
             const product = productData.data.product;
             const price = Number(product.price).toFixed(2);
+            const return_price = Number(product.price);
             const uid = product.userId;
             document.getElementById('productName').textContent = product.name;
             document.getElementById('productPrice').textContent = price + ' MT';
             document.getElementById('image-url').src = product.imageUrl;
-           
+
 
             return {
                 uid: uid,
-                bannerUrl: product.bannerUrl
+                bannerUrl: product.bannerUrl,
+                price: return_price,
+                productId: productId
             };
         }
 
@@ -43,6 +54,13 @@ export async function displayProductData() {
         return
     }
 
+}
+
+export async function getProductId() {
+    const urlParams = new URLSearchParams(document.location.search)
+    const productId = urlParams.get('id')
+    console.log(productId)
+    return productId
 }
 
 
@@ -66,31 +84,36 @@ async function userCheckoutConfig(data) {
             document.querySelector('.banner').remove();
         }
 
-        if ( manualPrice === true) {
-            
-        } else {
-            document.querySelector(".box-manual-payment").remove()
+        if (typeof manualPrice !== 'undefined') {
+            if (manualPrice === true) {
+
+            } else {
+                document.querySelector(".box-manual-payment").remove()
+            }
         }
 
-        
+
         if (nameBuyer === true) {
-            
+
         } else {
             document.querySelectorAll(".input-billing-adress")[0].style.display = "none";
+            document.querySelectorAll(".billing-fields")[0].style.display = "none";;
         }
 
-        
+
         if (emailBuyer === true) {
-            
+
         } else {
             document.querySelectorAll(".input-billing-adress")[1].style.display = "none";
+            document.querySelectorAll(".billing-fields")[1].style.display = "none";;
         }
 
 
         if (whatsappBuyer === true) {
-            
+
         } else {
             document.querySelectorAll(".input-billing-adress")[2].style.display = "none";
+            document.querySelectorAll(".billing-fields")[2].style.display = "none";;
         }
 
         pageLoader(false)

@@ -1,15 +1,7 @@
 import { getUserId } from "../user/user_data.mjs";
+import { formatBalance } from "../animations/index.js";
 
 
-export const formatBalance = (balance) => {
-    const formatter = new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "MZN",
-    });
-    const f_balance = formatter.format(balance || 0);
-    
-    return f_balance;
-}
 
 async function userData() {
     try {
@@ -49,10 +41,10 @@ export async function financeHub() {
         const container = document.createElement('div');
         // const userdata = await userData();
         // console.log(userdata.name);
-        const balance = formatBalance(data.balance);
-        const paypalBalance = formatBalance(data.paypalBalance);
+        const balance = formatBalance(data.balance, "MZN");
+        const paypalBalance = formatBalance(data.paypalBalance, "MZN");
         const username = 'Olá, ' + data.user_name;
-        const vendasHoje = formatBalance(data.vendasHoje);
+        const vendasHoje = formatBalance(data.vendasHoje, "MZN");
 
         const page_data = await axios.get('/app/src/static-pages/finance-hub.html');
         const dataPage = page_data.data;

@@ -168,6 +168,10 @@ select {
     justify-self: start;
     align-self: self-start;
 }
+.box-2 {
+    justify-self: start;
+    align-self: self-start;
+}
 .box-checkout.box-1 {
     padding: 15px 80px 80px 80px;
 }

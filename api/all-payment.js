@@ -1,70 +1,56 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const paypal = require('paypal-rest-sdk');
-const admin = require('firebase-admin'); 
+const admin = require('firebase-admin');
 require('dotenv').config();
-const { 
-  ApiError, 
-  CheckoutPaymentIntent, 
-  Client, 
-  Environment, 
-  LogLevel, 
-  OrdersController, 
-  PaymentsController 
-} = require("@paypal/paypal-server-sdk");
-
-
-
-
-
-
 const {
-  PAYPAL_CLIENT_ID,
-  PAYPAL_CLIENT_SECRET,
-} = process.env;
+  ApiError,
+  CheckoutPaymentIntent,
+  Client,
+  Environment,
+  LogLevel,
+  OrdersController,
+  PaymentsController
+} = require("@paypal/paypal-server-sdk");
+const { default: axios } = require('axios');
 
-const client = new Client({ 
+
+
+
+
+
+const client_id = process.env.PAYPAL_CLIENT_ID_2;
+const client_secret = process.env.PAYPAL_CLIENT_SECRET_2;
+
+
+const client = new Client({
   clientCredentialsAuthCredentials: {
-      oAuthClientId: PAYPAL_CLIENT_ID,
-      oAuthClientSecret: PAYPAL_CLIENT_SECRET,
+    oAuthClientId: client_id,
+    oAuthClientSecret: client_secret,
   },
   timeout: 0,
   environment: Environment.Sandbox,
-  logging: { 
-      logLevel: LogLevel.Info,
-      logRequest: { logBody: true },
-      logResponse: { logHeaders: true },
+  logging: {
+    logLevel: LogLevel.Info,
+    logRequest: { logBody: true },
+    logResponse: { logHeaders: true },
   },
-}); 
+});
 const ordersController = new OrdersController(client);
 const paymentsController = new PaymentsController(client);
 
 
 // Função para inicializar o Firebase
-async function initializeFirebase() {
-  try {
-    const serviceAccount = require('../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json');
+const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); // Substitua pelo seu arquivo de credenciais
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      databaseURL: 'https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app',
-    });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app", // Substitua pela URL do seu banco de dados
+});
 
-    console.log('Firebase inicializado com sucesso.');
-  } catch (err) {
-    console.error('Erro ao inicializar Firebase:', err);
-    process.exit(1); // Encerra o processo em caso de erro
-  }
-}
+const db = admin.database();
 
-initializeFirebase();
 
-// // Configuração do PayPal
-// paypal.configure({
-//   mode: 'live', // Use 'sandbox' para testes, 'live' para produção
-//   client_id: process.env.PAYPAL_CLIENT_ID,
-//   client_secret: process.env.PAYPAL_CLIENT_SECRET,
-// });
 
 // Criar servidor Express
 const app = express();
@@ -84,40 +70,40 @@ app.use((req, res, next) => {
 
 //CRIAR PEDIDO
 
-const createOrder = async (cart) => {
+const createOrder = async (price) => {
   const collect = {
-      body: {
-          intent: "CAPTURE",
-          purchaseUnits: [
-              {
-                  amount: {
-                      currencyCode: "USD",
-                      value: "100",
-                  },
-              },
-          ],
-      },
-      prefer: "return=minimal",
-  }; 
+    body: {
+      intent: "CAPTURE",
+      purchaseUnits: [
+        {
+          amount: {
+            currencyCode: "USD",
+            value: price,
+          },
+        },
+      ],
+    },
+    prefer: "return=minimal",
+  };
 
   try {
-      const { body, ...httpResponse } = await ordersController.ordersCreate(
-          collect
-      );
-      // Get more response info...
-      const { statusCode, headers } = httpResponse;
-      return {
-          jsonResponse: JSON.parse(body),
-          httpStatusCode: httpResponse.statusCode,
-          statusCode: statusCode,
-          headers: headers
-      };
+    const { body, ...httpResponse } = await ordersController.ordersCreate(
+      collect
+    );
+    // Get more response info...
+    const { statusCode, headers } = httpResponse;
+    return {
+      jsonResponse: JSON.parse(body),
+      httpStatusCode: httpResponse.statusCode,
+      statusCode: statusCode,
+      headers: headers
+    };
   } catch (error) {
-      if (error instanceof ApiError) {
-          const { statusCode, headers } = error;
-          console.log(error)
-          // throw new Error(error.message);
-      }
+    if (error instanceof ApiError) {
+      const { statusCode, headers } = error;
+      console.log(error)
+      // throw new Error(error.message);
+    }
   }
 };
 
@@ -125,59 +111,221 @@ const createOrder = async (cart) => {
 
 // CAPTURAR PEDIDO /**
 const captureOrder = async (orderID) => {
-   const collect = {
-       id: orderID,
-       prefer: "return=minimal",
-   };
+  const collect = {
+    id: orderID,
+    prefer: "return=minimal",
+  };
 
-   try {
-       const { body, ...httpResponse } = await ordersController.ordersCapture(
-           collect
-       );
-       // Get more response info...
-       // const { statusCode, headers } = httpResponse;
-       return {
-           jsonResponse: JSON.parse(body),
-           httpStatusCode: httpResponse.statusCode,
-       };
-   } catch (error) {
-       if (error instanceof ApiError) {
-           // const { statusCode, headers } = error;
-           throw new Error(error.message);
-       }
-   }
+  try {
+    const { body, ...httpResponse } = await ordersController.ordersCapture(
+      collect
+    );
+    // Get more response info...
+    // const { statusCode, headers } = httpResponse;
+    return {
+      jsonResponse: JSON.parse(body),
+      httpStatusCode: httpResponse.statusCode,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) {
+      // const { statusCode, headers } = error;
+      throw new Error(error.message);
+    }
+  }
 };
+
+async function exchangePrice(cart) {
+
+  
+  if (cart.currencyCode === "MZ") {
+    let bidUSD = '';
+    try {
+      const data = await axios.get("https://economia.awesomeapi.com.br/json/last/USD-MZN")
+      const bid = data.USDMZN.bid;  // Obtém a cotação 'bid'
+      bidUSD = bid;
+
+    } catch (error) {
+      bidUSD = '63.20';
+
+    }
+    console.log(bidUSD)
+    const exchanged_price = parseFloat((cart.price / bidUSD).toFixed(2))
+    console.log(exchanged_price)
+    return exchanged_price
+
+  }
+
+
+  if (cart.currencyCode === "BR") {
+
+    let price_in_brl = 0
+    bidBRL = ""
+
+    try {
+      const exchange = await axios.post("http://127.0.0.1:3013/api/balance", {
+        reqType: "exchange",
+        exchange_type: "MZN-BRL",
+        price: 2
+      })
+      bidBRL = exchange.data.cot;
+      console.log("CAMBIO : ", bidBRL)
+
+
+    } catch (error) {
+      console.log(error)
+      bidBRL = '11.08';
+
+    }
+
+    price_in_brl = parseFloat((cart.price / bidBRL))
+    console.log("price in brl : ", price_in_brl)
+    let bidUSD_BRL = 0
+
+    try {
+
+      const usd = await axios.get("https://economia.awesomeapi.com.br/json/last/USD-BRL")
+      console.log(usd.data)
+      const bid = usd.data.USDBRL.bid;  // Obtém a cotação 'bid'
+      bidUSD_BRL = bid
+
+
+    } catch (error) {
+      console.log(error)
+      bidUSD_BRL = 6
+
+    }
+
+
+
+    console.log(bidUSD)
+    const exchanged_price = parseFloat((price_in_brl / bidUSD_BRL).toFixed(2))
+    console.log(exchanged_price)
+    return exchanged_price
+
+  }
+
+  
+  if (cart.currencyCode === "USA") {
+    let bid_USD = "";
+    try {
+      const data = await axios.get("https://economia.awesomeapi.com.br/json/last/USD-MZN")
+      const bid = data.USDMZN.bid;  // Obtém a cotação 'bid'
+      bid_USD = bid;
+
+    } catch (error) {
+      bid_USD = '63.20';
+
+    }
+    return parseFloat((cart.price / bid_USD).toFixed(2))
+  }
+
+
+}
+
+let bid_usd = 0
+async function exchangePriceToUsd(amount) {
+  try {
+    const bid_usd = await axios.get("https://economia.awesomeapi.com.br/json/last/USD-MZN")
+    const bid = data.USDMZN.bid;  // Obtém a cotação 'bid'
+    bid_usd = bid;
+  } catch (error) {
+    bid_usd = 63.20;
+  }
+  console.log(bid_usd)
+  const exchanged_price = parseFloat((amount * bid_usd).toFixed(2))
+  console.log(exchanged_price)
+  return Number(exchanged_price)
+
+}
 
 
 app.post("/api/all-payment", async (req, res) => {
-  const { reqType, cart, orderId } = req.body;
-  console.log(req.body)
+  const { reqType, cart, orderId, transData, productData, buyerData } = req.body;
+  // console.log(req.body)
+
+
+  if (reqType === "save_payment_card") {
+    console.log("CAMPOTOS COLETADOS : ", buyerData)
+    try {
+      
+      const netAmount = transData?.seller_receivable_breakdown?.net_amount?.value || 0; // Valor líquido
+      console.log(netAmount)
+      const grossAmount = transData?.amount?.value; // Valor total pago
+      const feeAmount = transData?.seller_receivable_breakdown?.paypal_fee?.value || 0; // Taxa do PayPal
+      const paypal_payment_id = transData?.id;
+      console.log(netAmount, grossAmount, feeAmount, paypal_payment_id)
+      const meticalNetAmount = await exchangePriceToUsd(Number(netAmount));
+      const MeticalfeeAmount = await exchangePriceToUsd(Number(feeAmount));
+      const MeticalGrossAmount = await exchangePriceToUsd(Number(grossAmount));
+      const currency = transData?.amount.currency_code;
+      console.log(currency)
+
+      const userId = productData.userId;
+      console.log(userId)
+
+      const paymentIdDB = new Date().getTime().toString();
+
+      const paymentData = {
+        productId: productData.productId,
+
+        orderId: paypal_payment_id  || "N/A",
+        originalAmount: meticalNetAmount,
+        feeAmount: MeticalfeeAmount || "N/A",
+        paidAmount: MeticalGrossAmount || "N/A",
+        paymentName:  buyerData?.Nome || "N/A",
+        paymentEmail: buyerData?.Email || "N/A",
+        paymentMethod: 'PayPal',
+        status: 'approved',
+        description: transData?.description || "N/A",
+        currency: currency || "N/A",
+        nome: productData.name || "N/A",
+        timestamp: new Date().toISOString() || "N/A",
+
+      };
+
+      await db.ref(`users/${userId}/payments/${paymentIdDB}`).set(paymentData)
+      console.log("Pagamaento criado com sucesso!") 
+
+      return res.status(201).json({ estado: "completado", code: "0", payer_email: buyerData.Email })
+
+
+    } catch (error) { 
+      console.log(error)
+      console.log("Ocorreu um erro ao salvar o pagamento!") 
+    }
+   
+  }
 
 
   if (reqType === '/api/orders') {
     try {
       // use the cart information passed from the front-end to calculate the order amount detals
       const { cart } = req.body;
-      const { jsonResponse, httpStatusCode } = await createOrder(cart);
+      const price = await exchangePrice(cart);
+      const { jsonResponse, httpStatusCode } = await createOrder(String(price));
+      console.log("PEDIDO CRIADO COM SUCESSO")
       res.status(httpStatusCode).json(jsonResponse);
-  } catch (error) {
+    } catch (error) {
       console.error("Failed to create order:", error);
       res.status(500).json({ error: "Failed to create order.", error_datails: error });
-  }
+    }
   }
 
 
   if (reqType === "/api/orders/:orderID/capture") {
     try {
-      const { orderID } = req.params;
+      const { orderID, data } = req.body;
+      console.log(orderID)
+      console.log(data)
       const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+      console.log('PEDIDO CAPTURADO COM SUCESSO')
       res.status(httpStatusCode).json(jsonResponse);
-  } catch (error) {
+    } catch (error) {
       console.error("Failed to create order:", error);
       res.status(500).json({ error: "Failed to capture order." });
+    }
   }
-  }
-  
+
 
 
 });

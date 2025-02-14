@@ -17,27 +17,28 @@
     <link rel="stylesheet" href="../styles/checkout/timer.css">
     <link rel="stylesheet" href="../styles/modals/loading-icon.css">
     <link rel="stylesheet" href="../styles/modals/produc-not-found.css">
+    <link rel="stylesheet" href="../styles/animations/checkout/index.css">
     <script type="module" src="../scripts/payments/process.js"></script>
     <script type="module" src="../scripts/product-data/get-product-data.js"></script>
-   
+
 </head>
 
 <body>
-    <div class="timer-container" >
-        <p  class="text-[20px]" id="timer" >00 : 00 : 00</p>
+    <div class="timer-container">
+        <p class="text-[20px]" id="timer">00 : 00 : 00</p>
         <i class="bi bi-clock-history"></i>
         <p>Preencha os seus dados antes <br> que o cronômetro termine</p>
     </div>
     <div class="main-container-checkout">
         <div class="box-checkout box-1">
-          
+
             <img class="banner" src="../assets/deafult-banner.png" alt="">
             <div>
-                <select name="cars" id="cars">
-                    <option value="volvo">MZ</option>
-                    <option value="saab">BR</option>
-                    <option value="mercedes">USA</option>
-                    <option value="audi">RSA</option>
+                <select name="cars" id="currency">
+                    <option value="MZ">MZ</option>
+                    <option value="BR">BR</option>
+                    <option value="USA">USA</option>
+                    <option value="RSA">RSA</option>
                 </select>
             </div>
             <div class="product-info-checkout ">
@@ -55,28 +56,30 @@
             </div>
         </div>
         <div class="box-checkout box-2">
-            
+
             <div class="box-2-logo"><img src="../assets/dp-logo.png" alt=""></div>
             <hr>
-            <p>Endereço de Cobrança</p>
+            <div class="output"></div>
+            <p class="font-semibold">Endereço de Envio</p>
             <div class="input-billing-adress">
                 <i class="bi bi-person-circle"></i>
-                <input type="text" placeholder="Nome">
+                <input class="billing-fields" id="buyer-name" type="text" placeholder="Nome">
             </div>
+
             <div class="input-billing-adress">
                 <i class="bi bi-envelope"></i>
-                <input type="text" placeholder="E-mail">
+                <input class="billing-fields" id="buyer-email" type="text" placeholder="Email">
             </div>
             <div class="input-billing-adress">
                 <i class="bi bi-telephone"></i>
-                <input type="text" placeholder="Telefone">
+                <input class="billing-fields" id="buyer-contact" type="text" placeholder="Telefone">
             </div>
             <hr>
 
 
             <div class="box-manual-payment">
                 <p>Insira om montante a pagar</p>
-                <div class=" input-billing-adress">
+                <div class="input-billing-adress">
                     <i class="bi bi-tag"></i>
                     <input type="text" placeholder="0.00">
                 </div>
@@ -90,6 +93,8 @@
                     <a href="#/m-pesa"><img class="method" src="../assets/mpesa.png" onclick="handlePayment(this)"
                             alt=""></a>
                     <a href="#/paypal"><img class="method" src="../assets/paypal.png" onclick="handlePayment(this)"
+                            alt=""></a>
+                    <a href="#/pix"><img class="method" src="../assets/pix.png" onclick="handlePayment(this)"
                             alt=""></a>
                 </div>
 
@@ -107,6 +112,7 @@
 <script type="module" src="../scripts/product-data/index.js"></script>
 <script type="module" src="../scripts/product-data/get-product-data.js"></script>
 <script src="../scripts/timer/index.js"></script>
+<script type="module" src="../scripts/currency/index.js"></script>
 <script>
     function handlePayment(element) {
         const elemnts = document.querySelectorAll(".method")
@@ -116,8 +122,8 @@
         }
         element.classList.add("payment-selected")
     }
-    
-   
+
+
 </script>
 
 

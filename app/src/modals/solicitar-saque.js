@@ -67,7 +67,7 @@ document.body.addEventListener('click', function (event) {
 document.body.addEventListener('submit', async function (event) {
     if (event.target && event.target.matches('.confirm-w')) {
         event.preventDefault();
-        addLoadAnim('b-confirm', 'Solicitar', 5000);
+        addLoadAnim('b-confirm', 'Solicitar', true);
 
         const balance_type = document.getElementById('balance-type').value;
         const amount_to_withdraw = document.getElementById('amount').value;
@@ -76,6 +76,7 @@ document.body.addEventListener('submit', async function (event) {
 
         if (!checkbox.checked) {
             setAnOutPut('Por favor, confirme a solicitação!', 'E-M');
+            addLoadAnim('b-confirm', 'Solicitar', true);
         } else {
             let balance_type_change = '';
         
@@ -85,6 +86,7 @@ document.body.addEventListener('submit', async function (event) {
                 balance_type_change = 'paypal';
             } else {
                 setAnOutPut('Tipo de saldo inválido!', 'E-M');
+                addLoadAnim('b-confirm', 'Solicitar', true);
                 return; // Sai da função para evitar requisição errada
             }
         
@@ -100,9 +102,11 @@ document.body.addEventListener('submit', async function (event) {
                 if (response.status === 200) {
                     setAnOutPut(response.data.message, 'S-M'); // Sucesso
                     showAnPopup('', false)
+                    addLoadAnim('b-confirm', 'Solicitar', true);
                 } else {
                     setAnOutPut(response.data.message, 'E-M'); // Erro genérico
                     showAnPopup('', false)
+                    addLoadAnim('b-confirm', 'Solicitar', true);
                 }
             } catch (error) {
                 console.error('Erro na requisição:', error);
@@ -111,9 +115,11 @@ document.body.addEventListener('submit', async function (event) {
                 if (error.response) {
                     setAnOutPut(error.response.data.message || 'Erro desconhecido.', 'E-M');
                     showAnPopup('', false)
+                    addLoadAnim('b-confirm', 'Solicitar', true);
                 } else {
                     setAnOutPut('Erro ao conectar ao servidor.', 'E-M');
                     showAnPopup('', false)
+                    addLoadAnim('b-confirm', 'Solicitar', true);
                 }
             }
         }

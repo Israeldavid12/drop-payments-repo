@@ -115,7 +115,7 @@ export const displayProducts = async () => {
                   <p>Link de divulgação</p>
                   <div class="modal-content" >
                       <p>Página de pagamento</p>
-                       <input class="product-link-page" type="text" value="https://www.dropaymentsmz.online/v2/checkout/typed?id=${product_id}" >
+                       <input class="product-link-page" type="text" value="https://www.dropaymentsmz.online/v2/checkout/?id=${product_id}" >
                        <p class="info-link" >Página que seus compradores preenchem informações, métodos de pagamento e realizam a compra</p>
                        <div class="modal-button" >
                          <i class="bi bi-copy"></i> <i class="bi bi-box-arrow-up-right"></i>

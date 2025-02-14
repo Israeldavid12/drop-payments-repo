@@ -1,6 +1,6 @@
 import {userData} from "../user/user_data.mjs";
 import { withdrawHistory } from "../user/user_data.mjs";
-import { formatBalance } from "./finances-hub.js";
+import { formatBalance } from "../animations/index.js";
 import { setMaxEntries } from "../scripts/app.js";
 
 export const displayBalnace = async () => {
@@ -11,7 +11,7 @@ export const displayBalnace = async () => {
 
   const w_balance = document.getElementById('w-balance');
   if (w_balance) {
-    w_balance.innerText = formatBalance(user.balance); // Formatando o saldo
+    w_balance.innerText = formatBalance(user.balance, "MZN"); // Formatando o saldo
   } else {
     console.error('Elemento com id "w-balance" não encontrado');
   }
@@ -60,8 +60,8 @@ export const renderWithdrawHistory = async(entries) => {
     const tr_container = document.createElement('tr');
 
     const th_rows = `<td data-th="Solicitado a" >${withdraws.timestamp}</td>
-    <td data-th="Valor solicitado"  >${formatBalance(withdraws.valueAmount)}</td>
-    <td data-th="Valor a receber" >${formatBalance(withdraws.amountPaid)}</td>
+    <td data-th="Valor solicitado"  >${formatBalance(withdraws.valueAmount, "MZN")}</td>
+    <td data-th="Valor a receber" >${formatBalance(withdraws.amountPaid, "MZN")}</td>
     <td data-th="Fee" >MZN 10,00 </td>
     <td data-th="Conta" ><img style="width: 25px; height: 25px; border-radius: 50%;" src="${metodo_image}"></td>
     <td data-th="Estado" >${withdraws.status}</td>

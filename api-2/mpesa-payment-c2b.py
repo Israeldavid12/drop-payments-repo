@@ -15,7 +15,10 @@ logging.basicConfig(level=logging.ERROR)
 @app.route('/ap1/mpesa-payment-c2b', methods=['POST'])
 
 
-
+def generate_third_party_reference(third_party_reference):
+    random_number = str(random.randint(1000, 10000)).strip() 
+    third_party_reference_formated = str(third_party_reference + random_number).strip()
+    return third_party_reference_formated
 
 
 def mpesa_payment_c2b():
@@ -37,8 +40,7 @@ def mpesa_payment_c2b():
 
 
         # Gera um número aleatório entre 1000 e 10000
-        random_number = str(random.randint(1000, 10000)).strip() 
-        third_party_reference_formated = str(third_party_reference + random_number).strip() 
+        third_party_reference_formated = generate_third_party_reference(third_party_reference)
         print(third_party_reference_formated)
   
 

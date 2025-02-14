@@ -161,9 +161,7 @@ const init = () => {
             case '#/vendas':
                 loadRender(true);
                 setTimeout(async () => {
-                    changeTitle("Vendas")
-                    content.innerHTML = '';
-                    content.appendChild(await salesPage())
+                    location.reload()
                 }, 2000);
                 break;
             default:
@@ -233,10 +231,12 @@ window.addEventListener('load', async () => {
             break;
         case '#/vendas':
             loadRender(true);
+            
             setTimeout(async () => {
                 changeTitle("Vendas")
                 content.innerHTML = '';
                 content.appendChild(await salesPage())
+                
             }, 2000);
             break;
         default:

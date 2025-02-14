@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUCESS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./sucess/styles/indeex.css">
+</head>
+
+<body>
+    <div class="sucess-main-container">
+        <img src="../assets/sucess-2.png" alt="sucess">
+        
+        <p class="title">Pagamento realizado com sucesso</p>
+
+        <p>O seu pagamento foi completado e enviado para o endereco de e-mail: <strong class="payer-email" ></strong></p>
+
+        <a href="mailto:droppaymentsinc@gmail.com" class="button" >Finalizar</a>
+
+        <div class="footer-container">
+            <p> <i class="bi bi-lock-fill"></i> Pagamento 100% seguro </p>
+            <p> Powered by <span>DROP PAY E.I</span> </p>
+        </div>
+    </div>
+    <script>
+        const url_parms = new URLSearchParams(window.location.search)
+        const email = url_parms.get("payer_email")
+        document.querySelector(".payer-email").textContent = email
+        console.log(email)
+    </script>
+</body>
+
+</html>

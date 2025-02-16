@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+  
 }
 
 body {
@@ -52,7 +53,7 @@ select {
 
 .product-info-checkout .product-image {
     width: 125px;
-
+    user-select: none;
     border-radius: 8px;
 }
 

@@ -21,7 +21,6 @@ function checkFields() {
 
 
 
-
 function buyerData() {
 
 
@@ -107,6 +106,7 @@ function displayPaymentMethod(name) {
         container.appendChild(div)
     }
     if (name === "paypal") {
+       
         setTimeout(() => {
             window.paypal
                 .Buttons({
@@ -134,7 +134,7 @@ function displayPaymentMethod(name) {
                                 headers: {
                                     "Content-Type": "application/json",
                                 },
-                                // use the "body" param to optionally pass additional order information
+                               
                                 // like product ids and quantities
                                 body: JSON.stringify({
                                     reqType: "/api/orders",
@@ -172,15 +172,10 @@ function displayPaymentMethod(name) {
                                     body: JSON.stringify({
                                         reqType: "/api/orders/:orderID/capture",
                                         orderID: data.orderID,
-                                        data: data,
-                                        cart: [
-                                            {
-                                                id: "1",
-                                                quantity: "1",
-                                                price: "500"
+                                        productData: await getUserIdByProductID(),
+                                        buyerData: buyerData(),
+                                       
 
-                                            },
-                                        ],
                                     }),
                                 }
                             );
@@ -208,27 +203,11 @@ function displayPaymentMethod(name) {
                             } else {
                                 // (3) Successful transaction -> Show confirmation or thank you message
                                 // Or go to another URL:  actions.redirect('thank_you.html');
-                                const transaction =
-                                    orderData?.purchase_units?.[0]?.payments
-                                        ?.captures?.[0] ||
-                                    orderData?.purchase_units?.[0]?.payments
-                                        ?.authorizations?.[0];
+                                
 
+                                const email = document.getElementById("buyer-email").value;
+                                window.location.href = `http://127.0.0.1:5501/v2/sucess/index.html?payer_email=${email}`
 
-                                const save_payment = await axios.post("http://127.0.0.1:3010/api/all-payment", {
-                                    reqType: "save_payment_card",
-                                    productData: await getUserIdByProductID(),
-                                    transData: transaction,
-                                    buyerData: buyerData()
-
-                                })
-                                console.log(buyerData())
-                                console.log(save_payment)
-                                if (save_payment.data.payer_email) {
-                                    const email = save_payment.data.payer_email;
-                                    console.log("saved")
-                                    window.location.href = `http://127.0.0.1:5501/v2/sucess/index.html?payer_email=${email}`
-                                }
 
                                 console.log(
                                     `Transaction ${transaction.status}: ${transaction.id}<br>

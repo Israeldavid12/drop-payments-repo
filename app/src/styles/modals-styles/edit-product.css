@@ -28,7 +28,7 @@
 
 .pop-edit-product input:hover, .modal-link input:hover  {
     border: 1px solid #062859;
-    box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+    box-shadow: rgba(0, 119, 255, 0.3) 0px 0px 0px 3px;
 }
 .pop-edit-product .save-edit {
     border-radius: 20px;

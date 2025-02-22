@@ -1,10 +1,15 @@
 const express = require("express");
 const admin = require("firebase-admin");
+const axios = require("axios")
 const bodyParser = require("body-parser");
-const { v4: uuidv4 } = require('uuid');
-const axios = require('axios');
+const { urlToRelativePath, convertCurrency, generatePresignedUrl } = require("./functions/index.js")
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); //
 require("dotenv").config();
+
+
+
+
 
 
 const s3 = new S3Client({
@@ -15,10 +20,6 @@ const s3 = new S3Client({
     secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
   },
 });
-
-
-// Inicialize o Firebase Admin SDK
-const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); // Substitua pelo seu arquivo de credenciais
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -42,68 +43,242 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-function urlToRelativePath(url) {
-  // Regex para remover parâmetros de consulta
-  const path = url.split('?')[0]; // Retira a parte depois do "?"
+async function verifyOTP(req, res) {
+  try {
+    const { email, otp } = req.body;
 
-  // Extrai o caminho após "o/" e decodifica caracteres especiais
-  const relativePath = path.replace("https://firebasestorage.googleapis.com/v0/b/drop-payments-mz.appspot.com/o/", "");
+    // Buscar OTP no banco de dados
+    const snapshot = await db.ref(`otp_codes/${email.replace('.', '_')}`).get();
+    
+    if (!snapshot.exists()) {
+      return res.status(400).json({ error: "OTP inválido ou expirado!" });
+    }
 
-  return decodeURIComponent(relativePath); // Decodifica espaços e outros caracteres especiais
-}
+    const storedOTP = snapshot.val();
 
+    // Verificar se o OTP expirou
+    if (Date.now() > storedOTP.expiresAt) {
+      await db.ref(`otp_codes/${email.replace('.', '_')}`).remove();
+      return res.status(400).json({ message: "OTP expirado!" });
+    }
 
-const convertCurrency = async (price_geted, type) => {
-  if (type === "MZN-BRL") {
-    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/BRL`;
-    const brl_currency = await axios.get(apiUrl)
-    console.log(brl_currency.data.conversion_rates.MZN)
-    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
-    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
-    console.log(result)
-    return {
-      result: result,
-      c_rate: brl_exhanged
-    } 
-  } else if (type === "MZN-USD") {
-    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/USD`;
-    const brl_currency = await axios.get(apiUrl)
-    console.log(brl_currency.data.conversion_rates.MZN)
-    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
-    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
-    console.log(result)
-    return {
-      result: result,
-      c_rate: brl_exhanged
-    } 
+    // Verificar se o OTP é válido
+    if (otp != storedOTP.otp) {
+      return res.status(400).json({ message: "OTP incorreto!" });
+    }
+
+    // Remover OTP do banco após o uso
+    await db.ref(`otp_codes/${email.replace('.', '_')}`).remove();
+
+    return res.status(200).json({ message: "OTP verificado com sucesso!", code: "0" });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Erro interno do servidor!" });
   }
-  else if (type === "MZN-ZAR") {
-    const apiUrl = `https://v6.exchangerate-api.com/v6/9839a325e7590a117270a4d8/latest/ZAR`;
-    const brl_currency = await axios.get(apiUrl)
-    console.log(brl_currency.data.conversion_rates.MZN)
-    const brl_exhanged = Number(brl_currency.data.conversion_rates.MZN)
-    const result = parseFloat((price_geted / brl_exhanged).toFixed(2))
-    console.log(result)
-    return {
-      result: result,
-      c_rate: brl_exhanged
-    } 
-  }
-
 }
 
 // Rota para calcular e atualizar o saldo
-app.post("/api/balance", async (req, res) => {
+app.post("/api/server", async (req, res) => {
   console.log("Dados recebidos:", req.body);
-
-
-
   const { userId, reqType, name, email, p_number, p_name, p_metodo, contacto_1, contacto_2, productId, currency, price, exchange_type } = req.body;
+
+
 
   if (!reqType) {
     return res.status(400).send({ error: "reqType indefinido." });
   }
-  let exchange_price = 0
+
+  if (reqType === "verifyOtp") {
+     verifyOTP(req, res)
+  }
+
+  if (reqType === "otp/code") {
+    const { email } = req.body;
+    console.log(req.body)
+    try {
+
+      // Gerar um número de 6 dígitos aleatórios
+      const randomSixDigitNumber = () => {
+        return Math.floor(100000 + Math.random() * 900000);
+      };
+
+      const otp = randomSixDigitNumber();
+      console.log("OTP gerado:", otp);
+
+      const expiresAt = Date.now() + 5 * 60 * 1000;
+
+      // Salvar no Firebase Realtime Database
+      await db.ref(`otp_codes/${email.replace('.', '_')}`).set({
+        otp,
+        expiresAt
+      });
+
+      const otpEmailPayload = {
+        otp_code: otp,
+        emailSeller: email,
+        templateType: '7-OTP-CODE'
+      }
+
+      await axios.post('https://www.dropaymentsmz.online/api/send-email', otpEmailPayload);
+
+      return res.status(200).json({ message: 'OTP enviado!', code: '0' });
+
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Error interno do servidor!' });
+    }
+  }
+
+  if (reqType === "create") {
+
+    try {
+
+      // Verifica a quantidade de produtos no Firebase
+      const quantityRef = db.ref(`users/${userId}/quantity`);
+      const q_snapshot = await quantityRef.once("value");
+      const quantity = Number(q_snapshot.val());
+
+      if (quantity >= 15) {
+        return res.status(400).json({ message: "Você atingiu o número máximo de produtos!" });
+      }
+
+
+
+      const productId = Date.now().toString(); // ID do produto
+
+      const docRef = fb_firestore.doc(`products/${productId}`);
+      let newDocUrl = '';
+
+      if (docUrl === 'PAYMENT-ONLY') {
+        newDocUrl = 'PAYMENT-ONLY';
+      } else {
+        newDocUrl = docUrl;
+      }
+
+      const productData = {
+        productId: productId,
+        userId: userId,
+        name: product_name,
+        price: product_price,
+        description: product_description,
+        imageUrl: image_url,
+        bannerUrl: banner_url,
+        docUrl: newDocUrl,
+        createdAt: new Date().toISOString()
+
+      }
+      console.log(productData)
+
+      await docRef.set(productData);
+      console.log(docRef.id)
+
+      // Atualiza a quantidade no Firebase
+      await quantityRef.set(quantity + 1);
+
+      return res.json({ message: "Produto criado com sucesso!", docUrl: newDocUrl });
+
+    } catch (error) {
+      console.error("Erro no upload:", error);
+      return res.status(500).json({ error: "Erro interno do servidor.", details_error: error });
+    }
+
+  }
+
+  if (reqType === 'presigned_url') {
+    const { fileName, contentType } = req.body;
+
+    if (!fileName || !contentType) {
+      return res.status(400).json({ error: "Parâmetros inválidos" });
+    }
+
+    try {
+      const data = await generatePresignedUrl(fileName, contentType, dir_file);
+      console.log(data)
+      const url = data.signedUrl;
+      const filePathUrl = data.filePath;
+      return res.status(200).json({ presignedUrl: url, filePath: filePathUrl });
+    } catch (error) {
+      return res.status(500).json({ error: "Erro ao gerar Presigned URL" });
+    }
+
+  }
+
+  if (reqType === "/api/edit-product") {
+
+    try {
+      const { product_name, product_price, old_image_url, new_image_url, product_id } = req.body;
+
+      console.log(req.body)
+
+      const image = String(old_image_url);
+
+      if (image.includes('firebasestorage')) {
+
+        const relativePath = urlToRelativePath(image);
+
+        await bucket.file(relativePath).delete();
+        console.log(`Arquivo "${relativePath}" excluído com sucesso.`);
+
+        console.log('imagem salva no R2')
+
+
+        const productRef = fb_firestore.doc(`products/${product_id}`);
+
+        await productRef.update({
+          imageUrl: new_image_url || '',
+          name: product_name || '',
+          price: product_price !== undefined ? product_price : 10,
+        });
+        console.log("imageUrl atualizado com sucesso!");
+
+
+
+
+        console.log('contem firebasestorage ')
+        console.log(old_image_url)
+      } else {
+
+        console.log(old_image_url)
+        // Extrai o caminho do arquivo removendo o domínio
+        const fileKey = old_image_url.replace(/^https?:\/\/[^\/]+\//, "");
+
+        // Agora fileKey será "uploads/images/1738658325326-netflix-baner (2).png"
+        console.log(fileKey);
+
+        const command = new DeleteObjectCommand({
+          Bucket: process.env.CLOUDFLARE_R2_BUCKET,
+          Key: fileKey,
+        });
+
+        await s3.send(command);
+        console.log(`Arquivo '${fileKey}' excluído com sucesso.`);
+
+        console.log('imagem salva no R2')
+
+
+        const productRef = fb_firestore.doc(`products/${product_id}`);
+
+        await productRef.update({
+          imageUrl: new_image_url || '',
+          name: product_name || '',
+          price: product_price !== undefined ? product_price : 10,
+        });
+        console.log("imageUrl atualizado com sucesso!");
+
+
+
+        console.log('nao contem firebasestorage ')
+      }
+
+
+      return res.json({ message: "Produto atualizado com sucesso!" });
+    } catch (error) {
+      console.error("Erro no upload:", error);
+      return res.status(500).json({ error: "Erro ao enviar arquivos." });
+    }
+  }
+
   if (reqType === "exchange") {
     try {
 
@@ -114,11 +289,11 @@ app.post("/api/balance", async (req, res) => {
         switch (exchange_type) {
           case "MZN-BRL":
             const brl = await convertCurrency(Number(price), "MZN-BRL")
-            return res.status(200).json({ result: brl.result , cot: brl.c_rate })
+            return res.status(200).json({ result: brl.result, cot: brl.c_rate })
             break;
           case "MZN-USD":
             const usd = await convertCurrency(Number(price), "MZN-USD")
-            return res.status(200).json({ result: usd.result, cot: usd.c_rate  })
+            return res.status(200).json({ result: usd.result, cot: usd.c_rate })
             break;
           case "MZN-ZAR":
             const zar = await convertCurrency(Number(price), "MZN-ZAR")
@@ -295,9 +470,6 @@ app.post("/api/balance", async (req, res) => {
     }
   }
 
-
-
-
   if (reqType === 'user_checkout_config') {
 
     if (!userId) {
@@ -319,8 +491,6 @@ app.post("/api/balance", async (req, res) => {
 
 
   }
-
-
 
   if (reqType === 'product_data') {
     try {
@@ -347,8 +517,6 @@ app.post("/api/balance", async (req, res) => {
     }
 
   }
-
-
 
   if (reqType === 'fech_user_products') {
 
@@ -383,8 +551,6 @@ app.post("/api/balance", async (req, res) => {
 
 
   }
-
-
 
   if (reqType === 'save_user_data') {
 
@@ -451,7 +617,6 @@ app.post("/api/balance", async (req, res) => {
     }
   }
 
-
   if (reqType === 'user_payment_data') {
 
     if (!userId) {
@@ -478,8 +643,6 @@ app.post("/api/balance", async (req, res) => {
     }
 
   }
-
-
 
   if (reqType === 'user_data') {
 
@@ -513,18 +676,7 @@ app.post("/api/balance", async (req, res) => {
       snapshot.forEach((childSnapshot) => {
         const payment = childSnapshot.val();
         const paymentKey = childSnapshot.key;
-        
-        // let array_payments = [];
-        // array_payments = payment;
-        // array_payments  = Object.entries(array_payments).map(([id, objeto]) => ({ id, ...objeto }));
-        // console.log(array_payments)
 
-        // let total = array_payments.reduce( async (acumulador, item) => {
-        //   let originalAmount = parseFloat(item.originalAmount) || 0; // Converte para número e evita NaN
-        //   return acumulador + originalAmount;
-        // }, 0);
-
-        // console.log( await total())
 
 
 
@@ -610,109 +762,6 @@ app.post("/api/balance", async (req, res) => {
 
 
 
-// Endpoint para obter o nome do usuário pelo email
-app.post('/api/get-user-info', async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ error: 'O email é obrigatório.' });
-    }
-
-    // Obter o ID do usuário pelo email
-    const userRecord = await admin.auth().getUserByEmail(email);
-    const userId = userRecord.uid;
-
-    // Acessar o diretório do Realtime Database
-    const db = admin.database();
-    const userRef = db.ref(`users/${userId}/name`);
-    const userNameSnapshot = await userRef.once('value');
-    const userName = userNameSnapshot.val();
-
-    if (!userName) {
-      return res.status(404).json({ error: 'Nome do usuário não encontrado.' });
-    }
-
-    // Retornar o nome e email do usuário
-    res.json({
-      email: email,
-      name: userName,
-      userId: userId,
-      estado: "success"
-    });
-  } catch (error) {
-    console.error('Erro ao obter informações do usuário:', error);
-    res.status(500).json({ error: 'Erro interno do servidor.', details: error.message });
-  }
-});
-
-// Endpoint de pagamento
-app.post('/api/send-amount', async (req, res) => {
-  const { userId, email, sender_id, balance_wallet, wallet_destin, amount, sender_email } = req.body;
-
-  if (!userId || !email || !sender_id || !balance_wallet || !wallet_destin || !amount) {
-    return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
-  }
-
-  try {
-    // Recuperar o saldo atual do remetente
-    const senderBalanceRef = db.ref(`users/${sender_id}/balance`);
-    const senderBalanceSnapshot = await senderBalanceRef.once('value');
-
-    const senderBalance = senderBalanceSnapshot.val();
-    if (senderBalance < amount) {
-      return res.status(400).json({ error: 'Saldo insuficiente.' });
-    }
-
-    // Deduzir o valor do saldo do remetente
-    const newSenderBalance = senderBalance - amount;
-    await senderBalanceRef.set(newSenderBalance);
-
-    // Subtrair a taxa de 8
-    const fee = 8;
-    const amountAfterFee = amount - fee;
-
-    // Gerar ID único para o pagamento
-    const paymentId = uuidv4();
-    const timestamp = Date.now();
-
-    // Salvar a taxa de 8 no diretório especificado
-    await db.ref(`users/iIpkewISsJTlu0Lh7d1YxJ3ZTK12/payments/${paymentId}`).set({
-      originalAmount: fee,
-      paymentMethod: 'dp-wallet',
-      timestamp: timestamp
-    });
-
-    // Salvar o valor restante no diretório do destinatário
-    await db.ref(`users/${userId}/payments/${paymentId}`).set({
-      originalAmount: amount - 8,
-      timestamp: timestamp,
-      paymentMethod: wallet_destin
-    });
-
-    // Enviar a requisição para o endpoint de email
-    const emailPayload = {
-      emailSeller: email,
-      originalAmount: amount,
-      amountPaid: amountAfterFee,
-      fee: fee,
-      paymentId: paymentId,
-      timestamp: new Date().toISOString(),
-      templateType: '8-P-R'
-    };
-
-    await axios.post('http://127.0.0.1:3001/api/send-email', emailPayload);
-
-    // Responder com sucesso
-    res.status(200).json({
-      message: 'sent',
-      paymentId: paymentId
-    });
-  } catch (error) {
-    console.error('Erro ao processar o pagamento:', error);
-    res.status(500).json({ error: 'Erro ao processar o pagamento.' });
-  }
-});
 
 // Iniciar o servidor
 const PORT = 3013;

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drop Payments Moz</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="criar-conta.css">
+   <script type="module" src="scripts/login.js"></script>
+</head>
+<body>
+    <div class="content">
+        <!-- Container da esquerda para texto em desktops -->
+        <div class="left-container">
+            <img style="width: 30px;" src="assests/dp-logo.png" alt="Logo Drop Payments Moz">
+            <h2>Com o que você sabe, é possível criar um negócio online de sucesso. Estamos aqui para ajudar você a começar.</h2>
+            <p>Nós ajudaremos você a dar o próximo passo. Faça login ou crie uma conta.</p>
+        </div>
+
+        <!-- Formulário de login -->
+        <div class="container">
+            <h1>ENTRAR</h1>
+
+            <!-- Botão de login com Google -->
+            <div id="google-login"  class="google-signup-container">
+                <img src="assests/google.png" alt="">
+            </div>
+            <div style="margin: 15px;" class="line-with-text">
+                <span>Ou acesse sua usando um e-mail</span>
+            </div>
+            <form>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="E-mail" required>
+
+                <label for="senha">Senha</label>
+                <input type="password" id="password" placeholder="Senha" required>
+
+                <button id="entrar" type="submit">Entrar</button>
+            </form>
+        
+            <!-- Botão de recuperação de senha -->
+            <button id="reset-password" style="margin-top: 10px; background-color: transparent; color: #007bff; text-decoration: underline;">Esqueceu sua senha?</button>
+
+            
+
+            <!-- Output de erros -->
+            <div id="error-message" style="color: red; margin-top: 10px;"></div>
+
+            <div class="link">
+                Não tem uma conta? <a href="https://www.dropaymentsmz.online/register">Criar conta</a>
+            </div>
+        </div>
+    
+        <button class="help-btn">
+            <span class="icon">?</span> Ajuda
+        </button>
+    </div>
+</body>
+
+</html>

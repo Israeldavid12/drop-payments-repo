@@ -1,0 +1,16 @@
+.display-message-container {
+    display: flex;
+    position: fixed;
+    top: 25%;
+    right: 0;
+    margin-right: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    border-radius: 7px;
+    background-color: #E52020;
+    color: #fff;
+    max-width: 300px;
+    transition: .4s ease-in-out;
+}
+      

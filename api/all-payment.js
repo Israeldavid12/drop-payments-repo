@@ -301,7 +301,7 @@ app.post("/api/all-payment", async (req, res) => {
 
       await db.ref(`users/${userId}/payments/${paymentIdDB}`).set(paymentData)
       console.log("Pagamaento criado com sucesso!")
-
+      const salesUserRef = db.ref(`users/${userId}/payments`);
       try {
         let userEmail = "";
 

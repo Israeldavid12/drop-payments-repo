@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drop Payments Moz</title>
+    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../styles/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script type="module" src="../scripts/recover/recover.js"></script>
+    <link rel="stylesheet" href="../styles/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+    
+
+</head>
+
+<body>
+   
+    <div class="main-container">
+        <div class="plataform-info-container">
+            <div class="grid gap-4">
+                <img class="w-20 rounded-full" src="../../app/src/assets/logo-dp.png" alt="">
+                <p class="text-[22px] font-[800] text-[#ffffff]">Com o que você sabe, é possível criar um negócio online
+                    de sucesso.
+                    <br> Estamos aqui para ajudar você a
+                    começar.
+                </p>
+                <span class="text-[16px] font-[500] text-[#ffffff]">Nós ajudaremos você a dar o próximo passo. Faça
+                    login ou crie uma conta.</span>
+                <img class="login-icon" src="../assets/login.png" alt="">
+            </div>
+        </div>
+
+        <div class="auth-container">
+            <p class="font-[700] text-[20px]">Recuperar minha senha</p>
+            <p>Preencha o campo abaixo com seu endereço de e-mail para <br>receber instruções sobre como criar uma nova senha.</p>
+            <hr>
+            <form class="form grid gap-8" action="">
+            <div>
+                <p>Email</p>
+                <input id="email" placeholder="Inisira o seu email" class="email-input" type="email" maxlength="100" required>
+            </div>
+            <button type="submit" class="authenticator" id="recover-btn">Redefinir minha senha</button>
+        </form>
+            <div>
+                <div class="flex gap-4">
+                    <a class="underline underline-offset-1" href="/auth/login/index.html">Voltar <i class="bi bi-arrow-return-left"></i></a>
+                </div>
+            </div>
+            <div class="help-btn">
+                <i class="bi bi-question-circle"></i>
+                <p>Ajuda</p>
+            </div>
+           
+        </div>
+    </div>
+</body>
+<script src="../scripts/login/functions.js"></script>
+
+</html>

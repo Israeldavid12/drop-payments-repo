@@ -129,7 +129,7 @@ function displayPaymentMethod(name) {
                         }
                         try {
 
-                            const response = await fetch("http://127.0.0.1:3010/api/all-payment", {
+                            const response = await fetch("http://127.0.0.1:3010/api/v2/payment/paypal", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -163,7 +163,7 @@ function displayPaymentMethod(name) {
                         console.log(data.orderID)
                         try {
                             const response = await fetch(
-                                `http://127.0.0.1:3010/api/all-payment`,
+                                `http://127.0.0.1:3010/api/v2/payment/paypal`,
                                 {
                                     method: "POST",
                                     headers: {

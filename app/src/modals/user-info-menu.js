@@ -16,10 +16,12 @@ export const userMenu =  async () => {
             <div class='user_name_h2'>  <h2>${first_letter}</h2></div>
             <p>${name}</p>
             <p>${email}</p>
+            <p class='change-theme' ><i class="bi bi-sun"></i> Modo claro</p>
            <hr>
            <div class="user_menu_items" >
           <a href="#profile/user/data"><i class="bi bi-person-bounding-box"></i> Meus dados</a>
           <a href="#help"><i class="bi bi-question-circle"></i> Auda</a>
+          <a href="#/feedback"><i class="bi bi-send"></i> Dar feedback ou sugestao</a>
           <a href="#logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
            </div>
 

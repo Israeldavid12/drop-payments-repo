@@ -12,10 +12,10 @@ const saque_template = `<form class="confirm-w" > <div class="overlay-content">
              
             <div class="a-money"  >
                 <p>Saldo disponivel (M-pesa/E-mola) <i class="bi bi-credit-card-2-back-fill"></i></p>
-                <p>${balance} MT</p>
+                <p>${parseFloat(balance).toFixed(2)} MT</p>
                  <hr>
                 <p>Saldo disponivel (PayPal) <i class="bi bi-paypal"></i></p>
-                <p>${paypalBalance} MT</p>
+                <p>${parseFloat(paypalBalance).toFixed(2)} MT</p>
             </div>
             <select id="balance-type" name="opcoes" required>
                 <option value="" disabled selected>Selecione uma opção</option>

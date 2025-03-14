@@ -76,11 +76,16 @@ export async function userData() {
 
   try {
     const userId = await getUserId();
-    const fech_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+    const fech_data = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
       userId: userId,
       reqType: 'user_data',
     });
     const data = fech_data.data;
+
+    if (data.nationalId === 'N/A') {
+      document.querySelector('.complete-porfile-info').innerHTML = `<a href="#profile/user/data"><i class="bi bi-person-bounding-box"></i> Complete seu perfil para
+                        começar a vender</a>`;
+    } 
 
     localStorage.setItem('name', data.user_name);
     localStorage.setItem('email', data.user_email);

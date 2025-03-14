@@ -19,28 +19,34 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 function displayMessage(type, message) {
-    const template = ` <div class="display-message-container" >
-     <p>${message}</p>
-    </div>`;
-    const div = document.createElement("div");
-
-    if (type === "err") {
-        const body = document.body;
-        div.innerHTML = template;
-        body.insertBefore(div, body.firstChild);
-        div.style.opacity = '0';
-        div.style.visibility = 'hidden';
-
-        // Usa um pequeno timeout para permitir a transição
-        setTimeout(() => {
-            div.style.opacity = '1';
-            div.style.visibility = 'visible';
-        }, 120);
-        setTimeout(() => {
-            document.querySelector(".display-message-container").remove()
-        }, 4000)
-
+    const container = document.querySelector(".display-message-container");
+    
+    if (!container) {
+        console.error("Elemento .display-message-container não encontrado.");
+        return;
     }
+
+    const div = document.createElement("div");
+    div.classList.add("message", type === "err" ? "error-message" : "success-message");
+
+    div.innerHTML = `<p>${message}</p>`;
+    div.style.opacity = "0";
+    div.style.visibility = "hidden";
+
+    container.appendChild(div);
+
+    // Aplica um pequeno delay para ativar a transição
+    setTimeout(() => {
+        div.style.opacity = "1";
+        div.style.visibility = "visible";
+    }, 100);
+
+    // Remove a mensagem após 4 segundos
+    setTimeout(() => {
+        div.style.opacity = "0";
+        div.style.visibility = "hidden";
+        setTimeout(() => div.remove(), 500); // Remove após a transição
+    }, 4000);
 }
 
 
@@ -51,7 +57,7 @@ function login(email, password) {
         .then((userCredential) => {
             addLoadAnim("authenticator", "Entrar", false)
             console.log(userCredential.user)
-            window.location.href = "/app/";
+            window.location.href = "/app/#panel";
             console.log('Usuário logado:');
         })
         .catch((error) => {
@@ -70,7 +76,7 @@ function loginComGoogle() {
             // Sucesso no login com Google
             const user = result.user;
             console.log('Usuário logado com Google:');
-            window.location.href = "/app/";  // Redireciona para a página principal após o login
+            window.location.href = "/app/#panel";  // Redireciona para a página principal após o login
         })
         .catch((error) => {
             displayMessage("err", error.code)

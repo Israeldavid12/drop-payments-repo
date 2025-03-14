@@ -166,7 +166,7 @@ async function exchangePrice(cart) {
     bidBRL = ""
 
     try {
-      const exchange = await axios.post("http://127.0.0.1:3013/api/balance", {
+      const exchange = await axios.post("http://127.0.0.1:3013/api/server", {
         reqType: "exchange",
         exchange_type: "MZN-BRL",
         price: 2
@@ -245,7 +245,7 @@ async function exchangePriceToUsd(amount) {
 }
 
 
-app.post("/api/all-payment", async (req, res) => {
+app.post("/api/v2/payment/paypal", async (req, res) => {
   const { reqType } = req.body;
   // console.log(req.body)
 
@@ -403,7 +403,7 @@ app.post("/api/all-payment", async (req, res) => {
       console.log("resposta do paypal : ", jsonResponse);
       const transData = jsonResponse;
       console.log("1", httpStatusCode)
-      const save_payment = await axios.post("http://127.0.0.1:3010/api/all-payment", {
+      const save_payment = await axios.post("http://127.0.0.1:3010/api/v2/payment/paypal", {
         reqType: "save_paypal_payment",
         productData: productData,
         transData: transData,

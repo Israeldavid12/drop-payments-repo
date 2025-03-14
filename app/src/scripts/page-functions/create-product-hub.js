@@ -228,6 +228,10 @@ async function saveProduct() {
         const productPrice = document.getElementById('price-product').value
         const productDescription = document.getElementById('description').value
 
+        if (parseInt(productPrice) >= 40000) {
+            return setAnOutPut('Por favor insira um valor nao superior a 39999', 'E-M');
+        }
+
         //PRESIGNED IMAGE URL
         const image_data = await generatePresignedUrl('imageInput', 'images');
         const image_url_signed = image_data.presignedUrl;

@@ -134,17 +134,10 @@ document.body.addEventListener('click', async function (event) {
             const new_image_url = await uploadFile("new-image", signed_url, upload_path);
 
 
-            // const formData = new FormData();
-            // formData.append('new_product_image', new_productImage);
-            // formData.append('old_image_url', old_image_url);
-            // formData.append('product_id', productId);
-            // formData.append('product_name', name);
-            // formData.append('product_price', price);
-
             const response = await axios.post('https://www.dropaymentsmz.online/api/edit-product', {
                 product_name: name, 
                 product_price: price, 
-                old_image_url: old_image_url, 
+                old_image_url: old_image_url , 
                 new_image_url: new_image_url, 
                 product_id: productId
             });
@@ -163,13 +156,16 @@ document.body.addEventListener('click', async function (event) {
 
         } catch (error) {
             showAnPopup('', false);
-            console.log(error);
-            console.log(error);
+            console.log(error.message);
+            
             if (error.data) {
                 setAnOutPut(error.data.message, 'E-M');
             } else if (error.response) {
                 setAnOutPut(error.response.data.message, 'E-M')
-            } else {
+            } else if (error.message === `Cannot read properties of undefined (reading 'name')`)  {
+                setAnOutPut('Por favor selecione uma imagem para fazer a alteracao!', 'E-M');
+            }
+            else {
                 setAnOutPut(error, 'E-M');
             }
 

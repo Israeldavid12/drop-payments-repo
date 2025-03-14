@@ -172,6 +172,8 @@ select {
 .box-2 {
     justify-self: start;
     align-self: self-start;
+    width: 60%;
+    padding: 30px !important;
 }
 .box-checkout.box-1 {
     padding: 15px 80px 80px 80px;
@@ -223,6 +225,9 @@ select {
     }
     .box-checkout.box-1 {
         padding: 20px;
+    }
+    .box-2 {
+        width: 100%;
     }
  
 }

@@ -1,0 +1,29 @@
+.light-theme {
+   background-color: white !important;
+}
+.light-theme .item-description {
+    color: rgb(32, 32, 32) !important;
+    font-weight: 600;
+}
+.light-theme i {
+    color: rgb(32, 32, 32) !important;
+}
+
+.light-theme .side-item:hover {
+    color: rgb(32, 32, 32) !important;
+    font-weight: 600;
+    background-color: rgb(245, 243, 243) !important;
+}
+
+.light-item-seleted {
+    background-color: rgb(245, 243, 243) !important;
+    color: rgb(32, 32, 32) !important;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+
+.change-theme {
+    display: flex;
+    cursor: pointer;
+}

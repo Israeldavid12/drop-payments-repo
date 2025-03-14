@@ -29,14 +29,14 @@
     font-size: 18px;
     margin-bottom: 20px;
 }
-.p-flex-container input {
+.p-flex-container input, .user-national-id-container input {
   outline: none;
   height: 40px;
   border: 1px solid rgb(155, 155, 155);
   border-radius: 3px;
   padding: 16px;
   color: #0e0e0e;
-  max-width: 100%;
+  width: 100%;
   font-size: 14px;
 }
 
@@ -60,7 +60,7 @@ select {
     padding: 8px;
     outline: none;
     border: 1px solid silver;
-    width: 10%;
+    width: 20%;
 }
 
 .p-box {
@@ -107,6 +107,9 @@ select {
     width: 100%;
    }
    .p-box {
+    width: 100%;
+   }
+   .p-select select {
     width: 100%;
    }
 }

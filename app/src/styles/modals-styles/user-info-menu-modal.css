@@ -1,10 +1,9 @@
 .user_info_menu {
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     flex-direction: column;
-    padding: 20px;
-    height: 250px;
+    padding: 10px;
     background-color: #fff;
     border-radius: 8px;
     z-index: 1000;
@@ -69,4 +68,14 @@
 .user_menu_items a:hover {
     background-color: #f3f3f3;
     padding: 6px;
+}
+
+
+@media (max-width: 600px) {
+    .user_info_menu {
+        width: 250px;
+    }
+    .user_info_menu a {
+        display: flex;
+    }
 }

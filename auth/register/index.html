@@ -19,12 +19,14 @@
 </head>
 
 <body>
+    <div class="display-message-container" > </div>
+    
 
     <div class="main-container">
         <div class="plataform-info-container">
             <div class="grid gap-4">
                 <img class="w-20 rounded-full" src="../../app/src/assets/logo-dp.png" alt="">
-                <p class="text-[22px] font-[800] text-[#ffffff]">Com o que você sabe, é possível criar um negócio online
+                <p class="text-[20px] font-[800] text-[#ffffff]">Com o que você sabe, é possível criar um negócio online
                     de sucesso.
                     <br> Estamos aqui para ajudar você a
                     começar.
@@ -32,6 +34,7 @@
                 <span class="text-[16px] font-[500] text-[#ffffff]">Nós ajudaremos você a dar o próximo passo. Faça
                     login ou crie uma conta.</span>
                 <img class="login-icon" src="../assets/login.png" alt="">
+               
             </div>
         </div>
 
@@ -45,27 +48,35 @@
             <form class="form grid gap-6">
                 <div>
                     <p>Nome</p>
-                    <input placeholder="Inisira o seu nome completo" class="email-input" type="text">
+                    <input placeholder="Inisira o seu nome completo" id="name" class="email-input" type="text" required>
                 </div>
                 <div>
                     <p>Email</p>
-                    <input id="email" placeholder="Inisira o seu email" class="email-input" type="text">
+                    <input id="email" placeholder="Inisira o seu email" class="email-input" type="text" required>
                 </div>
                 <div>
                     <p>Palavra-passe</p>
                     <div class="password-input">
-                        <input placeholder="Insira sua palavra-passe" type="password" id="password"">
+                        <input placeholder="Insira sua palavra-passe" type="password" id="password" required>
                     <i onclick="togglePassword()" class="bi bi-eye toggle-btn"></i>
                     </div>
                 </div>
                 <div>
                     <p>OTP</p>
                     <div class="password-input">
-                        <input placeholder="Insira o codigo OTP" type="number" id="otp-code"">
-                   <p id="send-otp" class="send-otp">Enviar</p>
+                        <input placeholder="Insira o codigo OTP" type="number" id="otp-code">
+                        <div class="send-otp" class="flex gap-2" id="send-otp">
+                            <p>Enviar</p>
+                        </div>
                     </div>
                 </div>
-                <button class="authenticator">Criar conta</button>
+                <div>
+                    <button  type="submit" id="create-account" class="authenticator">Criar conta</button>
+                    <div class="flex gap-2">
+                        <input type="checkbox" name="terms" id="termos" required>
+                        <p>Aceito e concordo com <a href="#">os termos e condições</a></p>
+                    </div>
+                </div>
             </form>
             <div>
                 <div class="flex gap-4">
@@ -83,4 +94,5 @@
     </div>
 </body>
 <script src="../scripts/login/functions.js"></script>
+
 </html>

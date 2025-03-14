@@ -12,7 +12,7 @@ export async function handleUserData() {
             userId: userId,
             reqType: 'user_payment_data',
         });
-        const fech_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const fech_data = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
             userId: userId,
             reqType: 'user_data',
         });
@@ -23,9 +23,19 @@ export async function handleUserData() {
         document.getElementById("payment-number").value = resData.data.numero;
         document.getElementById('user-name').value = resData2.user_name;
         document.getElementById('user-email').value = resData2.user_email;
+        document.getElementById('user-national-id').value = resData2.nationalId || '';
         document.getElementById("tipo-conta").value = resData.data.metodo;
-        document.getElementById('contacto-1').value = resData2.contacto_1;
-        document.getElementById('contacto-2').value = resData2.contacto_2;
+
+        if (resData2.contacto_2 === 'undefined') {
+            document.getElementById('contacto-2').value = '';
+        } else {
+            document.getElementById('contacto-2').value = resData2.contacto_2
+        }
+        if (resData2.contacto_1 === 'undefined') {
+            document.getElementById('contacto-1').value = '';
+        } else {
+            document.getElementById('contacto-1').value = resData2.contacto_1
+        }
 
         const selectElement = document.getElementById("tipo-conta");
         const imageElement = document.getElementById("imageELement");
@@ -71,6 +81,7 @@ async function saveData() {
     try {
         const name = document.getElementById("user-name").value;
         const email = document.getElementById("user-email").value;
+        const nationalId = document.getElementById("user-national-id").value || 'N/A';
         const p_name = document.getElementById("payment-name").value;
         const p_number = document.getElementById("payment-number").value;
         const metodo = document.getElementById('tipo-conta').value;
@@ -84,6 +95,7 @@ async function saveData() {
             reqType: 'save_user_data',
             name: name,
             email: email,
+            nationalId: nationalId,
             p_name: p_name,
             p_number: p_number,
             p_metodo: metodo,
@@ -91,7 +103,7 @@ async function saveData() {
             contacto_2: contacto_2
         }
         console.log(payload);
-        const response = await axios.post('https://www.dropaymentsmz.online/api/balance', payload);
+        const response = await axios.post('http://127.0.0.1:3013/api/v2/live/server', payload);
 
         console.log(response.data);
 

@@ -5,7 +5,7 @@ import { displayProductData } from "../product-data/get-product-data.js";
 async function changeCurrency(exchange_type) {
     const data = await displayProductData()
     console.log(data.price)
-    const exchange = await axios.post("http://127.0.0.1:3013/api/balance", {
+    const exchange = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
         reqType: "exchange",
         exchange_type: exchange_type,
         price: data.price

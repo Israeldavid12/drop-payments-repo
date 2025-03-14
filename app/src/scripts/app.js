@@ -1,5 +1,5 @@
 import { userMenu } from "../modals/user-info-menu.js";
-import { financeHub } from "../pages/finances-hub.js";
+import { financeHub, setLastSale } from "../pages/finances-hub.js";
 import { productHub, displayProducts } from "../pages/product-hub.js";
 import withdrawPage from "../pages/withdraw-hub.js";
 import { displayBalnace, renderWithdrawHistory } from "../pages/withdraw-hub.js";
@@ -7,15 +7,9 @@ import { profilePage } from "../pages/profile-hub.js";
 import { addLoadAnim, pageLoader, setAnOutPut, showAnPopup } from "../animations/index.js";
 import { createProduct } from "../pages/create-product.js";
 import { logOut } from "../user/user_data.mjs";
-import { salesPage } from "../pages/sales-hub.js";
-
-
-
-
-document.getElementById('logout_btn').addEventListener('click', () => {
-    logOut();
-})
-
+import { displaySales, salesPage } from "../pages/sales-hub.js";
+import { settingsPage } from "../pages/checkout-settings.js";
+import { feedbackPage } from "../pages/send-feedback-hub.js";
 
 
 
@@ -99,76 +93,93 @@ open_user_menu.addEventListener('click', async () => {
 //ALTERNAR PAGINAS 
 
 
-const init = () => {
+window.addEventListener('hashchange', async () => {
 
-    window.addEventListener('hashchange', async () => {
+    console.log(window.location.hash);
+    switch (window.location.hash) {
+        case '#panel':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Dashboard');
+                content.innerHTML = '';
+                content.appendChild(await financeHub());
+                createScript('src/scripts/page-functions/finaces-hub.js')
+                location.reload();
+            }, 2000);
 
-        console.log(window.location.hash);
-        switch (window.location.hash) {
-            case '#panel':
-                loadRender(true);
-                setTimeout(async () => {
-                    changeTitle('Dashboard');
-                    content.innerHTML = '';
-                    content.appendChild(await financeHub());
-                    createScript('src/scripts/page-functions/finaces-hub.js')
-                    location.reload();
-                }, 2000);
+            break;
+        case '#products/my':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Produtos');
+                content.innerHTML = '';
+                content.appendChild(productHub());
+                await displayProducts();
+            }, 2000);
+            break;
+        case '#withdraw':
+            loadRender(true);
+            setTimeout(() => {
+                changeTitle('Saques');
+                content.innerHTML = '';
+                content.appendChild(withdrawPage());
+                createScript('src/modals/solicitar-saque.js');
+            }, 2000);
+            setTimeout(() => {
+                displayBalnace();
+                renderWithdrawHistory();
+            }, 3000);
+            break;
+        case '#profile/user/data':
+            loadRender(true);
+            setTimeout(async () => {
+                location.reload();
+                changeTitle('Perfil');
+                content.innerHTML = '';
+                content.appendChild(await profilePage());
+                createScript('src/scripts/page-functions/profile-function-page.js');
 
-                break;
-            case '#products/my':
-                loadRender(true);
-                setTimeout(async () => {
-                    changeTitle('Produtos');
-                    content.innerHTML = '';
-                    content.appendChild(productHub());
-                    await displayProducts();
-                }, 2000);
-                break;
-            case '#withdraw':
-                loadRender(true);
-                setTimeout(() => {
-                    changeTitle('Saques');
-                    content.innerHTML = '';
-                    content.appendChild(withdrawPage());
-                    createScript('src/modals/solicitar-saque.js');
-                }, 2000);
-                setTimeout(() => {
-                    displayBalnace();
-                    renderWithdrawHistory();
-                }, 3000);
-                break;
-            case '#profile/user/data':
-                loadRender(true);
-                setTimeout(async () => {
-                    location.reload();
-                    changeTitle('Perfil');
-                    content.innerHTML = '';
-                    content.appendChild(await profilePage());
-                    createScript('src/scripts/page-functions/profile-function-page.js');
-
-                }, 2000);
-                break;
-            case '#/create/product':
-                loadRender(true);
-                setTimeout(async () => {
-                    changeTitle('Criar produto');
-                    content.innerHTML = '';
-                    content.appendChild(await createProduct());
-                    createScript('src/scripts/page-functions/create-product-hub.js');
-                }, 2000)
-                break;
-            case '#/vendas':
-                loadRender(true);
-                setTimeout(async () => {
-                    location.reload()
-                }, 2000);
-                break;
-            default:
-                break;
-        }
-    });
-}
+            }, 2000);
+            break;
+        case '#/create/product':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Criar produto');
+                content.innerHTML = '';
+                content.appendChild(await createProduct());
+                createScript('src/scripts/page-functions/create-product-hub.js');
+            }, 2000)
+            break;
+        case '#/vendas':
+            loadRender(true);
+            setTimeout(async () => {
+                location.reload()
+            }, 2000);
+            break;
+        case '#checkout/settings':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Definicoes do checkout');
+                content.innerHTML = '';
+                content.appendChild(await settingsPage());
+                createScript('src/scripts/page-functions/checkout-settings-hub.js');
+            }, 2000)
+            break;
+        case "#logout":
+            logOut()
+            break;
+        case '#/feedback':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Definicoes do checkout');
+                content.innerHTML = '';
+                content.appendChild(await feedbackPage());
+            }, 2000)
+            break;
+        default:
+            break;
+    }
+});
 window.addEventListener('load', async () => {
 
     switch (window.location.hash) {
@@ -179,6 +190,7 @@ window.addEventListener('load', async () => {
                 changeTitle('Dashboard');
                 content.innerHTML = ``;
                 content.appendChild(await financeHub());
+                await setLastSale();
                 createScript('src/scripts/page-functions/finaces-hub.js')
             }, 2500);
             break;
@@ -231,20 +243,37 @@ window.addEventListener('load', async () => {
             break;
         case '#/vendas':
             loadRender(true);
-            
+
             setTimeout(async () => {
                 changeTitle("Vendas")
                 content.innerHTML = '';
                 content.appendChild(await salesPage())
-                
+                await displaySales()
             }, 2000);
+            break;
+        case '#checkout/settings':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Definicoes do checkout');
+                content.innerHTML = '';
+                content.appendChild(await settingsPage());
+                createScript('src/scripts/page-functions/checkout-settings-hub.js');
+            }, 2000)
+            break;
+        case '#/feedback':
+            loadRender(true);
+            setTimeout(async () => {
+                changeTitle('Definicoes do checkout');
+                content.innerHTML = '';
+                content.appendChild(await feedbackPage());
+            }, 2000)
             break;
         default:
             break;
     }
 
 })
-init();
+
 
 
 

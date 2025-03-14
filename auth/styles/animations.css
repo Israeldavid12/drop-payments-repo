@@ -1,16 +1,39 @@
 .display-message-container {
-    display: flex;
+    display: grid;
+    gap: 10px;
     position: fixed;
     top: 25%;
     right: 0;
-    margin-right: 20px;
+    margin-right: 10px;
+}
+      
+.message-type {
+    display: grid;
     justify-content: center;
     align-items: center;
-    padding: 12px;
-    border-radius: 7px;
+    gap: 10px;
     background-color: #E52020;
     color: #fff;
     max-width: 300px;
+    border-radius: 12px;
+    padding: 10px;
     transition: .4s ease-in-out;
 }
-      
+
+
+
+.message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    color: #fff;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.error-message {
+    background-color: #d9534f;
+}
+
+.success-message {
+    background-color: #00a82a;
+}

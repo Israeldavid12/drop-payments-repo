@@ -27,7 +27,9 @@
     <link rel="stylesheet" href="src/styles/sales-hub.css">
     <link rel="stylesheet" href="src/styles/animation/switch-input.css">
     <link rel="stylesheet" href="src/styles/checkout-config.css">
+    <link rel="stylesheet" href="src/styles/themes/index.css">
     <script src="src/scripts/change-active-menu.js"></script>
+    <script type="module" src="src/scripts/events/index.js"></script>
 </head>
 
 
@@ -36,12 +38,12 @@
 
     </div>
 
-    <nav id="sidebar" class="show_sidebar">
+    <nav id="sidebar" class="show_sidebar ">
         <div id="sidebar_content">
             <div id="company_info">
                 <img src="src/assets/logo-dp.png" id="user_avatar" alt="Avatar">
                 <span class="item-description logo_title">
-                    DROP PAY E.I
+                    DROP PAY
                 </span>
                 <i id="close_side_menu" class="bi bi-layout-sidebar-inset"></i>
                 <i id="close_side_menu_mobile" class="bi bi-x-lg"></i>
@@ -86,7 +88,7 @@
                 </li>
 
                 <li class="side-item" onclick="setActive(this)">
-                    <a href="#">
+                    <a href="#checkout/settings">
                         <i class="bi bi-gear"></i>
                         <span class="item-description">
                             Configurações
@@ -107,15 +109,16 @@
         </div>
 
         <div id="logout">
-            <button id="logout_btn" onclick="logOut()">
-                <i class="bi bi-box-arrow-right"></i>
-                <span class="item-description">
-                    Logout
-                </span>
-            </button>
+            <a href="#logout">
+                <button id="logout_btn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span class="item-description">
+                        Logout
+                    </span>
+                </button>
+            </a>
         </div>
     </nav>
-
 
 
 
@@ -132,6 +135,9 @@
             <i id="open_menu" class="bi bi-list"></i>
 
             <div class="user">
+                <div class="complete-porfile-info">
+                    
+                </div>
                 <i class="bi bi-bell"></i>
                 <div>
                     <h2 id="open_user_menu"></h2>
@@ -143,99 +149,7 @@
         <!---CONTAINER--->
         <div id="content" class="content">
 
-            <p class="text-[20px] mb-4">Definicoes do checkout</p>
-            <div class="config-checkout-container">
 
-                <div class="config-checkout-payments-container">
-                    <p class="mb-2 font-semibold">Opções de Pagamento</p>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="emola" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">e-Mola</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="mpesa" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">M-pesa</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">PayPal</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">Venmo</p>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div class="config-checkout-payments-container">
-                    <p class="mb-2 font-semibold">Opções de Peenchimento</p>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="manualPrice" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">Preço inserido manualmente</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="nameBuyer" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">Campo do nome do comprador</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="emailBuyer" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">Campo do e-mail</p>
-                        </div>
-
-                    </div>
-                    <div class="config-checkout-payments-options">
-                        <div class="flex">
-                            <label class="switch">
-                                <input id="whatsappBuyer" type="checkbox">
-                                <span class="slider"> </span>
-                            </label>
-                            <p class="ml-4">Campo de Whatsapp</p>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-            <button id="save-config" class="save-config-checkout">Salvar alteracoes</button>
 
         </div>
 

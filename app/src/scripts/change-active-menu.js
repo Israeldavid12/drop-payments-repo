@@ -1,8 +1,17 @@
 
 function setActive(element) {
-    console.log('aaaaaaaaaaaa')
-    document.querySelectorAll('.side-item').forEach(item => item.classList.remove('active'));
-    element.classList.add('active');
+    const theme = localStorage.getItem('theme');
+
+    if (theme === 'dark') {
+        console.log('dark', theme)
+        document.querySelectorAll('.side-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+    } else {
+        console.log('light', theme)
+        document.querySelectorAll('.side-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('light-item-seleted');
+    }
+
 
     // Salva no localStorage
     localStorage.setItem('activeMenu', element.innerText);

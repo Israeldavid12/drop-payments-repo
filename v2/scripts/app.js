@@ -1,22 +1,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function closePopup() {
     document.getElementById('overlay').style.display = 'none';
     document.getElementById('mpesaPopup').style.display = 'none';

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>E-mail com Link para PDF</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+        body {
+            font-family: "Nunito Sans", serif;
+
+        }
+
+        .header {
+            background-color: #062858;
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 600px;
+            height: 50px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .invoice-container {
+            display: grid;
+            gap: 0px;
+            padding: 20px;
+            background-color: aliceblue;
+            margin: 10px 15px;
+        }
+
+        .invoice-container p {
+            font-size: 14px;
+            color: #333;
+            padding: 0px;
+            margin: 5px;
+        }
+        .invoice-container span {
+            font-size: 14px;
+            padding: 0 5px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 21px;
+            color: #333;
+        }
+
+        h1 span {
+
+            padding: 0 5px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        p span {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #07a544;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .signature {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        #suporte {
+            text-decoration: underline;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            background-color: #1f395e;
+            padding: 10px;
+            font-size: 10px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img id="back-button" src="https://megaofertasco.store/unnamed%20(3).png" alt="DP logo" class="logo">
+    </div>
+    <div class="container">
+        <h1>Olá, <span>${namePayer}</span>!</h1>
+        <p>Obrigado pela sua compra. </p>
+        <p>Parabens você tem agora acesso ao produto <span>${nameProduct}</span>!</p>
+        <a href="${docUrl}" class="button">Acessar o conteudo</a>
+        <div class="invoice-container">
+            <p>DADOS DA TRANSAÇÃO: </p>
+            <p>Nome : <span>${namePayer}</span></p>
+            <p>Email : <span>${emailPayer}</span></p>
+            <p>ID Transação: <span> ${paymentId}</span></p>
+            <p>Total pago: <span> ${originalAmount}  MT</span></p>
+            <p>Data de pagamento: <span> ${timestamp}</span></p>
+            <p>Meio de pagamento: <span> ${paymentMethod}</span></p>
+        </div>
+
+        <div class="signature">
+            <p>Atenciosamente,<br>Equipe Drop Payments</p>
+            <p></p>
+            <p style="font-size: 14px;">Se precisar de ajuda para Acessar o produto.</p>
+            <a id="suporte" href="https://api.whatsapp.com/send?phone=258863814050">Clique aqui</a>
+        </div>
+        <div class="footer">
+            &copf; Drop Payments – Todos direitos Reservados - 2025
+        </div>
+    </div>
+
+</body>
+
+</html>

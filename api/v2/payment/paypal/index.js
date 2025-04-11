@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const paypal = require('paypal-rest-sdk');
 const admin = require('firebase-admin');
 const axios = require("axios");
+const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const { captureOrder, createOrder } = require('./functions/index.js')
 
@@ -19,7 +20,7 @@ const serviceAccount = require("../../../.././credentials/drop-payments-mz-fireb
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app", // Substitua pela URL do seu banco de dados
-}); 
+});
 
 const db = admin.database();
 
@@ -40,8 +41,14 @@ app.use((req, res, next) => {
 });
 
 
+const JWT_SECRET = process.env.JWT_SECRET
+const TOKEN_EXPIRATION = 60 * 60 * 1000; // 1 hora (em milissegundos)
 
 
+const payload = {
+  client_id: "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+  timestamp: new Date().toISOString()
+};
 
 
 
@@ -53,7 +60,7 @@ async function exchangePrice(cart) {
     try {
       const data = await axios.get("https://economia.awesomeapi.com.br/json/last/USD-MZN")
       const bid = data.data.USDMZN.bid;  // Obtém a cotação 'bid'
-      console.log(data)
+      console.log(data.data)
       bidUSD = bid;
 
     } catch (error) {
@@ -154,10 +161,62 @@ async function exchangePriceToUsd(amount) {
 }
 
 
+app.get('/api/token', async (req, res) => {
+
+  try {
+    // Gera o token
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+
+    // Armazena o token no cookie seguro 
+    res.cookie("token", token,
+      {
+        httpOnly: true, // Impede acesso via JavaScript (proteção contra XSS)
+        secure: false, // Apenas HTTPS (ativa em produção)
+        sameSite: "None", // Protege contra CSRF
+        maxAge: TOKEN_EXPIRATION // Tempo de expiração do token
+      }
+    );
+    console.log(token);
+
+    return res.json({ message: "Token gerado" })
+
+  } catch (error) {
+    console.log(error)
+    return res.json({ message: "Erro ao gerar token" })
+
+  }
+
+});
+
+
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token; // Obtém o token do cookie
+  console.log('Token obtido: ', token)
+
+  if (!token) {
+    return res.status(401).json({ error: "Acesso não autorizado. Token ausente." });
+  }
+
+  try {
+    // Verifica e decodifica o token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded; // Adiciona os dados do usuário na requisição
+    console.log('Authenticacao bem succedida');
+    next(); // Continua para o próximo middleware/rota
+  } catch (error) {
+    console.log(error)
+    return res.status(403).json({ error: "Token inválido ou expirado." });
+  }
+};
+
+
 app.post("/api/v2/payment/paypal", async (req, res) => {
   const { reqType } = req.body;
-  // console.log(req.body)
- 
+  console.log(reqType)
+
+
+
 
   if (reqType === "save_paypal_payment") {
     const { transData, productData, buyerData } = req.body;
@@ -165,8 +224,6 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
     console.log("CPTURE PAYMENT REQ BODY : ", req.body)
     console.log("CAMPOS COLETADOS : ", buyerData)
     try {
-
-
       const transaction = transData?.purchase_units?.[0]?.payments?.captures?.[0] ||
         transData?.purchase_units?.[0]?.payments?.authorizations?.[0];
       console.log(transaction)
@@ -208,8 +265,16 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
       };
 
       await db.ref(`users/${userId}/payments/${paymentIdDB}`).set(paymentData)
+      //Autualizar para o saldo mais recente
+      const update = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+        reqType: 'user_data',
+        userId: userId
+      });
+      console.log("Novo Saldo Paypal : ", update.data.paypalBalance);
       console.log("Pagamaento criado com sucesso!")
+
       const salesUserRef = db.ref(`users/${userId}/payments`);
+
       try {
         let userEmail = "";
 
@@ -259,7 +324,7 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
         ]);
         // Aguarde as respostas
         const data = responses.map(response => response.data);
-        console.log(data)
+        console.log(data.data)
 
 
       } catch (error) {
@@ -274,7 +339,7 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
     } catch (error) {
       console.log(error)
       console.log("Ocorreu um erro ao salvar o pagamento!");
-      res.status(500).json({code: "E-10"})
+      res.status(500).json({ code: "E-10" })
     }
 
   }
@@ -319,7 +384,7 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
           res.status(httpStatusCode).json(transData)
         }
       }
-     
+
 
     } catch (error) {
       console.error("Failed to create order:", error);

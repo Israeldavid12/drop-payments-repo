@@ -10,7 +10,7 @@ getPage("../checkout/modals-statics/purcchase-popup.html")
 async function getProductData() {
 
     try {
-        const productData = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const productData = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             productId: productId,
             reqType: 'product_data',
         });
@@ -49,7 +49,7 @@ async function getProductData() {
 async function userCheckoutConfig(data) {
 
     try {
-        const checkout_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const checkout_data = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: data.uid,
             reqType: 'user_checkout_config'
         });
@@ -94,10 +94,3 @@ async function userCheckoutConfig(data) {
 // // }, 3000)
 
 
-document.body.addEventListener('click', function (event) {
-    if (event.target && event.target.matches('.mpesa-button')) {
-        purchasePopup(true, "m-pesa")
-        console.log('mpesa')
-    }
-
-});

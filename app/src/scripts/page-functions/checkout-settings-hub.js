@@ -9,7 +9,7 @@ export function value(id) {
 async function setFieldsData() {
     try {
         pageLoader(true)
-        const fields_data = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
+        const fields_data = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: await getUserId(),
             reqType: 'user_checkout_config'
         });
@@ -84,7 +84,7 @@ async function saveFieldsData() {
             }
         }
 
-        const request = await axios.post('http://127.0.0.1:3013/api/v2/live/server', payloadSettings);
+        const request = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', payloadSettings);
 
         console.log(request.data)
 

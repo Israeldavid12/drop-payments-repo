@@ -30,7 +30,7 @@ body {
     gap: 10px;
     justify-content: center;
     align-items: center;
-    background-color: #012169;
+    background-color: #344CB7;
     padding: 20px;
     width: 100%;
     height: 100%;
@@ -84,7 +84,7 @@ body {
 
 .authenticator {
     width: 100%;
-    background-color: #399918;
+    background-color: #009D43;
     color: #fff;
     padding: 10px;
     border-radius: 8px;

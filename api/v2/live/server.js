@@ -2,7 +2,7 @@ const express = require("express");
 const admin = require("firebase-admin");
 const axios = require("axios")
 const bodyParser = require("body-parser");
-const { urlToRelativePath, convertCurrency, generatePresignedUrl } = require("../../functions/index.js")
+const { urlToRelativePath, convertCurrency, generatePresignedUrl } = require("../../../backend/functions/index.js")
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const serviceAccount = require("../../../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); //
 require("dotenv").config();
@@ -10,7 +10,7 @@ require("dotenv").config();
 
 
 
- 
+
 
 const s3 = new S3Client({
   region: "auto",
@@ -92,7 +92,7 @@ async function saveUser(req, res) {
     const userRef = db.ref(`users/${userId}`);
     await userRef.set({
       email: email || "N/A",
-      name: name || "N/A", 
+      name: name || "N/A",
     });
 
     return res.status(200).json({ message: "Usuario criado com successo", code: "0" })
@@ -114,7 +114,7 @@ async function saveUser(req, res) {
 // Rota para calcular e atualizar o saldo
 app.post("/api/v2/live/server", async (req, res) => {
   console.log("Dados recebidos:", req.body);
-  const { userId, reqType, name, email,  nationalId, p_number, p_name, p_metodo, contacto_1, contacto_2, productId, currency, price, exchange_type } = req.body;
+  const { userId, reqType, name, email, nationalId, p_number, p_name, p_metodo, contacto_1, contacto_2, productId, currency, price, exchange_type } = req.body;
 
 
 
@@ -124,7 +124,7 @@ app.post("/api/v2/live/server", async (req, res) => {
 
   if (reqType === "save/user") {
     await saveUser(req, res);
-    
+
   }
 
   if (reqType === "verifyOtp") {
@@ -159,7 +159,7 @@ app.post("/api/v2/live/server", async (req, res) => {
       }
 
       const request = await axios.post('http://127.0.0.1:3002/api/v2/smtp/send-email', otpEmailPayload);
-      
+
 
       return res.status(200).json({ message: 'OTP enviado!', code: '0' });
 
@@ -510,30 +510,30 @@ app.post("/api/v2/live/server", async (req, res) => {
   }
 
   if (reqType === 'save_user_checkout_config') {
-  
+
     if (!userId) {
       return res.status(400).send({ error: "userId é obrigatório." });
     }
 
     try {
-      const { checkout, userId} = req.body;
+      const { checkout, userId } = req.body;
       console.log(req.body);
       const checkoutconfigRef = db.ref(`users/${userId}/checkoutUserConfig`);
 
       checkoutconfigRef.set(checkout)
-      .then(() => {
-        console.log('Informacoes salvas com sucesso')
-        return res.status(200).json({ message: 'Informacoes salvas com sucesso', status: '201'});
-      })
-      .catch((error) => {
-        console.log('Erro ao salvar informacoes')
-        return res.status(400).json({ error: error });
-      });
+        .then(() => {
+          console.log('Informacoes salvas com sucesso')
+          return res.status(200).json({ message: 'Informacoes salvas com sucesso', status: '201' });
+        })
+        .catch((error) => {
+          console.log('Erro ao salvar informacoes')
+          return res.status(400).json({ error: error });
+        });
 
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: 'Erro interno do servidor!', error: error });
-      
+
     }
 
   }
@@ -737,52 +737,52 @@ app.post("/api/v2/live/server", async (req, res) => {
       const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString();
 
       // Recuperar todas as transações
-      const snapshot = await paymentsRef.once("value");
+      // const snapshot = await paymentsRef.once("value");
 
       const updates = {}; // Objeto para batch updates
       let foundNewTransactions = false;
       let foundNewPayPalTransactions = false;
 
-      snapshot.forEach((childSnapshot) => {
-        const payment = childSnapshot.val();
-        const paymentKey = childSnapshot.key;
+      // snapshot.forEach((childSnapshot) => {
+      //   const payment = childSnapshot.val();
+      //   const paymentKey = childSnapshot.key;
 
 
 
 
-        // Verifique o estado da transação para saldo geral
-        if (payment.estado !== "computado" &&
-          payment.originalAmount &&
-          (payment.paymentMethod === "E-Mola" || payment.paymentMethod === "M-pesa" || payment.paymentMethod === "dp-wallet")) {
-          total += parseFloat(payment.originalAmount);
-          foundNewTransactions = true;
+      //   // // Verifique o estado da transação para saldo geral
+      //   // if (payment.estado !== "computado" &&
+      //   //   payment.originalAmount &&
+      //   //   (payment.paymentMethod === "E-Mola" || payment.paymentMethod === "M-pesa" || payment.paymentMethod === "dp-wallet")) {
+      //   //   total += parseFloat(payment.originalAmount);
+      //   //   foundNewTransactions = true;
 
-          // Marcar transação como computada
-          updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-        }
+      //   //   // Marcar transação como computada
+      //   //   updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
+      //   // }
 
-        // Calcular vendas realizadas hoje
-        if (payment.timestamp && payment.originalAmount) {
-          const paymentDate = new Date(payment.timestamp).toISOString();
-          if (paymentDate >= startOfDay && paymentDate <= endOfDay) {
-            vendasHoje += parseFloat(payment.originalAmount);
-          }
-        }
+      //   // Calcular vendas realizadas hoje
+      //   if (payment.timestamp && payment.originalAmount) {
+      //     const paymentDate = new Date(payment.timestamp).toISOString();
+      //     if (paymentDate >= startOfDay && paymentDate <= endOfDay) {
+      //       vendasHoje += parseFloat(payment.originalAmount);
+      //     }
+      //   }
 
-        // Verifique se a transação é do PayPal
-        if (payment.paymentMethod === "PayPal" && payment.estado !== "computado" && payment.originalAmount) {
-          paypalBalance += parseFloat(payment.originalAmount);
-          foundNewPayPalTransactions = true;
+      //   // Verifique se a transação é do PayPal
+      //   if (payment.paymentMethod === "PayPal" && payment.estado !== "computado" && payment.originalAmount) {
+      //     paypalBalance += parseFloat(payment.originalAmount);
+      //     foundNewPayPalTransactions = true;
 
-          // Marcar transação como computada
-          updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-        }
-      });
+      //     // Marcar transação como computada
+      //     updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
+      //   }
+      // });
 
-      // Arredondar valores para 2 casas decimais
-      total = parseFloat(total.toFixed(2));
-      vendasHoje = parseFloat(vendasHoje.toFixed(2));
-      paypalBalance = parseFloat(paypalBalance.toFixed(2));
+      // // Arredondar valores para 2 casas decimais
+      // total = parseFloat(total.toFixed(2));
+      // vendasHoje = parseFloat(vendasHoje.toFixed(2));
+      // paypalBalance = parseFloat(paypalBalance.toFixed(2));
 
       //Pegar informacoes do usuario
       const emailSnapshot = await emailRef.once("value");
@@ -809,25 +809,26 @@ app.post("/api/v2/live/server", async (req, res) => {
       const currentPayPalBalance = paypalBalanceSnapshot.val() || 0;
 
       // Somar os saldos atuais com os novos valores (se houver)
-      const newBalance = foundNewTransactions ? currentBalance + total : currentBalance;
+      // const newBalance = foundNewTransactions ? currentBalance + total : currentBalance;
       const newPayPalBalance = foundNewPayPalTransactions ? currentPayPalBalance + paypalBalance : currentPayPalBalance;
 
       // Atualizar os saldos no diretório do usuário
-      updates[`users/${userId}/balance`] = newBalance;
+      // updates[`users/${userId}/balance`] = newBalance;
       updates[`users/${userId}/paypalBalance`] = newPayPalBalance;
 
       // Salvar todas as atualizações no banco de dados
-      await db.ref().update(updates);
+      // await db.ref().update(updates);
 
       console.log(nationalId);
 
       // Retornar o valor do saldo atualizado, PayPal e vendas do dia
-      res.status(200).send({ balance: newBalance, vendasHoje, paypalBalance: newPayPalBalance, user_name: user_name, user_email: user_email, nationalId: nationalId,  contacto_1: contact_data.contacto_1 , contacto_2: contact_data.contacto_2 });
+      res.status(200).send({ balance: currentBalance, vendasHoje, paypalBalance: newPayPalBalance, user_name: user_name, user_email: user_email, nationalId: nationalId, contacto_1: contact_data.contacto_1, contacto_2: contact_data.contacto_2 });
     } catch (error) {
       console.error("Erro ao processar o saldo:", error);
       res.status(500).send({ error: "Erro ao processar o saldo." });
     }
   }
+
 
 });
 

@@ -3,7 +3,7 @@ const axios = require('axios');
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 require("dotenv").config();
-
+const jwt = require("jsonwebtoken");
 
 
 
@@ -16,6 +16,7 @@ const s3 = new S3Client({
   },
 });
 
+const JWT_SECRET = process.env.JWT_SECRET
 
 
 
@@ -85,5 +86,39 @@ async function generatePresignedUrl(fileName, contentType, dir_file) {
   };
 }
 
+// Middleware de autenticação
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token; // Obtém o token do cookie
+  console.log('Token obtido: ', token)
 
-module.exports = { urlToRelativePath, convertCurrency, generatePresignedUrl };
+  if (!token) {
+      return res.status(401).json({ error: "Acesso não autorizado. Token ausente." });
+  }
+
+  try {
+      // Verifica e decodifica o token
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.user = decoded; // Adiciona os dados do usuário na requisição
+      next(); // Continua para o próximo middleware/rota
+  } catch (error) {
+      return res.status(403).json({ error: "Token inválido ou expirado." });
+  }
+};
+
+
+function getDate(data = new Date()) {
+  // Extrai dia, mês, ano, horas, minutos e segundos
+  const dia = String(data.getDate()).padStart(2, '0');
+  const mes = String(data.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+  const ano = data.getFullYear();
+  const horas = String(data.getHours()).padStart(2, '0');
+  const minutos = String(data.getMinutes()).padStart(2, '0');
+  const segundos = String(data.getSeconds()).padStart(2, '0');
+
+  // Formata no padrão DD/MM/AAAA HH:MM:SS
+  return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+}
+
+
+
+module.exports = { urlToRelativePath, convertCurrency, generatePresignedUrl,  authenticateToken, getDate };

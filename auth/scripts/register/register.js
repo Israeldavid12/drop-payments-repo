@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthPro
 import { addLoadAnim } from "../../../app/src/animations/index.js";
 
 
-// Your web app's Firebase configuration
+
 const firebaseConfig = {
     apiKey: "AIzaSyDfNNPtqhpG7ShUJo8n89ONoKOq45Xy91w",
     authDomain: "drop-payments-mz.firebaseapp.com",
@@ -63,7 +63,7 @@ async function sendOtp() {
     }
     try {
         const reqType = "otp/code";
-        const req = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+        const req = await axios.post("https://www.dropaymentsmz.online/api/v2/live/server", {
             reqType,
             email,
         })
@@ -78,6 +78,7 @@ async function sendOtp() {
         addLoadAnim("send-otp", "Enviar", false)
     }
 } 
+
 async function validateOtp() {
     try {
         const email = document.getElementById("email").value
@@ -89,7 +90,7 @@ async function validateOtp() {
             return displayMessage("err", "Por favor insira o codigo OTP")
         }
         const reqType = "verifyOtp"
-        const req = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+        const req = await axios.post("https://www.dropaymentsmz.online/api/v2/live/server", {
             reqType,
             otp,
             email,
@@ -154,7 +155,7 @@ async function createAccount() {
         const res = await saveUser(email, name, userId)
 
         if (res === true) {
-            window.location.href = "/app/index.html#panel";
+            window.location.href = "/app/#panel";
         } else {
             return false
         }

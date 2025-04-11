@@ -1,4 +1,14 @@
 import { setAnOutPut } from "../../animations/index.js";
+import { userMenu } from "../../modals/user-info-menu.js";
+import { NotificationsModal } from "../../modals/notifications-modal.js";
+
+
+
+
+
+
+
+
 
 document.addEventListener('submit', async function (event) {
   if (event.target.id === 'feedback-form') {
@@ -53,3 +63,43 @@ document.body.addEventListener('click', function (event) {
 });
 
 setTheme();
+
+
+
+
+//MOSTRAR E OCULTAR MENU FLUTUANTE DO USUARIO
+const blur_div = document.getElementById('blur');
+let u_state = false;
+const open_user_menu = document.getElementById('open_user_menu');
+
+open_user_menu.addEventListener('click', async () => {
+    u_state = !u_state;
+
+    if (u_state === true) {
+        blur_div.innerHTML = await userMenu();
+        setTimeout(() => {
+            document.getElementsByClassName('user_info_menu')[0].classList.add('loaded');
+        }, 50);
+    } else if (u_state === false) {
+        document.getElementsByClassName('user_info_menu')[0].remove();
+    }
+});
+
+
+
+
+
+//MOSTRAR E OCULTAR NOTIFICACOES
+const notification = document.getElementById('open_notifications');
+const not_div = document.getElementById('not');
+let n_state = true;
+
+notification.addEventListener('click', async () => {
+    n_state = !n_state;
+
+    if (n_state === true) {
+        not_div.innerHTML = await NotificationsModal();
+    } else if (n_state === false) {
+        document.querySelector('.notifications-modal').remove();
+    }
+});

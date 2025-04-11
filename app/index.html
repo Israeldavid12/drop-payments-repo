@@ -28,8 +28,9 @@
     <link rel="stylesheet" href="src/styles/animation/switch-input.css">
     <link rel="stylesheet" href="src/styles/checkout-config.css">
     <link rel="stylesheet" href="src/styles/themes/index.css">
+    <link rel="stylesheet" href="src/styles/modals-styles/notification-modal.css">
     <script src="src/scripts/change-active-menu.js"></script>
-    <script type="module" src="src/scripts/events/index.js"></script>
+    
 </head>
 
 
@@ -37,6 +38,8 @@
     <div class="overlay-popup">
 
     </div>
+
+  
 
     <nav id="sidebar" class="show_sidebar ">
         <div id="sidebar_content">
@@ -127,6 +130,7 @@
     <main id="main">
 
         <div id="blur" class=""></div>
+        
 
 
 
@@ -136,18 +140,20 @@
 
             <div class="user">
                 <div class="complete-porfile-info">
-                    
+
                 </div>
-                <i class="bi bi-bell"></i>
+                <i id="open_notifications" class="bi bi-bell"></i>
                 <div>
                     <h2 id="open_user_menu"></h2>
                 </div>
             </div>
         </div>
 
-
+        <div id="not" ></div>
         <!---CONTAINER--->
         <div id="content" class="content">
+            
+           
 
 
 
@@ -165,7 +171,8 @@
     <script type="module" src="src/scripts/sales-graphic.js"></script>
     <script type="module" src="src/modals/product_modals_events.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1180.0/aws-sdk.min.js"></script>
-    <script type="module" src="src/scripts/page-functions/checkout-config-hub.js"></script>
+    <!-- <script type="module" src="src/scripts/page-functions/checkout-config-hub.js"></script> -->
+    <script type="module" src="src/scripts/events/index.js"></script>
 
 
 

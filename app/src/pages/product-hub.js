@@ -4,7 +4,7 @@ import { pageLoader, showAnPopup } from "../animations/index.js";
 export const displayProducts = async () => {
   pageLoader(true);
   const userId = await getUserId();
-  const fecth_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+  const fecth_data = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
     userId: userId,
     reqType: 'fech_user_products',
   });

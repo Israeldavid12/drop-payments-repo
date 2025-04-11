@@ -17,7 +17,7 @@ export async function displayProductData() {
 
 
     try {
-        const productData = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const productData = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             productId: productId,
             reqType: 'product_data',
         });
@@ -31,6 +31,7 @@ export async function displayProductData() {
 
         } else {
             const product = productData.data.product;
+            document.title = product.name;
             const price = Number(product.price).toFixed(2);
             const return_price = Number(product.price);
             const uid = product.userId;
@@ -67,17 +68,16 @@ export async function getProductId() {
 async function userCheckoutConfig(data) {
 
     try {
-        const checkout_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const checkout_data = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: data.uid,
             reqType: 'user_checkout_config'
         });
 
 
         const { bannerCheckbox, emailBuyer, manualPrice, nameBuyer, whatsappBuyer } = checkout_data.data.checkout;
-        console.log(checkout_data.data.checkout);
+        // console.log(checkout_data.data.checkout);
 
         if (bannerCheckbox === true) {
-            console.log(data.bannerUrl);
             document.querySelector('.banner').src = data.bannerUrl;
             document.querySelector('.banner').style.display = 'block';
         } else {

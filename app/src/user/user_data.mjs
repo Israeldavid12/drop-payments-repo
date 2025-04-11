@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/fireba
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 import { setAnOutPut } from "../animations/index.js";
-import { formatBalance } from "../animations/index.js";
 
 
 
@@ -56,9 +55,22 @@ export const getUserId = () => {
   });
 };
 
+export const userAuthSate = () => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      window.location.href = '/app/#panel'
+    } else {
+      // console.log('Nenhum usuário logado');
+      window.location.href = '/auth/login/';
+    }
+  });
+}
+
+
 const get_data = async () => {
   const userid = await getUserId();
-  const fech_data = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+  const fech_data = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
     userId: userid,
     reqType: 'user_data',
   });

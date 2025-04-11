@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <input type="number" id="amount" placeholder="Enter amount" />
+        <button id="pay">Pay</button>
+    </div>
+
+    <script>
+
+        async function HandlePayment() {
+            const amount = document.getElementById("amount").value;
+
+            try {
+                const req = await axios.post('https://mozpayment.co.mz/api/1.1/wf/pagamentorotativompesa', {
+                    carteira: '1722353552257x463701829088968700',
+                    numero: '852610323',
+                    'quem comprou': 'Daniel',
+                    valor: amount,
+
+                });
+
+                console.log(req.data);
+                if (req.data.status == 'success') {
+                    alert('Payment successful!');
+                } else {
+                    alert('Payment failed!');
+                }
+
+            } catch (error) {
+                console.log(error)
+
+            }
+
+
+        }
+
+
+        document.getElementById("pay").addEventListener("click", () => {
+            HandlePayment();
+        });
+
+    </script>
+</body>
+
+</html>

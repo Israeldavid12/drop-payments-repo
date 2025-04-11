@@ -1,4 +1,3 @@
-import { userMenu } from "../modals/user-info-menu.js";
 import { financeHub, setLastSale } from "../pages/finances-hub.js";
 import { productHub, displayProducts } from "../pages/product-hub.js";
 import withdrawPage from "../pages/withdraw-hub.js";
@@ -71,28 +70,7 @@ const removeScript = (dir_name) => {
 
 const content = document.getElementById('content');
 
-//MOSTRAR E OCULTAR MENU FLUTUANTE DO USUARIO
-const blur_div = document.getElementById('blur');
-let u_state = false;
-const open_user_menu = document.getElementById('open_user_menu');
-
-open_user_menu.addEventListener('click', async () => {
-    u_state = !u_state;
-
-    if (u_state === true) {
-        blur_div.innerHTML = await userMenu();
-        setTimeout(() => {
-            document.getElementsByClassName('user_info_menu')[0].classList.add('loaded');
-        }, 50);
-    } else if (u_state === false) {
-        document.getElementsByClassName('user_info_menu')[0].remove();
-    }
-});
-
-
 //ALTERNAR PAGINAS 
-
-
 window.addEventListener('hashchange', async () => {
 
     console.log(window.location.hash);

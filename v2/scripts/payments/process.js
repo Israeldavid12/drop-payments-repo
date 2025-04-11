@@ -1,7 +1,7 @@
 import { productId } from "../product-data/get-product-data.js";
 import { getUserIdByProductID } from "../product-data/userId.js";
 
-function checkFields() {
+export function checkFields() {
     const div = document.querySelectorAll(".input-billing-adress")
     const output = document.querySelector(".output")
     const inputs = document.querySelectorAll(".billing-fields")
@@ -77,14 +77,14 @@ const cart = async () => {
     }
 
 }
-console.log(await cart())
+// console.log(await cart())
 
 function displayPaymentMethod(name) {
     const div = document.createElement("div")
     const container = document.querySelector(".payment-methods-container")
     const mpesa_template = `<div class="input-billing-adress">
                 <i class="bi bi-telephone"></i>
-                <input type="text" placeholder="Telefone">
+                <input type="text" id='customerMSISDN' placeholder="Telefone">
             </div> <br> <button class="mpesa-button">Pagar com M-Pesa</button>`;
     const emola_template = `<h2>Metodo de pagamento indisponivel!</h2> `;
     const paypal_template = ` <div id="paypal-button-container" class="paypal-button-container"></div>`;
@@ -128,13 +128,13 @@ function displayPaymentMethod(name) {
                             console.log(conditional)
                         }
                         try {
+                           
 
                             const response = await fetch("http://127.0.0.1:3010/api/v2/payment/paypal", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
                                 },
-                               
                                 // like product ids and quantities
                                 body: JSON.stringify({
                                     reqType: "/api/orders",

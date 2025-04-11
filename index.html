@@ -1,593 +1,269 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard DP</title>
-    <link rel="shortcut icon" href="assests/dp-logo.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DROP PAYMENTS </title>
+    <link rel="shortcut icon" href="app/src/assets/logo-dp.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="product-forrm.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap">
-    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-    <!-- <script src="js-codes/status-user.js" type="module"></script> -->
-    <!-- <script src="js-codes/user.js" type="module"> </script> -->
-    <script type="module" src="js-codes/sales-graphics.js"></script>
-    <!-- <script type="module" src="js-codes/send-request.js"></script> -->
-    <!--<script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>  -->
 
 </head>
 
 <body>
-
-    <script>
-        window.location.href = "/app/#panel"
-    </script>
-
-    <!-- Tela de carregamento -->
-    <div id="loading-screen">
+    <div class="header-menu">
+        <div class="">
+            <img src="app/src/assets/logo-dp.png" alt="logo">
+        </div>
         <div>
-            <i style="color: #062858;" class="fas fa-circle-notch fa-spin fa-2x"></i>
+            <ul class="options">
+                <li><a href="#">Solucoes</a></li>
+                <li><a href="#tax">Taxas</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="https://api.whatsapp.com/send?phone=258863814050">Suporte</a></li>
+                <button class="login"><a href="auth/login/">Entrar</a></button>
+                <button class="signup"><a href="auth/register/">Criar conta</a></button>
+            </ul>
         </div>
     </div>
-
-    <!-- Conteúdo principal da página -->
-    <div id="content" class="hidden">
-
-
-
-        <!-- Fundo escuro do popup -->
-        <div id="popup-background" style="display: none;">
-            <div id="popup">
-                <img style="width: 100px;" src="assests/ssend-money.png" alt="Imagem do Popup">
-                <p id="popup-text">Novidade! Envie dinheiro para outra conta DROP PAYMENT</p>
-                <button class="popupUpdateButton" id="close-popup">Ok</button>
-            </div>
-        </div>
-
-        <div class="" style="display: block;">
-            <div id="product-pop-container-2" class="product-pop-container-2">
-                <div class="product-popup">
-                    <i onclick="closeProductPopup()" class="fa fa-times" style="float: right; margin-bottom: 5px; "
-                        aria-hidden="true"></i>
-
-
-                    <p id="popup-text-2" style="margin-bottom: 30px;">Criando produto, por favor aguarde...</p>
-                    <div id="addingProduct" style="display: block;">
-                        <div class="lds-ring" bis_skin_checked="1">
-                            <div bis_skin_checked="1"></div>
-                            <div bis_skin_checked="1"></div>
-                            <div bis_skin_checked="1"></div>
-                            <div bis_skin_checked="1"></div>
-                        </div>
-
-                    </div>
-                    <i id="addedProduct" class="fa fa-check-circle" style="font-size: 35px; display: none; "
-                        aria-hidden="true"></i>
-
-                    <a id="linkProduto" href="https://dropaymentsmz.online/produtos" class="button-product-popup">Ver
-                        produto <i class="fa fa-book" aria-hidden="true"></i> </a>
-                </div>
-            </div>
-
-
-            <!-- Popup para solicitar saque -->
-            <div class="product-pop-container-3" id="product-pop-container-3">
-                <div class="saque-popup">
-                    <p style="margin-bottom: 6px; text-align: start; font-size: 16px;">Obs: uma vez solicitado nao sera
-                        possivel cancelar*</p>
-                    <div class="balance">
-                        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
-                        <p id="balancePreview">0.00 MT</p>
-                    </div>
-                    <input style="font-weight: 600; height: 40px;" id="valor" type="number" placeholder="0 MT">
-                    <p style="font-size: 12px; margin-bottom: 8px;">Por favor insira um valor inteiro*</p>
-                    <div class="confirm">
-                        <input type="checkbox" name="" id="confirm"> Confirmar solicitação<br>
-                    </div>
-                    <button id="solicitarSaqueBtn" style=" background-color: #0056b3;">Solicitar</button>
-                    <button onclick="closeSaquePopup()"
-                        style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;">Cancelar</button>
-                    <div id="response-message" class="response-message"></div>
-                </div>
-            </div>
-
-
-
-
-            <!-- Popup para solicitar saque -->
-            <div class="product-pop-container-3" id="product-pop-container-3">
-                <div class="saque-popup">
-                    <p style="margin-bottom: 6px; text-align: start; font-size: 16px;">Obs: uma vez solicitado nao sera
-                        possivel cancelar*</p>
-                    <div class="balance">
-                        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
-                        <p id="balancePreview">0.00 MT</p>
-                    </div>
-                    <input style="font-weight: 600; height: 40px;" id="valor" type="number" placeholder="0 MT">
-                    <p style="font-size: 12px; margin-bottom: 8px;">Por favor insira um valor inteiro*</p>
-                    <div class="confirm">
-                        <input type="checkbox" name="" id="confirm"> Confirmar solicitação<br>
-                    </div>
-                    <button id="solicitarSaqueBtn" style=" background-color: #0056b3;">Solicitar</button>
-                    <button onclick="closeSaquePopup()"
-                        style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;">Cancelar</button>
-                    <div id="response-message" class="response-message"></div>
-                </div>
-            </div>
-
-
-            <!-- Popup para solicitar saque - paypal -->
-            <div class="product-pop-container-4" id="product-pop-container-4">
-                <div class="saque-popup">
-                    <p style="margin-bottom: 6px; text-align: start; font-size: 16px;">Obs: uma vez solicitado nao sera
-                        possivel cancelar*</p>
-                    <div class="balance">
-                        <h4>Saldo disponivel <i class="fas fa-credit-card"></i></h4>
-                        <p id="balancePreviewPayPal">0.00 MT</p>
-                    </div>
-                    <input style="font-weight: 600; height: 40px;" id="valor-paypal" type="number" placeholder="0 MT">
-                    <p style="font-size: 12px; margin-bottom: 8px;">Por favor insira um valor inteiro*</p>
-                    <div class="confirm">
-                        <input type="checkbox" name="" id="confirm-paypal"> Confirmar solicitação<br>
-                    </div>
-                    <button id="solicitarSaquePayPal" style=" background-color: #0056b3;">Solicitar</button>
-                    <button onclick="closeSaquePopup4()"
-                        style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;">Cancelar</button>
-                    <div id="response-message-2" class="response-message"></div>
-                </div>
-            </div>
-
-
-
-
-            <!-- Send Money -->
-            <div class="product-pop-container-5" id="product-pop-container-5">
-                <div class="saque-popup-5">
-                    <p style="margin-bottom: 6px; text-align: center; font-size: 16px;">Carteira a enviar*</p>
-                    <div class="wallet">
-                        <img class="wallet-selected" id="dpWallet" src="assests/dp-logo.png" alt=""
-                            onclick="dpWalletSelect()">
-                        <img id="paypalWallet" src="checkou-assets/paypal-waleet-logo.png" alt="" onclick="">
-                    </div>
-                    <P id="soon" style="font-weight: bold; font-size: 14px; display: none;">BREVEMENTE</P>
-
-                    <hr>
-                    <div>
-                        <select class="balances" name="" id="wallet-balance">
-                            <option value="emola-mpesa">Selecione o saldo a ser deduzida</option>
-                            <option value="emola-mpesa">M-pesa / eMola Balance</option>
-                            <option style="display: none;" value="paypal">PayPal Balance</option>
-                        </select>
-                    </div>
-                    <hr>
-                    <p style="text-align: start;">Montante a enviar*</p>
-                    <input style="font-weight: 600; height: 40px;" id="amount-to-send" type="number" placeholder="0 MT">
-                    <p style="font-size: 12px; margin-bottom: 8px;">Por favor insira um valor inteiro*</p>
-                    <p id="output" style="font-size: 14px; margin-bottom: 8px; color: red;"></p>
-                    <button id="sendMoneyNextPage" style=" background-color: #0056b3;">Proximo</button>
-                    <button onclick="closeSaquePopup5()"
-                        style=" background-color: #ffffff; color: #0056b3; border: 1px solid #0056b3;">Cancelar</button>
-                    <div id="response-message-2" class="response-message"></div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-            <div id="overlay" onclick="closePopup()"></div>
-            <div id="mpesaPopup">
-                <p id="infoError" style="color: #062858; font-size: 16px; font-weight: bold;">Informacao</p>
-
-                <hr>
-
-                <img style="border-radius: 10px; margin: 20px auto 10px; width: 60px; height: 60px;"
-                    src="checkou-assets/info.png" alt="">
-                <p id="textInfo">A criacao de funil de vendas estara disponivel em breve.</p>
-                <button class="showPopup" onclick="closePopup()">Fechar</button>
-            </div>
-
-            <div class="sidebar">
-                <div class="sidebar-header">
-                    <div class="sidebar-icon"></div>
-                    <img class="usermenu-icon"
-                        style="width: 40px; display: flex; border-radius: 50px; margin-right: 8px; "
-                        src="assests/dp-logo.png" alt="User Menu">
-                    <h2 style="color: white; font-size: 13px;">DROP PAYMENTS INC.</h2>
-
-
-
-                </div>
-                <hr>
-                <div class="menu">
-                    <div id="homepage" class="menu-item" onclick="selectMenu(this)"><i class="fa-thin fa-house"></i>
-                        Início</div>
-                    <div class="menu-item expandable" onclick="createProduct(), selectMenu(this)"><i
-                            class="fa-light fa-plus"></i> Criar produto</div>
-
-                    <div style="display: none;" id="upsellProduct"> <i class="fas fa-cube"></i>
-                        Upsells</div>
-                    <div style="display: none;" id="downsellProduct"> <img class="imgs-icon"
-                            src="assests/produto-icon.png" alt="produto-icon"> Downsells</div>
-                </div>
-
-                <div class="menu-item expandable" onclick="toggleDropdownmy('myproductDropdown'); selectMenu(this)">
-                    <i class="fa-thin fa-box-open"></i>
-                    Meus produtos
-                </div>
-                <div class="dropdown" id="myproductDropdown">
-                    <div id="principalProductmy" onclick="productPage()"><i class="fas fa-cube"></i>
-                        Ver meus produtos </div>
-                    <div style="display: none;" id="upsellProductmy"> <img class="imgs-icon"
-                            src="assests/produto-icon.png" alt="produto-icon">Produtos Upsells</div>
-                    <div style="display: none;" id="downsellProductmy"> <img class="imgs-icon"
-                            src="assests/produto-icon.png" alt="produto-icon">Produtos Downsells</div>
-                </div>
-
-                <div id="editcheckout" class="menu-item"><i class="fa-thin fa-gear"></i>
-                    Definições do checkout</div>
-                <div style="display: none;" id="donate" class="menu-item"><i class="fa fa-shopping-bag"
-                        aria-hidden="true"></i> Checkout para Doações</div>
-                <div id="vendasPage" class="menu-item">
-                    <div class="circle-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    Vendas
-                </div>
-                <div id="saques" class="menu-item"> <i class="fa-regular fa-credit-card"></i> Saques
-                </div>
-                <div id="funelPage" class="menu-item"> <i class="fas fa-filter"></i>
-                    Funil de Venda</div>
-                <div id="pixelpage" class="menu-item"> <!-- Ícone de Wi-Fi dentro de um Círculo com CSS --> <i
-                        class="fas fa-wifi"></i> Pixel do Facebook</div>
-                <div id="shopifyIntegration" onclick="selectMenu(this)" class="menu-item"> <i
-                        class="fab fa-shopify"></i>
-                    Vincular na Shopify</div>
-                <hr class="hr2">
-                <div id="instaPage" class="menu-item"> <i class="fab fa-instagram"></i>
-                    Siga-nos no Instagram</div>
-                <div id="supportPage" class="menu-item"> <i class="fab fa-whatsapp"></i>
-                    Ajuda e Supporte 24/7</div>
-                <div id="comunidade" class="menu-item"> <i class="fas fa-users"></i>
-                    Comunidade </div>
-
-            </div>
-        </div>
-
-        <div class="active" id="active">
-            <div id="conteudo" class="content">
-
-
-
-
-
-
-                <div class="header">
-
-
-                    <span id="userName"
-                        style="font-size: 20px; margin-left: 20px; font-weight: 500; color: rgb(39, 39, 39);; ">
-                        carregando...</span>
-
-                    <div class="user-menu" onclick="toggleDropdown('userMenu')">
-                        <img id="profileFoto" class="usermenu-icon"
-                            style="width: 50px; display: flex; border-radius: 50px; box-shadow: 0px 4px 8px rgb(0, 73, 173); "
-                            src="assests/user.png" alt="User Menu">
-                    </div>
-
-
-                    <div id="userMenu" class="dropdown2">
-                        <img id="profileFoto1" src="assests/user.png" style="width: 50px; border-radius: 50px;" alt="">
-                        <p id="userName2">carregando dados...</p>
-                        <p id="userEmail">carregando dados...</p>
-                        <div id="myacc" style="margin-top: 20px;"> <i class="fa fa-user" aria-hidden="true"></i>
-                            Minha conta</div>
-                        <div id="paymentMethod"> <i class="fas fa-money-check"></i>
-                            Informacoes de pagamento</div>
-                        <div id="apiCrendentials"> <i class="fa fa-key" style="margin-top: 4px;" aria-hidden="true"></i>
-                            Credenciais da API</div>
-                        <div id="apiDoc"> <i class="fa fa-book" aria-hidden="true"></i> Documentação da API </div>
-                        <div id="help"> <i class="fa fa-question-circle" aria-hidden="true"></i> Ajude </div>
-                        <div id="logoutButton"> <i class="fa fa-sign-out" aria-hidden="true"></i> Sair</div>
-                    </div>
-                </div>
-                <div style="display: none;" class="progress-label">
-                    <span style="font-size: 14px;" id="progress-text">MZN 0 </span>
-                    <strong style="margin-left: 5px; font-size: 14px;"> / MZN 100,000.00 </strong>
-                </div>
-
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
-
-                <!-- Div Container posicionada abaixo da div Header -->
-                <div class="container">
-                    <div class="box">
-                        <h2 style="font-size: 18px; font-weight: 500;">Saldo disponível para saque</h2>
-                        <p id="saldoDisponivel"
-                            style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold; display: inline;">
-                        </p>
-                        <p style="display: inline-block;"> <button id="hideFirstBalance"
-                                style="background-color: transparent; border: none;">
-                                <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
-                            </button></p> <br></p>
-                        <button id="showSaquepop" class="button" style="margin: 8px;"> <i class="fa fa-credit-card-alt"
-                                aria-hidden="true"></i> Solicitar Saque </button>
-                        <button id="saquesHistoryView"> <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                            Historico de saques</button>
-
-                        <p style="color: red; font-weight: bold;" id="saqueInfo"> </p>
-                        <p>Vendas das carteiras:</p>
-                        <img class="imgs-payments" src="assests/emola.png" alt="">
-                        <img class="imgs-payments" src="assests/mpesa2.jpg" alt="">
-                    </div>
-                    <div class="box">
-                        <h2 style="font-size: 18px; font-weight: 500;">Saldo disponivel para saque: </h2>
-                        <p id="paypalBalance"
-                            style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold; display: inline; " "></p> <p style="
-                            display: inline-block;"> <button style="background-color: transparent; border: none;"
-                                id="hideBalance">
-                                <i class="fa fa-eye-slash" aria-hidden="true"></i> <!-- Ícone inicial -->
-                            </button></p> <br>
-                        <button id="showSaquepopPay" class="button" style="margin: 8px;"> <i
-                                class="fa fa-credit-card-alt" aria-hidden="true"></i> Solicitar Saque </button>
-                        <button id="saquesHistoryView"> <i class="fa fa-credit-card-alt" aria-hidden="true"></i>
-                            Historico de saques</button>
-
-                        <p style="color: red; font-weight: bold;" id="saqueInfo2"> </p>
-                        <p>Vendas da carteira:</p>
-                        <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
-
-                    </div>
-                    <div class="box">
-                        <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 16px;">Ultimo saque efetuado
-                        </h2>
-                        <p id="pedidoDeSaque"
-                            style="color: #272727; font-size: 19px;  margin: 10px; font-weight: bold;">MZN 0.00 </p>
-                        <p id="saqueStatus" style="font-size: 18px;"><strong>Estado:</strong> Pendente</p><br>
-
-                        <button style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);" id="sendMoney"> Enviar
-                            dinheiro</button>
-                        <p id="sendMoneyInfo" style="color: red; font-weight: 600; display: none;">Recurso
-                            indisponivel!</p>
-                    </div>
-                    <div class="box">
-                        <h2 style="font-size: 18px; font-weight: 500; ">Vendas realizadas hoje</h2>
-                        <p>
-                        <p id="vendasHoje" style="color: #006e2f; font-size: 19px; font-weight: 500; margin: 10px;">
-                            MZN 0.00</p>
-                        </p>
-                        <button id="vendasHistoryView"> <i class="fa-solid fa-hand-holding-dollar"></i> Historico de
-                            vendas </i> </button>
-                        <p>Transações das carteiras:</p>
-                        <img class="imgs-payments" src="assests/emola.png" alt="">
-                        <img class="imgs-payments" src="assests/mpesa2.jpg" alt="">
-                        <i style="font-size: 28px;" class="fab fa-paypal fa-2x"></i>
-                    </div>
-
-                    <canvas id="salesChart"></canvas>
-                    <!-- Inclua a biblioteca Chart.js -->
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                </div>
-                <!--Start of Tawk.to Script-->
-                <script type="text/javascript">
-                    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-                    (function () {
-                        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                        s1.async = true;
-                        s1.src = 'https://embed.tawk.to/674a1cf24304e3196aea9741/1idso269o';
-                        s1.charset = 'UTF-8';
-                        s1.setAttribute('crossorigin', '*');
-                        s0.parentNode.insertBefore(s1, s0);
-                    })();
-                </script>
-                <!--End of Tawk.to Script-->
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </div> <!--Active menu-->
-        <div id="active2" class="active2">
-
-            <div id="loader-2" class="loader-container"
-                style="display: none; justify-content: center; align-items: center; height: 100vh;">
-                <div class="thin-loader"></div>
-            </div>
-
-            <div class="container2">
-                <p id="requestStatus"
-                    style="font-weight: bold; border: 1px solid #062858; padding: 8px; margin: 8px;  width: 400px; border-radius: 7px; margin-left: 0px; color: #031125; font-size: 12px; display: none; ">
-                    ESTADO DA SOLIÇITAÇÃO: <span id="statusRef" style="color: rgb(160, 14, 14);">PENDENTE</span></p>
-                <p id="clientLabel" style="font-size: 16px; color: #363636; margin-bottom: 15px; display: none; ">
-                    <strong> </strong> <span id="clientID" style="margin-left: 8px;"></span>
-                </p>
-                <hr>
-                <p class="title">Preencha os campos abaixo para solicitar a integração dos meios de pagamento
-                    M-pesa/e-Mola em sua loja na shopify.</p>
-
-                <div class="row">
-
-                </div>
-                <img style="width: 180px;" src="assests/D__24_-removebg-preview.png" alt="dp-shopify-banner">
-
-                <p>Seu whatsapp * <span style="color: #333333 ;">Entraremos em contacto atraves desde numero.</span>
-                </p>
-                <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="whatsapp"
-                    placeholder="Inisira seu whatsapp" class="inputForm">
-                <p>Nome da loja * </p>
-                <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="storename"
-                    placeholder="Inisira o nome da loja" class="inputForm">
-                <p>Link da loja * </p>
-                <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  " type="text" id="storeurl"
-                    placeholder="Inisira o link da loja" class="inputForm">
-                <p>Email onde receberá as notificações de pedidos gerados pelos compradores * </p>
-                <input style="width: 400px;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " type="text" id="emailuser"
-                    placeholder="Inisira o seu email" class="inputForm"> <br>
-                <button id="sendInfo"> Enviar solicitação</button>
-                <p id="outPutrequest">Solicitação enviada com sucesso, dentro de 3 dias entraremos em contacto.</p>
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
+    <div class="header-mobile-menu">
+        <i onclick="handleMenu()" id="icon" class="bi bi-list"></i>
+        <img src="app/src/assets/logo-dp.png" alt="logo">
+    </div>
+
+    <div class="mobile-options">
+        <ul>
+            <button class="login"><a href="auth/login/">Entrar</a></button>
+            <button class="signup"><a href="auth/register/">Criar conta</a></button>
+            <li><a href="#">Solucoes</a></li>
+            <li><a href="#">Taxas</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Suporte</a></li>
+
+        </ul>
 
     </div>
 
 
+    <div class="body-container">
+
+        <div class="about">
+            <div class="grid p-5 gap-6">
+                <p class="slogan">Crie e venda produtos digitais <br> de maneira simplificada</p>
+                <div>
+                    <p>✓ Aqui é possivel monetizar o seu conhecimento de maneira simplificada.</p>
+                    <p><strong style="color: #3674B5;">✓ Não cobramos</strong> nenhuma taxa de adesão e nem mensalidades
+                    </p>
+                </div>
+                <button class="get-started"><a href="auth/register/">Começar</a>r</button>
+            </div>
+            <img src="app/src/assets/dashboards.png" alt="dashboard" class="fade-in">
+
+        </div>
+
+        <div id="tax" class="tax">
+            <img src="index/assets/tax-corporate.jpg" alt="tax">
+            <div  class="grid p-5 gap-6">
+                <p class="title">Quanto cobramos por cada venda sua realizada?</p>
+            <div>
+                <p>✓ Nao cobramos nenhuma taxa por venda realizada.</p>
+                <p>✓ Atualmente cobramos uma taxa unica de <span class="tax-value">9.9 % </span>por cada saque realizado
+                    pelo vendedor.</p>
+                <button class="get-started mt-2"><a href="auth/register/">Começa</a>r</button>
+            </div>
+            </div>
+        </div>
+
+        <div class="about">
+            <img src="app/src/assets/saque.png" alt="saque" class="fade-in">
+            <div class="grid p-5 gap-6">
+                <p class="slogan">Saques rápidos</p>
+                <div>
+                    <p>Saque de vendas realizads via eMola e M-pesa é processado em até 24h. <br> Com valor minimo de
+                        retirada igual a <strong style="color: #3674B5;"> 100 MT.</strong></p>
+                    <br>
+                    <p>Saque de vendas realizads via PayPal é processado em até 7 dias. <br> Com valor minimo de
+                        retirada igual a <strong style="color: #3674B5;">3500 MT.</strong></p>
+
+                </div>
+                <button class="get-started"><a href="auth/register/">Começa</a>r</button>
+            </div>
+
+        </div>
+
+        <div>
+            <!-- FAQ Section -->
+            <p class="slogan">Perguntas Frequentes</p>
+            <section id="faq" class="faq">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>01</span>
+                        <p>Quanto custa para usar a DROP PAYMENTS?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>A **DROP PAYMENTS** retém apenas **9,9%** do valor de cada saque realizado pelo usuário, sem cobrar nenhuma taxa para o uso da plataforma. Isso significa que o usuário recebe **90,1%** do valor sacado. Essa taxa foi reduzida ao máximo para garantir que os usuários obtenham o maior lucro possível.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>02</span>
+                        <p>A DROP PAYMENTS cobra alguma taxa para envio do saque?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Não! A DROP PAYMENTS LTD não cobra nenhuma taxa para envio do saque.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>03</span>
+                        <p>Por que só pagar quando eu vender faz mais sentido do que pagar mensalidade?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Com este modelo, você tem menos riscos e só paga quando tem resultados.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>04</span>
+                        <p>Quantos produtos posso cadastrar na DROP PAYMENTS MZ?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Atualmente temos um limite de 10 produtos por usuario, caso o usuario necessite da cadastrar
+                            mais
+                            produtos pode entrar em contacto com o suporte, para receber a devida assistencia.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>05</span>
+                        <p>Quais são os metodos de pagamentos que a DROP PAYMENTS MZ aceita?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>A DROP PAYMENTS MZ aceita os seguintes metodos de pagamentos em seus chekouts: M-PESA,
+                            E-MOLA,
+                            PAYPAL E CARTAO DE DEBITO/CREDITO (VISA/MASTERCAR) apartir do gateway de pagamentos do
+                            PAYPAL.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>06</span>
+                        <p>Que tipo de produto posso vender na DROP PAYMENTS MZ?</p>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Na DROP PAYMENTS MZ pode hospedar e vender ebooks em formato .PDF ou links externos caso seja
+                            um
+                            curso hospedado em um outro local que voçe queira que os seus compradores acessem.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3><strong>Drop payments</strong></h3>
+                <a href="https://www.dropaymentsmz.online/produtos">Meus Produtos</a>
+                <a href="https://www.dropaymentsmz.online/criar-conta">Criar minha conta</a>
+                <a href="https://www.dropaymentsmz.online/criar-conta">Vender curso online</a>
+
+            </div>
+            <div class="footer-column">
+                <h3><strong>Parceiros</strong></h3>
+                <img src="checkou-assets/M-Pesa-partner.png" alt="M-pesa">
+            </div>
+            <div class="footer-column">
+                <h3><strong>Comunidade</strong></h3>
+                <a href="https://chat.whatsapp.com/EWw6uuMvY91DIp0sDZm1MT">Comunidade no whatsapp</a>
+            </div>
+            <div class="footer-column">
+                <h3><strong>Suporte</strong></h3>
+                <a href="https://api.whatsapp.com/send?phone=258863814050&text=Preciso%20de%20ajuda...">Centro de
+                    ajuda</a>
+                <a href="https://api.whatsapp.com/send?phone=258863814050">Fale conosco</a>
+            </div>
+        </div>
+        <p style="margin-top: 12px; text-align: center; font-size: 13px;">&copy; DROP PAY é operado pela DROP PAGAMENTOS
+            E SERVIÇOS DIGITAIS E.I
+            - Todos direitos reservados - LICENÇA N°: 16665/10/01/PS/2025 </p>
+    </footer>
 
 
 
-    <script src="index.js"></script>
+
+
+
+
+
+
 
     <script>
-        function createProduct() {
-            window, location.href = 'https://www.dropaymentsmz.online/create_product';
+        const icon = document.getElementById('icon');
+        let state = true;
+
+        function handleMenu() {
+            const sidebar = document.querySelector('.mobile-options');
+
+            state = !state;
+            if (state) {
+                icon.classList.remove('bi-x-lg');
+                icon.classList.add('bi-list');
+                sidebar.style.display = 'none';
+
+            } else {
+                icon.classList.remove('bi-list');
+                icon.classList.add('bi-x-lg');
+                sidebar.style.display = 'block';
+
+            }
         }
-        function productPage() {
-            window.location.href = 'produtos.html'
+
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const plusMinus = element.querySelector('span:last-child');
+
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+                plusMinus.textContent = "+";
+            } else {
+                answer.style.display = "block";
+                plusMinus.textContent = "-";
+            }
         }
-        document.getElementById('paypalWallet').addEventListener('click', () => {
-            document.getElementById('soon').style.display = 'block';
+
+
+        // script.js
+        document.addEventListener("DOMContentLoaded", function () {
+            const images = document.querySelectorAll('.fade-in');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target); // Para parar de observar após a imagem surgir
+                    }
+                });
+            }, {
+                threshold: 0.5 // Ajuste este valor para controlar quando a imagem deve surgir
+            });
+
+            images.forEach(image => {
+                observer.observe(image);
+            });
         });
-        let wallet_destin = 'dp-wallet';
 
-        function dpWalletSelect() {
-            document.getElementById("dpWallet").classList.add("wallet-selected");
-            document.getElementById("paypalWallet").classList.remove("wallet-selected");
-            wallet_destin = 'dp-wallet';
-            return wallet_destin
-        }
-        function paypalWalletSelect() {
-            document.getElementById("paypalWallet").classList.add("wallet-selected");
-            document.getElementById("dpWallet").classList.remove("wallet-selected");
-            wallet_destin = 'paypal';
-            return wallet_destin
-        }
-
-
-        document.getElementById('sendMoneyNextPage').addEventListener('click', function () {
-
-            const sender_email = document.getElementById("userEmail").textContent;
-            document.getElementById("sendMoneyNextPage").innerHTML = '<i style="font-size: 16px;" class="fas fa-circle-notch fa-spin fa-2x"></i>';
-            const wallet_balance = document.getElementById("wallet-balance").value;
-            const amount = document.getElementById("amount-to-send").value;
-            if (wallet_balance != 'emola-mpesa') {
-                document.getElementById('output').textContent = 'Selecione o saldo a ser deduzido!';
-                document.getElementById('output').style.display = 'block';
-                return;
-            } else {
-
-            }
-            if (amount >= 10) {
-
-            } else {
-                document.getElementById('output').textContent = 'montante invalido';
-                document.getElementById('output').style.display = 'block';
-                return 'montante invalido';
-            }
-            window.location.href = `https://www.dropaymentsmz.online/end_payment.html?wallet_balance=${wallet_balance}&wallet_destin=${wallet_destin}&amount=${amount}&sender_email=${sender_email}`;
-
-        });
-
-
-        function showMenu(menuId) {
-            // Esconder todos os menus
-            document.querySelectorAll('.menuHidden').forEach(menu => menu.classList.remove('active'));
-            // Mostrar o menu selecionado
-            document.getElementById(menuId).classList.add('active');
-            //document.getElementById('loader-2').style.display = 'none';
-        }
-
-        function closeProductPopup() {
-            const popupBackground2 = document.getElementById('product-pop-container-2');
-            popupBackground2.style.display = 'none';
-        }
-
-        function closeSaquePopup() {
-            const popupBackground3 = document.getElementById('product-pop-container-3');
-            popupBackground3.style.display = 'none';
-        }
-        function closeSaquePopup4() {
-            const popupBackground3 = document.getElementById('product-pop-container-4');
-            popupBackground3.style.display = 'none';
-        }
-        function closeSaquePopup5() {
-            const popupBackground3 = document.getElementById('product-pop-container-5');
-            popupBackground3.style.display = 'none';
-        }
-
-
-
-
-        // Versão atual do popup (altere essa versão quando houver uma atualização)
-        const popupVersion = '6.0'; // Atualize essa string para uma nova versão, como '1.1' ou '2.0'
-
-        // Função para exibir o popup
-        function showPopup2() {
-            const popupBackground = document.getElementById('popup-background');
-            popupBackground.style.display = 'block';
-        }
-
-        // Verifica se o popup já foi exibido para a versão atual
-        function verifyPopup() {
-            const storedVersion = localStorage.getItem('infoUpdateVersion');
-
-            // Se a versão armazenada for diferente da atual, mostra o popup
-            if (storedVersion !== popupVersion) {
-                showPopup2();
-            } else {
-                console.error("...");
-            }
-        }
-
-        // Função para fechar o popup
-        function closePopup2() {
-            const popupBackground = document.getElementById('popup-background');
-            popupBackground.style.display = 'none';
-            console.log("Popup fechado.");
-
-            // Marca no localStorage que o popup foi exibido para a versão atual
-            localStorage.setItem('infoUpdateVersion', popupVersion);
-        }
-
-        verifyPopup();
-
-
-        // Adiciona o evento de clique no botão de fechar o popup
-        document.getElementById('close-popup').addEventListener('click', closePopup2);
     </script>
-
-    <script type="module" src="checkoutDef.js"></script>
-
 </body>
 
 </html>

@@ -14,7 +14,7 @@ export async function salesPage() {
 export async function displaySales() {
     try {
         const user_id = await getUserId();
-        const response = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+        const response = await axios.post("https://www.dropaymentsmz.online/api/v2/live/server", {
             reqType: "user_sales",
             userId: user_id,
         });

@@ -44,6 +44,20 @@
   </div>
 
   <p style="margin-top: 50px;">&copf; Drop Payments E.I</p>
+  <script>
+      fetch("http://127.0.0.1:4000/api/protected", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.cookie.replace(
+            /(?:(?:^|.*;\s*)csrf_token\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1"
+        ),
+    },
+    body: JSON.stringify({ dados: "exemplo" }),
+});
+
+  </script>
 </body>
 
 </html>

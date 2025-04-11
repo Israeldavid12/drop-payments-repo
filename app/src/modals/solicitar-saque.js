@@ -92,7 +92,7 @@ document.body.addEventListener('submit', async function (event) {
         
             try {
                 const userId = await getUserId(); // Pegando o ID do usuário
-                const response = await axios.post('https://www.dropaymentsmz.online/api/solicitar-saque', {
+                const response = await axios.post('http://127.0.0.1:3014/api/solicitar-saque', {
                     userId: userId,
                     valorSolicitado: amount_to_withdraw,
                     type: balance_type_change

@@ -1,6 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
 import { addLoadAnim } from "../../../app/src/animations/index.js";
+// import { userAuthSate } from "../../../app/src/user/user_data.mjs";
+
+
+
 
 
 const firebaseConfig = {

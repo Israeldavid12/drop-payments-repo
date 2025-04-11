@@ -6,7 +6,7 @@ import { formatBalance } from "../animations/index.js";
 async function userData() {
     try {
         const userId = await getUserId();
-        const userDataResponse = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const userDataResponse = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: userId,
             reqType: 'user_data',
         });
@@ -31,7 +31,7 @@ export async function financeHub() {
 
     try {
         const userId = await getUserId();
-        const userDataResponse = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
+        const userDataResponse = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: userId,
             reqType: 'user_data',
         });
@@ -63,7 +63,7 @@ export async function financeHub() {
 export async function setLastSale() {
     try {
         const user_id = await getUserId();
-        const response = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+        const response = await axios.post("https://www.dropaymentsmz.online/api/v2/live/server", {
             reqType: "user_sales",
             userId: user_id,
         });

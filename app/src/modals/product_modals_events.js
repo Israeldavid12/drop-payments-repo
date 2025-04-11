@@ -76,7 +76,7 @@ document.body.addEventListener('click', async function (event) {
         try {
             addLoadAnim('confirm-delete', 'Sim', true)
             const productId = document.querySelector('.product-id').textContent
-            const response = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+            const response = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
                 productId: productId,
                 reqType: 'delete_product',
                 userId: await getUserId(),

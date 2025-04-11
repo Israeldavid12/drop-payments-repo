@@ -27,7 +27,12 @@ export const purchasePopup = async (flag, type) => {
             document.body.appendChild(div);
         }
     } else if (flag === false) {
-        document.body.querySelector('.dynamic-popup').remove()
+        const popup = document.body.querySelectorAll('.dynamic-popup')[0];
+        if (popup) {
+            popup.remove();
+        } else {
+            console.log('Elemento .dynamic-popup não encontrado para remoção');
+        }
     } else {
         console.error('ERRO AO CHMAR FUNCAO')
     }

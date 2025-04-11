@@ -8,11 +8,11 @@ export async function handleUserData() {
         const userId = await getUserId();
         console.log("UID do usuário logado:", userId);
 
-        const paymentData = await axios.post('https://www.dropaymentsmz.online/api/balance', {
+        const paymentData = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: userId,
             reqType: 'user_payment_data',
         });
-        const fech_data = await axios.post('http://127.0.0.1:3013/api/v2/live/server', {
+        const fech_data = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', {
             userId: userId,
             reqType: 'user_data',
         });
@@ -103,7 +103,7 @@ async function saveData() {
             contacto_2: contacto_2
         }
         console.log(payload);
-        const response = await axios.post('http://127.0.0.1:3013/api/v2/live/server', payload);
+        const response = await axios.post('https://www.dropaymentsmz.online/api/v2/live/server', payload);
 
         console.log(response.data);
 

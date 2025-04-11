@@ -13,7 +13,7 @@ function startCountdown() {
     const countdown = setInterval(() => {
         if (timeLeft <= 0) {
             clearInterval(countdown);
-            timerElement.innerHTML = "Tempo Esgotado!";
+            timerElement.innerHTML = "00 : 00 : 00";
         } else {
             let minutes = Math.floor(timeLeft / 60);
             let seconds = timeLeft % 60;

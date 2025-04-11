@@ -1,6 +1,9 @@
 const express = require("express");
 const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
+const axios = require("axios")
+
+
 
 // Inicialize o Firebase Admin SDK
 const serviceAccount = require("../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); // Substitua pelo seu arquivo de credenciais
@@ -45,11 +48,28 @@ app.post('/api/solicitar-saque', async (req, res) => {
     const balanceRef = admin.database().ref(`users/${userId}/balance`);
     const paypalBalanceRef = admin.database().ref(`users/${userId}/paypalBalance`);
 
+
+    //Autualizar para o saldo mais recente
+    const update = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
+      reqType: 'user_data',
+      userId: userId
+    });
+    console.log("Dados atualizados : ", update.data);
+
+    // Verifica se a chave 'nationalId' existe e não está vazia
+    const userSnapshot = await userRef.once('value');
+    const userData = userSnapshot.val();
+
+    if (!userData.nationalId) {
+      return res.status(400).json({ message: 'Por favor complete seu perfil para usar esta funcao.' });
+    }
+
+
     // Verifica o método de pagamento do usuário
     const userPaymentMethodsSnapshot = await userPaymentMethodsRef.once('value');
     if (!userPaymentMethodsSnapshot.exists()) {
-      console.log("'Método de pagamento não configurado. Redirecionando para configuração.");
-      return res.status(400).json({ message: 'Método de pagamento não configurado. Redirecionando para configuração.' });
+      console.log("Método de pagamento não configurado.");
+      return res.status(400).json({ message: 'Método de pagamento não configurado.' });
     }
 
     const paymentData = userPaymentMethodsSnapshot.val();
@@ -131,19 +151,24 @@ app.post('/api/solicitar-saque', async (req, res) => {
       templateType: "5-W-Admin",
     };
 
+
+
     // Enviar os e-mails em paralelo
     const responses = await Promise.all([
-      fetch('https://www.dropaymentsmz.online/api/send-email', {
+      fetch('http://127.0.0.1:3002/api/v2/smtp/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payloadSendWidrawUser),
       }),
-      fetch('https://www.dropaymentsmz.online/api/send-email', {
+      fetch('http://127.0.0.1:3002/api/v2/smtp/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payloadSendWidrawAdmin),
       }),
     ]);
+
+    // console.log(responses)
+    
 
     // Verificar se as requisições foram bem-sucedidas
     const isSuccess = responses.every((response) => response.ok);

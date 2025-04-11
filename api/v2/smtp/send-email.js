@@ -1581,7 +1581,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
             return res.status(500).json({ message: 'Erro na requisição', error: error.message });
         } else {
             console.log('E-mail enviado: ' + info.response);
-            res.json({ message: 'E-mail enviado com sucesso!', info: info.response });
+            return res.status(200).json({ message: 'E-mail enviado com sucesso!', info: info.response, status_code: 200  });
         }
     });
 });

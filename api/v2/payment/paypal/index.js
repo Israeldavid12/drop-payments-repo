@@ -6,6 +6,7 @@ const axios = require("axios");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 const { captureOrder, createOrder } = require('./functions/index.js')
+const { getDate } = require('../../../../backend/functions/index.js')
 
 
 
@@ -245,6 +246,7 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
       const userId = productData.userId;
 
       const paymentIdDB = new Date().getTime().toString();
+      let create_date = getDate();
 
       const paymentData = {
         productId: productData.productId,
@@ -260,12 +262,13 @@ app.post("/api/v2/payment/paypal", async (req, res) => {
         description: transaction?.description || "N/A",
         currency: currency || "N/A",
         nome: productData.name || "N/A",
-        timestamp: new Date().toISOString() || "N/A",
+        timestamp: Date.now()  || "N/A",
+        createAt: create_date,
 
       };
 
-      await db.ref(`users/${userId}/payments/${paymentIdDB}`).set(paymentData)
-      //Autualizar para o saldo mais recente
+      await db.ref(`users/${userId}/payments/${paymentIdDB}`).update(paymentData)
+      //Autualizar para o saldo mais recente   
       const update = await axios.post("http://127.0.0.1:3013/api/v2/live/server", {
         reqType: 'user_data',
         userId: userId

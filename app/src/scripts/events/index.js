@@ -17,7 +17,7 @@ document.addEventListener('submit', async function (event) {
       const formData = new FormData(event.target);
       const feedback_data = Object.fromEntries(formData.entries());
       console.log(feedback_data);
-      const send = await axios.post('http://127.0.0.1:3002/api/v2/smtp/send-email', {
+      const send = await axios.post('https://www.dropaymentsmz.online/api/v2/smtp/send-email', {
         templateType: '11-FEEDBACK',
         ...feedback_data
       });

@@ -1,0 +1,81 @@
+.payout-method {
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 30px;
+    margin: 10px 0;
+
+}
+
+.payout-method #payout-method-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.payout-method #payout-method-type:hover {
+    border: 1px solid rgb(69, 137, 201);
+}
+
+
+.payout-method #cancel-register {
+    border: 1px solid rgb(69, 137, 201);
+    background-color: white;
+    margin: 0;
+    color: rgb(69, 137, 201);
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: start;
+    margin-top: 16px;
+    width: 100%;
+    padding: 18px 0;
+    gap: 16px;
+}
+
+.payout-method input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgb(69, 137, 201);
+    background-color: white;
+    color: rgb(32, 32, 32);
+    font-size: 16px;
+    outline: none;
+}
+
+.add-payment-method {
+    background-color: mediumvioletred;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 23px;
+}
+
+.add-payment-method:hover {
+    background-color: rgb(69, 137, 201);
+    color: white;
+    outline: 1px solid rgb(69, 137, 201);
+}
+
+
+@media (max-width: 768px) {
+    .buttons-container {
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        gap: 16px;
+    }
+
+    .add-payment-method {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        margin: 0;
+    }
+
+
+
+}

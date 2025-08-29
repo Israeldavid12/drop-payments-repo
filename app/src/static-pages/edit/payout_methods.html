@@ -1,0 +1,42 @@
+<div class="payout-method">
+    <p class="text-[20px] font-[700] mb-3">Adicionar ou atualizar metodo de pagamento</p>
+    <p>As informações preenchidas são de sua responsabilidade e devem ser iguais aos seus dados.</p>
+
+    <div>
+        <form  id="payout-method-form" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 mt-4">
+                <div class="flex flex-col gap-2">
+                    <label for="payout-method-type">Metodos disponiveis</label>
+                    <select name="payout-method-type" id="payout-method-type" class="input">
+                        <option value="" disabled>Selecione o tipo de conta</option>
+                        <option value="m-pesa">-- M-pesa --</option>
+                        <option value="e-mola">-- e-Mola --</option>
+                        <option value="paypal">-- PayPal --</option>
+                       
+                    </select>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="payout-method-name">Nome do titular</label>
+                    <input type="text" placeholder="Nome do titular" id="account_holder" required>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="payout-method-number">ID da conta / Numero da conta</label>
+                    <input type="text" id="account_id" class="" placeholder="Número da conta" required>
+                </div>
+
+                <!-- <div class="flex flex-col gap-2">
+                    <label for="payout-method-bank">Banco (Opcional)</label>
+                    <input type="text" id="payout-method-bank" class="input`m-0" placeholder="Banco">
+                </div> -->
+
+                <div class="buttons-container" >
+                    <!-- <button id="cancel-register" class="p-save-btn" type="reset" >Cancelar</button> -->
+                    <a href="javascript:history.back()" id="cancel-register" class="p-save-btn" type="reset">Cancelar</a>
+                    <button id="save-payout-method" class="p-save-btn m-0" type="submit" onclick="">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

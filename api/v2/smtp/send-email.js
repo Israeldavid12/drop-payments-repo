@@ -25,8 +25,8 @@ app.use(json()); // Middleware para permitir parsing de JSON no corpo das requis
 const transporter = createTransport({
     service: 'gmail',
     auth: {
-        user: 'droppaymentsinc@gmail.com', // Seu e-mail do Gmail
-        pass: 'xldaxfnloqgysvuq', // Sua senha de aplicativo do Gmail
+        user: 'contacto0dropay@gmail.com', // Seu e-mail do Gmail
+        pass: 'gyjsuthaqcpzmovs', // Sua senha de aplicativo do Gmail
     },
 });
 
@@ -362,7 +362,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
             <p>Atenciosamente,<br>Equipe Drop Payments</p>
             <p></p>
             <p style="font-size: 14px;">Se precisar de ajuda para Acessar o produto.</p>
-            <a id="suporte" href="https://api.whatsapp.com/send?phone=258863814050">Clique aqui</a>
+            <a id="suporte" href="https://api.whatsapp.com/send?phone=258852610323">Clique aqui</a>
         </div>
         <div class="footer">
             &copf; Drop Payments – Todos direitos Reservados - 2025
@@ -1568,7 +1568,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
 
     // Opções do e-mail
     const mailOptions = {
-        from: 'droppaymentsinc@gmail.com', // Email remetente
+        from: 'contacto0dropay@gmail.com', // Email remetente
         to: receiptEmail, // Email do destinatário, vindo do body da requisição
         subject: subject,
         html: htmlTemplate, // O conteúdo HTML do e-mail

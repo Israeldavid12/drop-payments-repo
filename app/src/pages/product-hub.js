@@ -45,7 +45,7 @@ export const displayProducts = async () => {
       div.classList.add('product-card');
 
       const card = ` <img class="product-image skeleton image" src="${element.imageUrl}" alt="product_image">
-      <p class="status-sales">Vendas activas</p>
+      <p class="status-sales">Vendas activas: <span class="pc-id">${element.is_active}</span> </p>
       <p>ID: <span class="pc-id">${element.productId}</span></p>
       <p class="name" >${element.name}</p>
       <p class="pc-id price">${element.price} MT</p>

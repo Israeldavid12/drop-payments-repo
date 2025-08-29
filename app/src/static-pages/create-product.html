@@ -1,4 +1,3 @@
-
 <form id="product-form" action="">
     <div class="c-main-container">
         <p class="c-title">Criar produto: * </p>
@@ -20,6 +19,47 @@
             <p><span id="char-counter">0/200</span></p>
         </div>
 
+        <div class="category mb-3">
+            <label for="category" class="font-[700] text-[20px]">Selecione a categoria do produto:</label>
+            <select name="categoria-digital" id="category">
+                <option value="">-- Selecione --</option>
+
+                <!-- Cursos e Educação -->
+                <optgroup label="Cursos e Educação">
+                    <option value="cursos-online">Cursos Online</option>
+                    <option value="ebooks">E-books e Guias</option>
+                    <option value="certificacoes">Certificações Digitais</option>
+                </optgroup>
+
+                <!-- Software e Ferramentas -->
+                <optgroup label="Software e Ferramentas">
+                    <option value="aplicativos">Aplicativos e Apps</option>
+                    <option value="templates">Templates (Site, PPT, Word)</option>
+                    <option value="plugins">Plugins e Extensões</option>
+                    <option value="ia-ferramentas">Ferramentas de IA</option>
+                </optgroup>
+
+                <!-- Mídia Digital -->
+                <optgroup label="Mídia Digital">
+                    <option value="musica">Música e Efeitos Sonoros</option>
+                    <option value="fotos">Banco de Imagens</option>
+                    <option value="video">Vídeos e Animação</option>
+                </optgroup>
+
+                <!-- Jogos Digitais -->
+                <optgroup label="Jogos">
+                    <option value="jogos-pc">Jogos para PC</option>
+                    <option value="jogos-mobile">Jogos Mobile</option>
+                    <option value="assets-games">Assets para Game Dev</option>
+                </optgroup>
+
+                <!-- Serviços Digitais -->
+                <option value="assinaturas">Assinaturas (Cloud, Streaming)</option>
+                <option value="design">Design Sob Demanda (Logos, Artes)</option>
+            </select>
+
+        </div>
+ 
         <label for="productImage"><i class="fas fa-image"></i> Imagem do PRoduto :</label><br>
         <label class="upload-box" id="uploadArea">
             <span>Upload Image</span>
@@ -49,17 +89,17 @@
 
 
         <!-- Campo de link externo estilizado -->
-        <div id="productLinkDiv" >
-            <label for="productLink" >Insira o link Externo do Produto:</label>
+        <div id="productLinkDiv">
+            <label for="productLink">Insira o link Externo do Produto:</label>
             <input type="url" id="productLink" placeholder="https://example.com">
         </div>
-        
+
         <br>
 
         <!-- Campo de arquiv o PDF -->
-        <div id="productDocDiv" >
+        <div id="productDocDiv">
             <label for="productDoc">Arquivo do Produto (.PDF):</label>
-            <input type="file" id="productDoc" accept=".pdf" >
+            <input type="file" id="productDoc" accept=".pdf">
         </div>
 
         <div>

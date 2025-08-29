@@ -1,14 +1,12 @@
-import {userData} from "../user/user_data.mjs";
 
 
 export const userMenu =  async () => {
    try {
-   // const data = await userData();
     const container = document.createElement('div');
 
-    const pic_letter = localStorage.getItem('name');
-    const email = localStorage.getItem('email');
-    const name = localStorage.getItem('name');
+    const pic_letter =sessionStorage.getItem('name');
+    const email = sessionStorage.getItem('email');
+    const name = sessionStorage.getItem('name');
     console.log(pic_letter);
     const first_letter = pic_letter.charAt(0).toUpperCase();
 
@@ -19,7 +17,7 @@ export const userMenu =  async () => {
             <p class='change-theme' ><i class="bi bi-sun"></i> Modo claro</p>
            <hr>
            <div class="user_menu_items" >
-          <a href="#profile/user/data"><i class="bi bi-person-bounding-box"></i> Meus dados</a>
+          <a href="#profile/user/data"><i class="bi bi-person-bounding-box"></i> Dados do vendedor</a>
           <a href="#help"><i class="bi bi-question-circle"></i> Auda</a>
           <a href="#/feedback"><i class="bi bi-send"></i> Dar feedback ou sugestao</a>
           <a href="#logout"><i class="bi bi-box-arrow-right"></i> Sair</a>

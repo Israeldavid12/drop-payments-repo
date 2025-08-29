@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha</title>
+    <link rel="stylesheet" href="styles/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+    <div class="reset-password-container">
+        <h2>Redefinir Senha</h2>
+        <form id="reset-password-form">
+            <label for="new-password">Nova Senha</label>
+            <input type="password" id="new-password" placeholder="Digite a nova senha" required>
+            <button type="submit">Redefinir Senha</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        const supabaseUrl = 'https://ahwujnkfulwgzagshzrl.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFod3VqbmtmdWx3Z3phZ3NoenJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTI2NjUsImV4cCI6MjA2MDIyODY2NX0.Yav5nOeVPRQfPXhsSDn0AKvO4w8kFrFvYrV9ChZL5IM'
+
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+
+        if (!session) {
+            alert("Token inválido ou expirado. Refaça o processo de recuperação.")
+        }
+
+        document.getElementById('reset-password-form').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const novaSenha = document.getElementById('new-password').value
+
+            const { data, error } = await supabase.auth.updateUser({ password: novaSenha })
+
+            if (error) {
+                alert("Erro ao redefinir senha: " + error.message)
+            } else {
+                alert("Senha redefinida com sucesso! Você já pode fazer login.")
+                window.location.href = '/login.html' // redirecione conforme sua aplicação
+            }
+        })
+    </script>
+
+</body>
+
+</html>

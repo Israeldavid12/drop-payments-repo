@@ -26,7 +26,7 @@
 
     <div class="p-box user-national-id-container">
         <div>
-            <p>Nº do Bilhete de Identidade</p>
+            <p>Nº de Identificao Nacional (B.I)</p>
             <div class="input">
 
                 <input id="user-national-id" type="text">
@@ -35,31 +35,29 @@
     </div>
 
     <div class="p-box">
-        <p class="p-title">Informacoes Pagamento</p>
-        <div class="p-flex-container">
-            <div>
-                <p>Titular</p>
-                <input id="payment-name" type="text">
-            </div>
-            <div>
-                <p>Numero</p>
-                <input id="payment-number" type="text">
-            </div>
-
-
+        <p class="p-title">Meios de pagamentos</p>
+        <div class="flex w-full " >
+            <a href="#/edit/payout/method" class="add-payment-method"><i class="bi bi-plus"></i> Nova conta</a>
         </div>
 
-        <div class="p-select">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Titular</th>
+                    <th>Nº de conta</th>
+                    <th>Banco</th>
+                    <th>Data de criacao</th>
+                    <th></th>
+                </tr>
 
-            <p>Selecione um metodo de pagamento</p>
-            <select id="tipo-conta" class="form-select form-select-sm" aria-label="Small select example">
-                <option disabled>Selecione um metodo de pagamento</option>
-                <option value="M-PESA">M-pesa </option>
-                <option value="E-MOLA">e-Mola</option>
-            </select>
-            <br>
-            <img id="imageELement" src="src/assets/mpesa.png" alt="">
-        </div>
+            </thead>
+            <tbody id="payouts_methods_table">
+            </tbody>
+
+
+        </table>
+
 
 
     </div>
@@ -69,35 +67,15 @@
 
         <div class="p-flex-container">
             <div>
-                <p>Numero</p>
+                <p>Phone</p>
                 <input id="contacto-1" placeholder="ex: 87xxxxxxx" type="text">
-            </div>
-            <div>
-                <p>Numero 2</p>
-                <input id="contacto-2" placeholder="ex: 87xxxxxxx" type="text">
             </div>
 
         </div>
 
 
     </div>
-    <!-- <div class="p-box">
-        <p class="p-title">Contacto</p>
 
-        <div class="p-flex-container">
-            <div>
-                <p>Numero do Documento de Identificao</p>
-                <input id="contacto-1" placeholder="ex: 87xxxxxxx" type="text">
-            </div>
-            <div>
-                <p>Numero 2</p>
-                <input id="contacto-2" placeholder="ex: 87xxxxxxx" type="text">
-            </div>
-
-        </div>
-
-
-    </div> -->
 
 
 

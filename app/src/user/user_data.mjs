@@ -49,7 +49,7 @@ export const getUserId = () => {
         resolve(user.uid); // Retorna o UID se o usuário estiver logado
       } else {
         reject("Nenhum usuário logado"); // Se não houver usuário logado, rejeita
-        window.location.href = '/auth/login/';
+        // window.location.href = '/auth/login/';
       }
     });
   });
@@ -80,7 +80,7 @@ const get_data = async () => {
 }
 
 
-get_data();
+
 
 
 
@@ -115,7 +115,7 @@ export async function userData() {
 
 }
 
-userData();
+// userData();
 
 
 export async function logOut() {

@@ -7,14 +7,19 @@ import logging
 app = Flask(__name__)
 
 # Permite requisições de qualquer origem para todos os endpoints ou personalize conforme necessário
-CORS(app, resources={r"/api/v2/payment/mpesa/mpesa-payment-c2b": {"origins": "*"}})  # Substitua "*" por uma URL específica se necessário
+CORS(app)  # Substitua "*" por uma URL específica se necessário
 logging.basicConfig(level=logging.ERROR)
+print('Iniciando o servidor Flask...')
 
-@app.route('/api/v2/payment/mpesa/mpesa-payment-c2b', methods=['POST'])
+
+@app.route('/api/v2/payment/mpesa/mpesa-payment-c2b', methods=['POST', 'GET'])
+
 
 def mpesa_payment_c2b():
 
     try:
+        if request.method == 'GET':
+            return jsonify({"message": "Método GET aceito!"})  
         # Recuperando dados do corpo da requisição
         data = request.get_json()
 
@@ -24,6 +29,7 @@ def mpesa_payment_c2b():
         third_party_reference = data.get('input_ThirdPartyReference')
         service_provider_code = data.get('input_ServiceProviderCode')
         print(customer_msisdn)
+        
 
         if not all([transaction_reference, customer_msisdn, amount, third_party_reference, service_provider_code]):
             return jsonify({'error': 'Dados insuficientes na requisição'}), 400
@@ -49,6 +55,8 @@ def mpesa_payment_c2b():
         api_context.add_parameter('input_Amount', amount)
         api_context.add_parameter('input_ThirdPartyReference', third_party_reference)
         api_context.add_parameter('input_ServiceProviderCode', service_provider_code)
+        
+        print("Executando a requisição")
 
         # Executando a requisição
         api_request = APIRequest(api_context)
@@ -56,7 +64,7 @@ def mpesa_payment_c2b():
 
         # response_body = result.body if isinstance(result.body, dict) else result.body.decode()
         if result.status_code != 201:
-            print('ERRO: ', result.status_code)
+            print('Erro na requisicao: ', result.status_code)
             return jsonify(result.body), result.status_code
 
         # Formatando e retornando a resposta
@@ -70,10 +78,11 @@ def mpesa_payment_c2b():
         return jsonify(response), result.status_code 
 
     except Exception as error:
-        app.logger.error(f"Erro: {str(error.data)}")
-        print('ocorreu um exepcion')
-        return jsonify({'ocorreu um erro': str("AN ERROR AS OCURRED")}), 500
+        # app.logger.error(f"Erro: {str(error)}")
+        print('ocorreu um exepcion', error)
+        return jsonify({'ocorreu um erro': error}), 500
        
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -20,14 +20,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 
-// // Função para inicializar o Firebase
-// const serviceAccount = require("../../../.././credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json");
-
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//     databaseURL: "https://drop-payments-mz-default-rtdb.europe-west1.firebasedatabase.app", // Substitua pela URL do seu banco de dados
-// });
-
 const db = admin.database();
 
 
@@ -68,115 +60,6 @@ async function processPayment(amount, phoneNumber, trans_reference) {
 }
 
 
-
-// async function updateBalance(userId, amount) {
-
-
-//     const balanceRef = db.ref(`users/${userId}/balance`);
-//     await balanceRef.transaction(async (balance) => {
-//         if (balance === null) {
-//             balance = 0; // Inicializa o saldo se não existir
-//         }
-
-//         const paymentsRef = db.ref(`users/${userId}/payments`);
-//         let total = 0;
-//         let vendasHoje = 0;
-//         let paypalBalance = 0;
-
-//         // Recuperar todas as transações
-//         const snapshot = await paymentsRef.once("value")
-
-//         const updates = {}; // Objeto para batch updates
-//         let foundNewTransactions = false;
-//         let foundNewPayPalTransactions = false;
-
-//         snapshot.forEach((childSnapshot) => {
-//             const payment = childSnapshot.val();
-//             const paymentKey = childSnapshot.key;
-
-//             // Verifique o estado da transação para saldo geral
-//             if (payment.estado !== "computado" &&
-//                 payment.originalAmount &&
-//                 (payment.paymentMethod === "E-Mola" || payment.paymentMethod === "M-pesa" || payment.paymentMethod === "dp-wallet")) {
-//                 total += parseFloat(payment.originalAmount);
-//                 foundNewTransactions = true;
-
-//                 // Marcar transação como computada
-//                 updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-//             }
-
-//             // Calcular vendas realizadas hoje
-//             if (payment.timestamp && payment.originalAmount) {
-//                 const paymentDate = new Date(payment.timestamp).toISOString();
-//                 if (paymentDate >= startOfDay && paymentDate <= endOfDay) {
-//                     vendasHoje += parseFloat(payment.originalAmount);
-//                 }
-//             }
-
-//             // Verifique se a transação é do PayPal
-//             if (payment.paymentMethod === "PayPal" && payment.estado !== "computado" && payment.originalAmount) {
-//                 paypalBalance += parseFloat(payment.originalAmount);
-//                 foundNewPayPalTransactions = true;
-
-//                 // Marcar transação como computada
-//                 updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-//             }
-//         });
-
-//         // Arredondar valores para 2 casas decimais
-//         total = parseFloat(total.toFixed(2));
-//         vendasHoje = parseFloat(vendasHoje.toFixed(2));
-//         paypalBalance = parseFloat(paypalBalance.toFixed(2));
-
-
-//         // Recuperar o saldo atual
-//         const balanceSnapshot = await balanceRef.once("value");
-//         const currentBalance = balanceSnapshot.val() || 0;
-
-//         const paypalBalanceSnapshot = await paypalBalanceRef.once("value");
-//         const currentPayPalBalance = paypalBalanceSnapshot.val() || 0;
-
-//         // Somar os saldos atuais com os novos valores (se houver)
-//         let newBalance = currentBalance;
-//         let newPayPalBalance = currentPayPalBalance;
-
-//         if (foundNewTransactions) {
-//             newBalance = currentBalance + total;
-//         }
-
-//         if (foundNewPayPalTransactions) {
-//             newPayPalBalance = currentPayPalBalance + paypalBalance;
-//         }
-
-//         // Atualizar os saldos no diretório do usuário
-//         updates[`users/${userId}/balance`] = newBalance;
-//         updates[`users/${userId}/paypalBalance`] = newPayPalBalance;
-
-//         // Salvar todas as atualizações no banco de dados
-//         await db.ref().update(updates);
-
-
-//         return {
-//             balance: newBalance,
-//             paypalBalance: newPayPalBalance,
-//             vendasHoje: vendasHoje,
-//             success: true,
-//         };
-//     }, (error, committed, snapshot) => {
-//         if (error) {
-//             console.error('Erro ao atualizar saldo:', error);
-//             return {
-//                 success: false,
-//                 error: error.message,
-//             };
-//         } else if (committed) {
-//             console.log('Saldo atualizado com sucesso!');
-//         } else {
-//             console.log('Saldo já existe, não foi atualizado novamente.');
-//         }
-//     });
-
-// }
 
 
 

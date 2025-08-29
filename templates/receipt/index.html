@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recibo de Pagamento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff;
+      width: 600px;
+      padding: 20px;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #062858;
+      width: 100%;
+      max-width: 600px;
+      justify-self: center;
+      align-items: center;
+    }
+
+    .recibo-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 30px;
+      border-radius: 8px;
+      gap: 20px;
+    }
+
+    .logo {
+      display: block;
+      width: 30px;
+    }
+
+    .amount {
+      color: #048d17;
+    }
+
+    .seller-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .assinatura {
+      margin-top: 30px;
+      font-style: italic;
+      text-align: right;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 30px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <img src="https://megaofertasco.store/unnamed%20(3).png" alt="" class="logo">
+  </div>
+  <div class="recibo-container">
+
+    <p class="font-[700] text-[22px] text-center">Olá, Nelo mateus</p>
+    <div>
+      <p class="text-center">Obrigado pela sua compra!</p>
+      <br>
+      <p class="text-center">Montante</p>
+      <p class="text-[23px] font-[700] text-center amount">200.00 MZN</p>
+    </div>
+
+
+    <h3 style="text-align: center;">Recibo de Pagamento</h3>
+    <div class="flex justify-between">
+      <p><strong>Nome do Cliente:</strong> </p>
+      <p>Nelo mateus</p>
+    </div>
+
+    <div class="flex justify-between">
+      <p><strong>Valor:</strong> </p>
+      <p>200.00 MZN</p>
+    </div>
+
+    <div class="flex justify-between">
+      <p><strong>Data:</strong></p>
+      <p> 10/03/2025 12:20:54</p>
+    </div>
+
+    <div class="flex justify-between">
+      <p><strong>Item:</strong> </p>
+      <p>Curso de Marketing digital</p>
+    </div>
+
+    <div class="flex justify-between">
+      <p><strong>Recibo N&deg;</strong> </p>
+      <p>DP-16752-0953</p>
+    </div>
+
+
+    <div class="seller-info">
+      <p>informações do vendedor</p>
+
+      <div class="flex justify-between">
+        <p><strong>Nome:</strong> </p>
+        <p>Atanasio Raimundo</p>
+      </div>
+
+      <div class="flex justify-between">
+        <p><strong>Contacto:</strong></p>
+        <p>N/A</p>
+      </div>
+
+      <div class="flex justify-between">
+        <p><strong>NUIT:</strong></p>
+        <p>N/A</p>
+      </div>
+
+
+    </div>
+
+
+
+    <div class="assinatura">
+      DROP PAYMENTS <br />
+      _______________________
+    </div>
+
+    <div class="footer">
+      Este é um recibo gerado automaticamente. Para mais informações, acesse dropaymentsmz.online
+    </div>
+  </div>
+</body>
+
+</html>

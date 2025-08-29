@@ -338,89 +338,10 @@ async function updateBalance(userId) {
 
 
 
-// async function updateBalance(userId, payment) {
-//     try {
-//         const balanceRef = rtdb.ref(`users/${userId}/balance`);
-
-//         // Primeiro, pegue o saldo atual e as transações antes de chamar a transação
-//         const snapshot = await balanceRef.once('value');
-//         if (!snapshot.exists()) {
-//             await balanceRef.set(0);  // Cria o saldo se não existir
-//         }
-
-//         // Recupera as transações antes de executar a transação de saldo
-//         const paymentsRef = rtdb.ref(`users/${userId}/payments`);
-//         const snapshotPayments = await paymentsRef.once("value");
-//         let balanceInit = 0;
-//         const updates = {};
-//         let foundNewTransactions = false;
-
-//         snapshotPayments.forEach((childSnapshot) => {
-//             const payment = childSnapshot.val();
-//             const paymentKey = childSnapshot.key;
-
-//             // Verifique o estado da transação para saldo geral
-//             if (payment.estado !== "computado" && payment.originalAmount &&
-//                 (payment.paymentMethod === "E-Mola" || payment.paymentMethod === "M-pesa" || payment.paymentMethod === "dp-wallet")) {
-//                 balanceInit += parseFloat(payment.originalAmount);
-//                 foundNewTransactions = true;
-
-//                 // Marcar transação como computada
-//                 updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-//             }
-//         });
-
-//         // Agora, execute a transação para atualizar o saldo com segurança
-//         const result = await balanceRef.transaction((currentBalance) => {
-//             console.log('Saldo atual: ', currentBalance);
-
-//             let newBalance = currentBalance + (foundNewTransactions ? balanceInit : 0);
-
-//             // Retorna o novo saldo
-//             return newBalance;
-//         });
-
-//         // Se houver atualizações nas transações, atualize-as
-//         if (foundNewTransactions) {
-//             await rtdb.ref().update(updates);
-//         }
-
-//         if (result.committed) {
-//             console.log('Transação concluída. Novo saldo:', result.snapshot.val());
-//             console.log('Saldo atualizado com sucesso!');
-//             return {
-//                 committed: result.committed,
-//                 snapshot: result.snapshot.exists(),
-//                 success: true,
-//             };
-//         } else {
-//             console.log('Transação falhou ou foi cancelada.');
-//             return false;
-//         }
-
-//     } catch (error) {
-//         console.error('Erro ao atualizar saldo:', error);
-//         return {
-//             success: false,
-//             error: error.message,
-//         };
-//     }
-// }
-
-
-
-
-
-
-// setTimeout(async () => {
-//     const update =  await updateBalance('iIpkewISsJTlu0Lh7d1YxJ3ZTK12', 100);
-//     console.log("resultado: ", update.success)
-// })
-
-Promise.all([
-    updateBalance('iIpkewISsJTlu0Lh7d1YxJ3ZTK12'),
-    updateBalance('iIpkewISsJTlu0Lh7d1YxJ3ZTK12'),
-]);
+// Promise.all([
+//     updateBalance('iIpkewISsJTlu0Lh7d1YxJ3ZTK12'),
+//     updateBalance('iIpkewISsJTlu0Lh7d1YxJ3ZTK12'),
+// ]);
 
 
 module.exports = { updateBalance };                 

@@ -2,13 +2,11 @@ const express = require("express");
 const admin = require("firebase-admin");
 const axios = require("axios")
 const bodyParser = require("body-parser");
-const { urlToRelativePath, convertCurrency, generatePresignedUrl } = require("../../../backend/functions/index.js")
+const { Utils } = require("../../../backend/functions/index.js")
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
-const serviceAccount = require("../../../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json"); //
+const serviceAccount = require("../../../credentials/drop-payments-mz-firebase-adminsdk-bzvcd-4807201303.json");
 require("dotenv").config();
-
-
-
+const { DatabaseUtils, DbCreateUtils, DbGetDataUtils } = require("../../../backend/config-db/supabase-postgres.js")
 
 
 
@@ -79,51 +77,218 @@ async function verifyOTP(req, res) {
 }
 
 
-async function saveUser(req, res) {
-  console.log(req.body)
-  const { userId, email, name } = req.body;
-  console.log(userId)
-  if (!userId) {
-    return res.status(400).json({ message: "userId invalido!", code: "3" })
-  }
-
-  try {
-
-    const userRef = db.ref(`users/${userId}`);
-    await userRef.set({
-      email: email || "N/A",
-      name: name || "N/A",
-    });
-
-    return res.status(200).json({ message: "Usuario criado com successo", code: "0" })
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
-
-  }
-
-}
 
 
 
 
-
-
-
-
-// Rota para calcular e atualizar o saldo
 app.post("/api/v2/live/server", async (req, res) => {
   console.log("Dados recebidos:", req.body);
-  const { userId, reqType, name, email, nationalId, p_number, p_name, p_metodo, contacto_1, contacto_2, productId, currency, price, exchange_type } = req.body;
-
-
+  const { userId, reqType, productId, price, exchange_type } = req.body;
 
   if (!reqType) {
     return res.status(400).send({ error: "reqType indefinido." });
   }
 
+   if (reqType === 'verifyEmail') {
+    
+   }
+
+  if (reqType === 'get/user-products') {
+    await DbGetDataUtils.getProducts(req, res)
+   
+  }
+
+  if (reqType === 'create/product') {
+    const { productData } = req.body;
+    console.log(productData)
+    if (!productData) {
+      return res.status(400).send({ error: "productData é obrigatório." });
+    }
+    try {
+      const response = await DbCreateUtils.createProduct(productData);
+      if (response) {
+        return res.status(200).json({ message: "Produto criado com sucesso", code: "200" })
+      } else {
+        return res.status(400).json({ message: "Erro ao criar produto", code: "400" })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+
+    }
+
+  }
+
+  if (reqType === 'save/user-data') {
+    const { data } = req.body;
+    console.log(data)
+    if (!data) {
+      return res.status(400).send({ error: "data é obrigatório." });
+    }
+    try {
+      const response = await DataUpdateUtils.saveUserData(data);
+      if (response) {
+        return res.status(200).json({ message: "Dados salvos com sucesso", code: "0" })
+      } else {
+        return res.status(400).json({ message: "Erro ao salvar dados", code: "1" })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+
+    }
+
+  }
+
+
+  if (reqType === 'set/payout-method') {
+    const { account_holder, account_id, method_type, id, user_id } = req.body;
+
+    console.log(req.body)
+    if (!account_holder || !account_id || !method_type) {
+      return res.status(400).send({ error: "Todos os campos são obrigatórios." });
+    }
+    try {
+      const payoutMethod = await DatabaseUtils.setPayoutMethod(user_id, id, account_holder, account_id, method_type);
+
+      if (payoutMethod) {
+        return res.status(200).json({ message: "Método de pagamento salvo com sucesso", code: "0" })
+      } else {
+        return res.status(400).json({ message: "Erro ao salvar método de pagamento", code: "1" })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+    }
+  }
+
+  if (reqType === 'get/payout-method') {
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).send({ error: "id é obrigatório." });
+    }
+    try {
+      const payoutMethod = await DatabaseUtils.getPayoutMethod(id);
+      return res.status(200).json({ payoutMethod: payoutMethod });
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+    }
+  }
+
+  if (reqType === 'delete/user-data') {
+    const { id, table } = req.body;
+    console.log(id, table)
+    if (!id) {
+      return res.status(400).send({ error: "id é obrigatório." });
+    }
+
+    try {
+      const delete_response = await DatabaseUtils.deleteUserData(id, table);
+      if (delete_response === true) {
+        return res.status(200).json({ message: "Dados excluidos com sucesso", code: "0" })
+      } else {
+        return res.status(400).json({ message: "Erro ao excluir dados", code: "1" })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+
+    }
+  }
+
+  if (reqType === 'get/payout_methods') {
+    if (!userId) {
+      return res.status(400).send({ error: "userId é obrigatório." });
+    }
+
+    try {
+      const payoutMethods = await DatabaseUtils.getUserPayoutMethos(userId);
+      return res.status(200).json({ payoutMethods: payoutMethods });
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+    }
+  }
+
+  if (reqType === "get/user-data") {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).send({ error: "userId é obrigatório." });
+
+    } else {
+      try {
+        const userData = await DatabaseUtils.getUserBasicData(userId);
+        if (userData) {
+          return res.status(200).json({ userData: userData });
+        } else {
+          return res.status(400).json({ message: "Erro ao buscar dados do usuario", code: "1" })
+        }
+
+
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+
+      }
+
+    }
+
+  }
+
+
+  if (reqType === "update/last-login") {
+    const { userId } = req.body;
+    console.log(userId)
+    if (!userId) {
+      return res.status(400).json({ message: "userId invalido!", code: "3" })
+    } else {
+      try {
+        const update_response = await DatabaseUtils.updateLastLogin(userId);
+        if (update_response === true) {
+          return res.status(200).json({ message: "Ultimo login atualizado com sucesso", code: "0" })
+        } else {
+          return res.status(400).json({ message: "Erro ao atualizar ultimo login", code: "1" })
+        }
+
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Erro interno do servidor", code: "1" })
+
+      }
+    }
+
+  }
+
   if (reqType === "save/user") {
-    await saveUser(req, res);
+
+    // await saveUser(req, res);
+    const { userId, email, name } = req.body;
+    console.log(userId)
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId invalido!", code: "3" })
+    } else {
+
+      try {
+        const save_response = await DatabaseUtils.saveUserOnSupabase(userId, name, email);
+
+        if (save_response === true) {
+          return res.status(200).json({ message: "Usuario criado com successo", code: "0" })
+        } else {
+          return res.status(400).json({ message: "Erro ao criar usuario", code: "1" })
+        }
+
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Erro interno do servidor", code: "1", error: error })
+
+      }
+    }
 
   }
 
@@ -134,34 +299,42 @@ app.post("/api/v2/live/server", async (req, res) => {
   if (reqType === "otp/code") {
     const { email } = req.body;
     console.log(req.body)
+
     try {
+      const emailExists = await DatabaseUtils.verificarEmail(email);
 
-      // Gerar um número de 6 dígitos aleatórios
-      const randomSixDigitNumber = () => {
-        return Math.floor(100000 + Math.random() * 900000);
-      };
+      if (emailExists === true) {
+        return res.status(400).json({ message: "email already exists" });
 
-      const otp = randomSixDigitNumber();
-      console.log("OTP gerado:", otp);
+      } else {
 
-      const expiresAt = Date.now() + 5 * 60 * 1000;
+        const randomSixDigitNumber = () => {
+          return Math.floor(100000 + Math.random() * 900000);
+        };
 
-      // Salvar no Firebase Realtime Database
-      await db.ref(`otp_codes/${email.replace('.', '_')}`).set({
-        otp,
-        expiresAt
-      });
+        const otp = randomSixDigitNumber();
+        console.log("OTP gerado:", otp);
 
-      const otpEmailPayload = {
-        otp_code: otp,
-        emailSeller: email,
-        templateType: '7-OTP-CODE'
+        const expiresAt = Date.now() + 5 * 60 * 1000;
+
+        // Salvar no Firebase Realtime Database
+        await db.ref(`otp_codes/${email.replace('.', '_')}`).set({
+          otp,
+          expiresAt
+        });
+
+        const otpEmailPayload = {
+          otp_code: otp,
+          emailSeller: email,
+          templateType: '7-OTP-CODE'
+        }
+
+        const request = await axios.post('https://www.dropaymentsmz.online/api/v2/smtp/send-email', otpEmailPayload);
+        console.log(request.data)
+
+
+        return res.status(200).json({ message: 'OTP enviado!', code: '0' });
       }
-
-      const request = await axios.post('http://127.0.0.1:3002/api/v2/smtp/send-email', otpEmailPayload);
-
-
-      return res.status(200).json({ message: 'OTP enviado!', code: '0' });
 
     } catch (err) {
       console.log(err);
@@ -225,20 +398,21 @@ app.post("/api/v2/live/server", async (req, res) => {
   }
 
   if (reqType === 'presigned_url') {
-    const { fileName, contentType } = req.body;
+    const { fileName, contentType, dir_file } = req.body;
 
-    if (!fileName || !contentType) {
+    if (!fileName || !contentType, !dir_file) {
       return res.status(400).json({ error: "Parâmetros inválidos" });
     }
 
     try {
-      const data = await generatePresignedUrl(fileName, contentType, dir_file);
+      const data = await Utils.generatePresignedUrl(fileName, contentType, dir_file);
       console.log(data)
       const url = data.signedUrl;
       const filePathUrl = data.filePath;
       return res.status(200).json({ presignedUrl: url, filePath: filePathUrl });
     } catch (error) {
-      return res.status(500).json({ error: "Erro ao gerar Presigned URL" });
+      console.log(error)
+      return res.status(500).json({ error: "Erro ao gerar Presigned URL", deatils: error });
     }
 
   }
@@ -620,214 +794,11 @@ app.post("/api/v2/live/server", async (req, res) => {
 
   }
 
-  if (reqType === 'save_user_data') {
-
-    if (!userId) {
-      return res.status(400).send({ error: "userId é obrigatório." });
-    }
-    try {
-
-      const userRef = db.ref(`users/${userId}/`);
-      const contactRef = db.ref(`users/${userId}/contact`);
-      const paymentRef = db.ref(`users/${userId}/userpaymentMethods`);
-      const data = {
-        'name': name,
-        'email': email,
-        'nationalId': nationalId
-      }
-      const paymentData = {
-        'numero': p_number,
-        'titular': p_name,
-        'metodo': p_metodo
-      }
-      const contactData = {
-        'contacto_1': contacto_1,
-        'contacto_2': contacto_2
-      }
-
-      contactRef.set(contactData)
-        .then(() => {
-          console.log("Dados criados com sucesso!");
-          //return res.status(200).json({ status: 'success' });
-        })
-        .catch((erro) => {
-          console.error("Erro ao criar dados:", erro);
-          return res.status(400).json({ erro: erro.message });
-        });
-
-
-
-      await paymentRef.update(paymentData, (erro) => {
-        if (erro) {
-          console.error("Erro ao atualizar numero:", erro);
-          return res.status(400).json({ erro: erro.message });
-        } else {
-          console.log("Numero atualizado com sucesso!");
-
-        }
-      });
-
-
-
-      userRef.update(data, (erro) => {
-        if (erro) {
-          console.error("Erro ao atualizar nome:", erro);
-          return res.status(400).json({ erro: erro });
-        } else {
-          console.log("Nome atualizado com sucesso!");
-          return res.status(200).json({ status: 'Informacoes salvas com sucesso!' });
-        }
-      });
-
-
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ erro: '{status : 500} : erro interno do servidor' });
-    }
-  }
-
-  if (reqType === 'user_payment_data') {
-
-    if (!userId) {
-      return res.status(400).send({ error: "userId é obrigatório." });
-    }
-    try {
-      const user_payment_methodRef = db.ref(`users/${userId}/userpaymentMethods`);
-
-      // Obter o snapshot do nó
-      const snapshot = await user_payment_methodRef.once('value');
-
-      // Verificar se o nó existe
-      if (snapshot.exists()) {
-        const keys = snapshot.val();
-        console.log('Chaves:', keys);
-        return res.status(200).json({ data: keys }); // Retorna as chaves encontradas
-      } else {
-        console.log('O nó não existe ou está vazio.');
-        return res.status(404).json({ error: '{status : 404} : dados nao encontrados' });
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      return res.status(500).json({ error: '{status : 500} : erro interno do servidor' });
-    }
-
-  }
-
-  if (reqType === 'user_data') {
-
-    if (!userId) {
-      return res.status(400).send({ error: "userId é obrigatório." });
-    }
-    try {
-      const paymentsRef = db.ref(`users/${userId}/payments`);
-      const balanceRef = db.ref(`users/${userId}/balance`);
-      const emailRef = db.ref(`users/${userId}/email`);
-      const nameRef = db.ref(`users/${userId}/name`);
-      const nationalIdRef = db.ref(`users/${userId}/nationalId`);
-      const contactRef = db.ref(`users/${userId}/contact`);
-
-      const paypalBalanceRef = db.ref(`users/${userId}/paypalBalance`);
-      let total = 0;
-      let vendasHoje = 0;
-      let paypalBalance = 0;
-
-      // Obter a data de hoje
-      const today = new Date();
-      const startOfDay = new Date(today.setHours(0, 0, 0, 0)).toISOString();
-      const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString();
-
-      // Recuperar todas as transações
-      // const snapshot = await paymentsRef.once("value");
-
-      const updates = {}; // Objeto para batch updates
-      let foundNewTransactions = false;
-      let foundNewPayPalTransactions = false;
-
-      // snapshot.forEach((childSnapshot) => {
-      //   const payment = childSnapshot.val();
-      //   const paymentKey = childSnapshot.key;
 
 
 
 
-      //   // // Verifique o estado da transação para saldo geral
-      //   // if (payment.estado !== "computado" &&
-      //   //   payment.originalAmount &&
-      //   //   (payment.paymentMethod === "E-Mola" || payment.paymentMethod === "M-pesa" || payment.paymentMethod === "dp-wallet")) {
-      //   //   total += parseFloat(payment.originalAmount);
-      //   //   foundNewTransactions = true;
 
-      //   //   // Marcar transação como computada
-      //   //   updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-      //   // }
-
-      //   // Calcular vendas realizadas hoje
-      //   if (payment.timestamp && payment.originalAmount) {
-      //     const paymentDate = new Date(payment.timestamp).toISOString();
-      //     if (paymentDate >= startOfDay && paymentDate <= endOfDay) {
-      //       vendasHoje += parseFloat(payment.originalAmount);
-      //     }
-      //   }
-
-      //   // Verifique se a transação é do PayPal
-      //   if (payment.paymentMethod === "PayPal" && payment.estado !== "computado" && payment.originalAmount) {
-      //     paypalBalance += parseFloat(payment.originalAmount);
-      //     foundNewPayPalTransactions = true;
-
-      //     // Marcar transação como computada
-      //     updates[`users/${userId}/payments/${paymentKey}/estado`] = "computado";
-      //   }
-      // });
-
-      // // Arredondar valores para 2 casas decimais
-      // total = parseFloat(total.toFixed(2));
-      // vendasHoje = parseFloat(vendasHoje.toFixed(2));
-      // paypalBalance = parseFloat(paypalBalance.toFixed(2));
-
-      //Pegar informacoes do usuario
-      const emailSnapshot = await emailRef.once("value");
-      const user_email = emailSnapshot.val() || 'N/A';
-      const namelSnapshot = await nameRef.once("value");
-      const user_name = namelSnapshot.val() || 'N/A';
-      const nationalIdSnapshot = await nationalIdRef.once("value");
-      const nationalId = nationalIdSnapshot.val() || 'N/A';
-      const contactSnapshot = await contactRef.once('value');
-      let contact_data = '';
-
-      if (contactSnapshot.exists()) {
-        contact_data = contactSnapshot.val() || 'N/A';
-        console.log('Dados:', contact_data); // Exibe os dados no console
-      } else {
-        console.log('O nó não existe.');
-      }
-
-      // Recuperar o saldo atual
-      const balanceSnapshot = await balanceRef.once("value");
-      const currentBalance = balanceSnapshot.val() || 0;
-
-      const paypalBalanceSnapshot = await paypalBalanceRef.once("value");
-      const currentPayPalBalance = paypalBalanceSnapshot.val() || 0;
-
-      // Somar os saldos atuais com os novos valores (se houver)
-      // const newBalance = foundNewTransactions ? currentBalance + total : currentBalance;
-      const newPayPalBalance = foundNewPayPalTransactions ? currentPayPalBalance + paypalBalance : currentPayPalBalance;
-
-      // Atualizar os saldos no diretório do usuário
-      // updates[`users/${userId}/balance`] = newBalance;
-      updates[`users/${userId}/paypalBalance`] = newPayPalBalance;
-
-      // Salvar todas as atualizações no banco de dados
-      // await db.ref().update(updates);
-
-      console.log(nationalId);
-
-      // Retornar o valor do saldo atualizado, PayPal e vendas do dia
-      res.status(200).send({ balance: currentBalance, vendasHoje, paypalBalance: newPayPalBalance, user_name: user_name, user_email: user_email, nationalId: nationalId, contacto_1: contact_data.contacto_1, contacto_2: contact_data.contacto_2 });
-    } catch (error) {
-      console.error("Erro ao processar o saldo:", error);
-      res.status(500).send({ error: "Erro ao processar o saldo." });
-    }
-  }
 
 
 });

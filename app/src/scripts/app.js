@@ -1,23 +1,25 @@
 import { financeHub, setLastSale } from "../pages/finances-hub.js";
-import { productHub, displayProducts } from "../pages/product-hub.js";
+import { displayProduct } from "./displayProducts/init.js";
 import withdrawPage from "../pages/withdraw-hub.js";
 import { displayBalnace, renderWithdrawHistory } from "../pages/withdraw-hub.js";
-import { profilePage } from "../pages/profile-hub.js";
 import { addLoadAnim, pageLoader, setAnOutPut, showAnPopup } from "../animations/index.js";
-import { createProduct } from "../pages/create-product.js";
-import { logOut } from "../user/user_data.mjs";
+import { UserData } from "../user/v2/userData.js";
 import { displaySales, salesPage } from "../pages/sales-hub.js";
 import { settingsPage } from "../pages/checkout-settings.js";
 import { feedbackPage } from "../pages/send-feedback-hub.js";
+import { Pages } from "../pages/getAllPage.js";
 
 
 
 
 
 
+
+const content = document.getElementById('content');
 
 export default function loadRender(flag) {
     if (flag === true) {
+
         content.innerHTML = '';
 
         const load_template = `<div class='l-container'> <div class="loading-container">
@@ -49,6 +51,7 @@ const createScript = (dir__name) => {
     script.src = dir__name;
     script.type = 'module';
     body.appendChild(script);
+    console.log(`Script "${dir__name}" adicionado com sucesso!`);
 };
 
 const removeScript = (dir_name) => {
@@ -68,12 +71,12 @@ const removeScript = (dir_name) => {
 
 
 
-const content = document.getElementById('content');
+
 
 //ALTERNAR PAGINAS 
 window.addEventListener('hashchange', async () => {
 
-    console.log(window.location.hash);
+    const hash = window.location.hash;
     switch (window.location.hash) {
         case '#panel':
             loadRender(true);
@@ -91,8 +94,8 @@ window.addEventListener('hashchange', async () => {
             setTimeout(async () => {
                 changeTitle('Produtos');
                 content.innerHTML = '';
-                content.appendChild(productHub());
-                await displayProducts();
+                content.appendChild( await Pages.productHub());
+                // await displayProducts();
             }, 2000);
             break;
         case '#withdraw':
@@ -114,7 +117,7 @@ window.addEventListener('hashchange', async () => {
                 location.reload();
                 changeTitle('Perfil');
                 content.innerHTML = '';
-                content.appendChild(await profilePage());
+                content.appendChild(await Pages.profilePage());
                 createScript('src/scripts/page-functions/profile-function-page.js');
 
             }, 2000);
@@ -124,8 +127,8 @@ window.addEventListener('hashchange', async () => {
             setTimeout(async () => {
                 changeTitle('Criar produto');
                 content.innerHTML = '';
-                content.appendChild(await createProduct());
-                createScript('src/scripts/page-functions/create-product-hub.js');
+                content.appendChild(await Pages.createProduct());
+                createScript('src/scripts/createProduct/init.js');
             }, 2000)
             break;
         case '#/vendas':
@@ -144,7 +147,7 @@ window.addEventListener('hashchange', async () => {
             }, 2000)
             break;
         case "#logout":
-            logOut()
+            await UserData.logout();
             break;
         case '#/feedback':
             loadRender(true);
@@ -157,13 +160,38 @@ window.addEventListener('hashchange', async () => {
         default:
             break;
     }
+
+    if (hash.startsWith('#/exclude/payout/method')) {
+        const match = hash.match(/id=(\d+)/); // extrai o id
+        const id = match ? match[1] : null;
+        console.log(id);
+        UserData.deleleData(id, 'payout_methods', '#profile/user/data');
+
+    }
+    if (hash.startsWith('#/edit/payout/method')) {
+        const match = hash.match(/id=(\d+)/); // extrai o id
+        const id = match ? match[1] : null;
+        console.log(id);
+        removeScript('src/scripts/page-functions/edit/payoutMethod.js');
+        pageLoader(true);
+        setTimeout(async () => {
+            changeTitle('Dashboard');
+            content.innerHTML = '';
+            content.appendChild(await Pages.editPayoutsMethds());
+            await UserData.setPayoutMethod(id);
+            createScript('src/scripts/page-functions/edit/payoutMethod.js');
+            pageLoader(false);
+        }, 2000);
+
+    }
 });
 window.addEventListener('load', async () => {
+    const hash = window.location.hash;
 
     switch (window.location.hash) {
         case '#panel':
-            pageLoader(true);
-            loadRender(true);
+            // pageLoader(true);
+            // loadRender(true);
             setTimeout(async () => {
                 changeTitle('Dashboard');
                 content.innerHTML = ``;
@@ -177,8 +205,8 @@ window.addEventListener('load', async () => {
             setTimeout(async () => {
                 changeTitle('Produtos');
                 content.innerHTML = '';
-                content.appendChild(productHub());
-                await displayProducts();
+                content.appendChild( await Pages.productHub());
+                await displayProduct();
             }, 2000);
             break;
         case '#withdraw':
@@ -202,7 +230,7 @@ window.addEventListener('load', async () => {
                 content.innerHTML = '';
                 console.log('Appending profilePage...');
                 pageLoader(true);
-                content.appendChild(await profilePage());
+                content.appendChild(await Pages.profilePage());
                 console.log('Awaiting handleUserData...');
                 //  removeScript('src/scripts/profile-function-page.js');
                 console.log('Creating script...');
@@ -215,8 +243,8 @@ window.addEventListener('load', async () => {
             setTimeout(async () => {
                 changeTitle('Criar produto');
                 content.innerHTML = '';
-                content.appendChild(await createProduct());
-                createScript('src/scripts/page-functions/create-product-hub.js');
+                content.appendChild(await Pages.createProduct());
+                createScript('src/scripts/createProduct/init.js');
             }, 2000)
             break;
         case '#/vendas':
@@ -246,8 +274,27 @@ window.addEventListener('load', async () => {
                 content.appendChild(await feedbackPage());
             }, 2000)
             break;
+
         default:
             break;
+    }
+
+    if (hash.startsWith('#/edit/payout/method')) {
+        const match = hash.match(/id=(\d+)/); // extrai o id
+        const id = match ? match[1] : null;
+        console.log(id);
+        pageLoader(true);
+        setTimeout(async () => {
+            changeTitle('Dashboard');
+            content.innerHTML = '';
+            content.appendChild(await Pages.editPayoutsMethds());
+            await UserData.setPayoutMethod(id);
+            createScript('src/scripts/page-functions/edit/payoutMethod.js');
+            pageLoader(false);
+
+
+        }, 2000);
+
     }
 
 })

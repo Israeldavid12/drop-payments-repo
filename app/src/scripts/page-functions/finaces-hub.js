@@ -1,14 +1,16 @@
 import { pageLoader } from "../../animations/index.js";
-import { userData } from "../../user/user_data.mjs";
+import { UserData} from "../../user/v2/userData.js";
 import { formatBalance } from "../../animations/index.js";
 import loadRender from "../app.js";
 
-const data = await userData();
-const balance = Number(data.balance);
-const paypalBalance = Number(data.paypalBalance)
-const vendasHoje = Number(data.vendasHoje)
+const data = await UserData.getUserData();
 
-document.querySelector('.user_name').textContent = 'Olá, '+data.name;
+
+const balance = Number(data.userData.user_info.primary_balance);
+const paypalBalance = Number(data.userData.user_info.secundary_balance);
+const vendasHoje = Number(data.userData.user_info.sales_today);
+
+document.querySelector('.user_name').textContent = 'Olá, '+data.userData.user_info.name.split(' ')[0]+'!';
 document.getElementById('mobilePaymentsBalance').textContent = formatBalance(balance, "MZN");
 document.getElementById('paypalBalance').textContent = formatBalance(paypalBalance, "MZN");
 document.getElementById('sales-today').textContent = formatBalance(vendasHoje, "MZN")

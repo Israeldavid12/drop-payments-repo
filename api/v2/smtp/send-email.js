@@ -216,7 +216,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
     } else if (templateType === '1-B') {
         receiptEmail = emailPayer;
         subject = 'Seu Produto está pronto!';
-
+ 
         // Template HTML para o e-mail
         htmlTemplate = `<!DOCTYPE html>
 <html lang="pt-br">

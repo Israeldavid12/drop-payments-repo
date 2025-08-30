@@ -328,7 +328,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
 
         .footer {
             margin-top: 10px;
-            font-size: 9px;
+            font-size: 8px;
             height: 25px;
             color: #fff;
             background-color: #1f395e;
@@ -359,13 +359,10 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
         </div>
 
         <div class="signature">
-            <p>Atenciosamente,<br>Equipe Drop Payments</p>
-            <p></p>
-            <p style="font-size: 14px;">Se precisar de ajuda para Acessar o produto.</p>
-            <a id="suporte" href="https://api.whatsapp.com/send?phone=258852610323">Clique aqui</a>
+            <p>Atenciosamente.</p>
         </div>
         <div class="footer">
-            &copf; Drop Payments – Todos direitos Reservados - 2025
+            &copf; Drop Pay – Todos direitos Reservados - 2025
         </div>
     </div>
 

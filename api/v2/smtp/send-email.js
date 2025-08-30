@@ -307,6 +307,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
+            
         }
 
         .button:hover {
@@ -840,10 +841,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
                 <td class="titulo"  >Total solicitado</td>
                 <td>${amountPaid} MT </td>
             </tr>
-            <tr>
-                <td class="titulo" >Valor a receber</td>
-                <td>${amountPaid - (amountPaid * 0.08)} MT</td>
-            </tr>
+           
             <tr>
                 <td class="titulo" >Conta solicitante</td>
                 <td  >${emailSeller}</td>

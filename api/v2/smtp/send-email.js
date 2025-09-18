@@ -1062,7 +1062,7 @@ app.post('/api/v2/smtp/send-email', (req, res) => {
 `
     } else if (templateType === '6-SALES-S') {
         receiptEmail = emailSeller;
-        subject = 'Venda efetuada com sucesso!';
+        subject = 'Novo pagamento recebido!';
 
         // Template HTML para o e-mail
         htmlTemplate = `<!DOCTYPE html>

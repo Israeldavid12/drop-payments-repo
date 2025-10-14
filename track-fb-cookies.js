@@ -1,4 +1,3 @@
-<script>
 (function () {
   // ====== 1. Captura fbclid da URL ======
   const params = new URLSearchParams(window.location.search);
@@ -65,4 +64,3 @@
     });
   });
 })();
-</script>

@@ -47,7 +47,7 @@
   // Interceptar cliques em âncoras (<a>)
   document.addEventListener('click', function(event) {
     const anchor = event.target.closest('a');
-    if (anchor && anchor.href && !anchor.target) { // Ignora links com target="_blank"
+    if (anchor && anchor.href) { // Ignora links com target="_blank"
       event.preventDefault();
       const fbclid = getStoredFbclid();
       const modifiedURL = addParameterToURL(anchor.href, 'fbclid', fbclid);

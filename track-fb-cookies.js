@@ -1,76 +1,79 @@
-(function() {
-  // Função para extrair parâmetro da URL
-  function getUrlParameter(url, paramName) {
-    try {
-      const urlObj = new URL(url, window.location.origin);
-      return urlObj.searchParams.get(paramName);
-    } catch (e) {
-      console.error('Erro ao extrair parâmetro:', e);
-      const match = url.match(new RegExp('[?&]' + paramName + '=([^&]*)'));
-      return match ? decodeURIComponent(match[1]) : null;
-    }
-  }
+ (function () {
+            // 1️⃣ Inserir o Meta Pixel dinamicamente no DOM
+            (function (f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function () {
+                    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+            })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-  // Função para adicionar parâmetro à URL
-  function addParameterToURL(url, paramName, paramValue) {
-    if (!paramValue) return url; // Não adiciona se não houver valor
-    try {
-      const urlObj = new URL(url, window.location.origin);
-      urlObj.searchParams.set(paramName, paramValue);
-      return urlObj.toString();
-    } catch (e) {
-      console.error('Erro ao adicionar parâmetro:', e);
-      return url + (url.includes('?') ? '&' : '?') + paramName + '=' + paramValue;
-    }
-  }
+            fbq('init', '3233922930116692');
+            fbq('track', 'PageView');
 
-  // Captura e armazena fbclid na carga da página
-  function captureFbclid() {
-    const fbclid = getUrlParameter(window.location.href, 'fbclid');
-    if (fbclid) {
-      sessionStorage.setItem('fbclid', fbclid);
-      console.log('fbclid capturado e armazenado:', fbclid);
-      // Opcional: limpar fbclid da URL atual
-      const cleanUrl = window.location.href.replace(new RegExp('[?&]fbclid=[^&]*'), '').replace(/\?$/g, '');
-      window.history.replaceState({}, document.title, cleanUrl);
-    }
-  }
+            // 2️⃣ Função para obter cookies
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
 
-  // Recupera fbclid armazenado
-  function getStoredFbclid() {
-    return sessionStorage.getItem('fbclid');
-  }
+            // 3️⃣ Função para adicionar parâmetros à URL
+            function addParameterToURL(url, paramName, paramValue) {
+                if (!paramValue) return url; // ignora se o valor for nulo
+                try {
+                    const urlObj = new URL(url, window.location.origin);
+                    urlObj.searchParams.set(paramName, paramValue);
+                    return urlObj.toString();
+                } catch {
+                    return url + (url.includes('?') ? '&' : '?') + paramName + '=' + encodeURIComponent(paramValue);
+                }
+            }
 
-  // Executa captura imediatamente
-  captureFbclid();
+            // 4️⃣ Função principal: adicionar fbp e fbc às URLs
+            function appendMetaParams(url) {
+                const fbp = getCookie('_fbp');
+                const fbc = getCookie('_fbc');
+                let newUrl = url;
+                if (fbp) newUrl = addParameterToURL(newUrl, 'fbp', fbp);
+                if (fbc) newUrl = addParameterToURL(newUrl, 'fbc', fbc);
+                return newUrl;
+            }
 
-  // Interceptar cliques em âncoras (<a>)
-  document.addEventListener('click', function(event) {
-    const anchor = event.target.closest('a');
-    if (anchor && anchor.href) { // Ignora links com target="_blank"
-      event.preventDefault();
-      const fbclid = getStoredFbclid();
-      const modifiedURL = addParameterToURL(anchor.href, 'fbclid', fbclid);
-      console.log('Redirecionando âncora com fbclid:', modifiedURL);
-      window.location.assign(modifiedURL);
-    }
-  }, true);
+            // 5️⃣ Interceptar cliques em âncoras
+            document.addEventListener('click', function (event) {
+                const anchor = event.target.closest('a');
+                if (!anchor || !anchor.href) return;
+                const newUrl = appendMetaParams(anchor.href);
+                if (newUrl !== anchor.href) {
+                    event.preventDefault();
+                    console.log('🔗 Redirecionando com parâmetros Meta:', newUrl);
+                    window.location.assign(newUrl);
+                }
+            }, true);
 
-  // Sobrescrever window.location.assign
-  const originalAssign = window.location.assign;
-  window.location.assign = function(url) {
-    const fbclid = getStoredFbclid();
-    const modifiedURL = addParameterToURL(url, 'fbclid', fbclid);
-    console.log('Redirecionando via assign com fbclid:', modifiedURL);
-    return originalAssign.call(window.location, modifiedURL);
-  };
+            // 6️⃣ Interceptar redirecionamentos via JS
+            const originalAssign = window.location.assign;
+            window.location.assign = function (url) {
+                const newUrl = appendMetaParams(url);
+                console.log('➡️ Redirecionando via assign com Meta params:', newUrl);
+                return originalAssign.call(window.location, newUrl);
+            };
 
-  // Sobrescrever window.location.replace
-  const originalReplace = window.location.replace;
-  window.location.replace = function(url) {
-    const fbclid = getStoredFbclid();
-    const modifiedURL = addParameterToURL(url, 'fbclid', fbclid);
-    console.log('Substituindo via replace com fbclid:', modifiedURL);
-    return originalReplace.call(window.location, modifiedURL);
-  };
-})();
+            const originalReplace = window.location.replace;
+            window.location.replace = function (url) {
+                const newUrl = appendMetaParams(url);
+                console.log('♻️ Substituindo via replace com Meta params:', newUrl);
+                return originalReplace.call(window.location, newUrl);
+            };
+        })();

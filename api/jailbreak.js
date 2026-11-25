@@ -16,21 +16,21 @@ app.use(bodyParser.json());
 
 
 
-export default function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+app.post('/api/jailbreak', async (req, res) => {
+  return res.status(202).json({
+    accepted: true
+  })
+})
 
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
+app.options('/api/jailbreak', async (req, res) => {
+  return res.status(202).json({
+    accepted: true
+  })
+})
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
 
-  return res.status(202).json({ accepted: true });
-}
+
+module.exports = app;
 
 // const PORT = 3014;
 // app.listen(PORT, () => {

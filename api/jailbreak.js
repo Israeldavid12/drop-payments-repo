@@ -23,6 +23,8 @@ app.post('/api/jailbreak', async (req, res) => {
 })
 
 
+module.exports = app;
+
 // const PORT = 3014;
 // app.listen(PORT, () => {
 //   console.log(`Servidor rodando na porta ${PORT}`);

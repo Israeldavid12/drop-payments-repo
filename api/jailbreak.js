@@ -12,7 +12,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());   
+app.use(bodyParser.json());     
 
 
 
@@ -21,3 +21,9 @@ app.post('/api/jailbreak', async (req, res) => {
     accepted: true
   })
 })
+
+
+// const PORT = 3014;
+// app.listen(PORT, () => {
+//   console.log(`Servidor rodando na porta ${PORT}`);
+// });
